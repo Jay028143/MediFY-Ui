@@ -183,18 +183,6 @@ const Page = () => {
 
   const [data1, setData] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const header = new Headers({ "Access-Control-Allow-Origin": "*" });
-      const result = await fetch("http://localhost:8080/medify/user",{ header: header },{mode: "no-cors"});
-      const data1 = await result.json();
-      alert("data.."+JSON.stringify(data1));
-      setData(data1);
-    };
-
-    fetchData();
-  }, []);
-
   const handlePageChange = useCallback(
     (event, value) => {
       setPage(value);

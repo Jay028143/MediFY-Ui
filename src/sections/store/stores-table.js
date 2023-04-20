@@ -42,33 +42,23 @@ export const StoresTable = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedAll}
-                    indeterminate={selectedSome}
-                    onChange={(event) => {
-                      if (event.target.checked) {
-                        onSelectAll?.();
-                      } else {
-                        onDeselectAll?.();
-                      }
-                    }}
-                  />
-                </TableCell>
                 <TableCell>
-                  Name
-                </TableCell>
-                <TableCell>
-                  Email
+                  Store Name
                 </TableCell>
                 <TableCell>
                   Location
                 </TableCell>
                 <TableCell>
-                  Phone
+                  Post Code
                 </TableCell>
                 <TableCell>
-                  Signed Up
+                  Mobile Number
+                </TableCell>
+                <TableCell>
+                 Update
+                </TableCell>
+                <TableCell>
+                 Delete
                 </TableCell>
               </TableRow>
             </TableHead>

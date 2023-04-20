@@ -6,16 +6,37 @@ import * as Yup from 'yup';
 import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import LoginService from 'src/services/LoginService';
+//import {DatePicker} from '@mui/x-date-pickers/DatePicker'; 
 
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
   const formik = useFormik({
     initialValues: {
+      firstName: '',
+      lastName: '',
       email: '',
-      name: '',
+      storeId:'0',
+      username: '',
       password: '',
+      niNumber: '',
+      dateOfBirth: '',
+      role:['admin'],
+      dateOfJoining: '',
+      address: '',
+      postCode: '',
+      mobileNumber: '',
+      createdAt:'2023-04-17',
+      updatedAt:'2013-04-17',
       submit: null
+    },
+    response: {
+      id: '',
+      username: '',
+      email: '',
+      roles: '',
+      storeId: ''
     },
     validationSchema: Yup.object({
       email: Yup
@@ -23,10 +44,38 @@ const Page = () => {
         .email('Must be a valid email')
         .max(255)
         .required('Email is required'),
-      name: Yup
+      firstName: Yup
         .string()
         .max(255)
-        .required('Name is required'),
+        .required('First Name is required'),
+      lastName: Yup
+        .string()
+        .max(255)
+        .required('Last Name is required'),
+      username: Yup
+        .string()
+        .max(255)
+        .required('User Name is required'),
+      niNumber: Yup
+        .string()
+        .max(255)
+        .required('NI Number is required'),
+      address: Yup
+        .string()
+        .max(255)
+        .required('Address is required'),
+      postCode: Yup
+        .string()
+        .max(255)
+        .required('Post Code is required'),
+      dateOfBirth: Yup
+        .string()
+        .max(255)
+        .required('Date Of Birth is required'),
+      dateOfJoining: Yup
+        .string()
+        .max(255)
+        .required('dateOfJoining is required'),
       password: Yup
         .string()
         .max(255)
@@ -34,7 +83,19 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signUp(values.email, values.name, values.password);
+        alert("called signin");
+      //  await auth.signUp(values.email, values.name, values.password);
+        LoginService.register(values)
+          .then(response => {
+            alert(JSON.stringify(response));
+            setSubmitted(true);
+            console.log(response.data);
+          })
+          .catch(e => {
+            console.log(e);
+          });
+
+
         router.push('/');
       } catch (err) {
         helpers.setStatus({ success: false });
@@ -48,7 +109,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Register | Devias Kit
+          Register | MediFY
         </title>
       </Head>
       <Box
@@ -97,14 +158,41 @@ const Page = () => {
             >
               <Stack spacing={3}>
                 <TextField
-                  error={!!(formik.touched.name && formik.errors.name)}
+                  error={!!(formik.touched.firstName && formik.errors.firstName)}
                   fullWidth
-                  helperText={formik.touched.name && formik.errors.name}
-                  label="Name"
-                  name="name"
+                  helperText={formik.touched.firstName && formik.errors.firstName}
+                  label="First Name"
+                  name="firstName"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.name}
+                  value={formik.values.firstName}
+                />
+                <TextField
+                  error={!!(formik.touched.lastName && formik.errors.lastName)}
+                  fullWidth
+                  helperText={formik.touched.lastName && formik.errors.lastName}
+                  label="Last Name"
+                  name="lastName"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.lastName}
+                />
+
+                {/* <DatePicker label="Date Of Birth"
+                  name="dateOfBirth" 
+                  // onChange={formik.handleChange}
+                  // value={formik.values.dateOfBirth}
+                  /> */}
+
+                <TextField
+                  error={!!(formik.touched.dateOfBirth && formik.errors.dateOfBirth)}
+                  fullWidth
+                  helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
+                  label="Date Of Birth"
+                  name="dateOfBirth"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.dateOfBirth}
                 />
                 <TextField
                   error={!!(formik.touched.email && formik.errors.email)}
@@ -118,6 +206,16 @@ const Page = () => {
                   value={formik.values.email}
                 />
                 <TextField
+                  error={!!(formik.touched.username && formik.errors.username)}
+                  fullWidth
+                  helperText={formik.touched.username && formik.errors.username}
+                  label="User Name"
+                  name="username"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.username}
+                />
+                <TextField
                   error={!!(formik.touched.password && formik.errors.password)}
                   fullWidth
                   helperText={formik.touched.password && formik.errors.password}
@@ -128,6 +226,63 @@ const Page = () => {
                   type="password"
                   value={formik.values.password}
                 />
+                <TextField
+                  error={!!(formik.touched.address && formik.errors.address)}
+                  fullWidth
+                  helperText={formik.touched.address && formik.errors.address}
+                  label="Address"
+                  name="address"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.address}
+                />
+                <TextField
+                  error={!!(formik.touched.postCode && formik.errors.postCode)}
+                  fullWidth
+                  helperText={formik.touched.postCode && formik.errors.postCode}
+                  label="Post Code"
+                  name="postCode"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.postCode}
+                />
+                <TextField
+                  error={!!(formik.touched.mobilenumber && formik.errors.mobilenumber)}
+                  fullWidth
+                  helperText={formik.touched.mobilenumber && formik.errors.mobilenumber}
+                  label="Mobile Number"
+                  name="mobilenumber"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.mobilenumber}
+                />
+                <TextField
+                  error={!!(formik.touched.niNumber && formik.errors.niNumber)}
+                  fullWidth
+                  helperText={formik.touched.niNumber && formik.errors.niNumber}
+                  label="NI Number"
+                  name="niNumber"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.niNumber}
+                />
+                {/* <DatePicker label="Date Of Joining"
+                  name="dateOfJoining"  
+                  // onChange={formik.handleChange}
+                  // value={formik.values.dateOfJoining}
+                  />
+                 */}
+                <TextField
+                  error={!!(formik.touched.dateOfJoining && formik.errors.dateOfJoining)}
+                  fullWidth
+                  helperText={formik.touched.dateOfJoining && formik.errors.dateOfJoining}
+                  label="Date Of Joining"
+                  name="dateOfJoining"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.dateOfJoining}
+                />
+
               </Stack>
               {formik.errors.submit && (
                 <Typography

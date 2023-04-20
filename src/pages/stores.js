@@ -7,8 +7,8 @@ import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { CustomersTable } from 'src/sections/customer/customers-table';
-import { CustomersSearch } from 'src/sections/customer/customers-search';
+import { StoresTable } from 'src/sections/store/stores-table';
+import { StoresSearch } from 'src/sections/store/stores-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 
 const now = new Date();
@@ -156,7 +156,7 @@ const data = [
   }
 ];
 
-const useCustomers = (page, rowsPerPage) => {
+const useStores = (page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
@@ -165,21 +165,21 @@ const useCustomers = (page, rowsPerPage) => {
   );
 };
 
-const useCustomerIds = (customers) => {
+const useStoreIds = (stores) => {
   return useMemo(
     () => {
-      return customers.map((customer) => customer.id);
+      return stores.map((store) => store.id);
     },
-    [customers]
+    [stores]
   );
 };
 
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const customers = useCustomers(page, rowsPerPage);
-  const customersIds = useCustomerIds(customers);
-  const customersSelection = useSelection(customersIds);
+  const stores = useStores(page, rowsPerPage);
+  const storesIds = useStoreIds(stores);
+  const storesSelection = useSelection(storesIds);
 
   const [data1, setData] = useState(null);
 
@@ -213,7 +213,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Customers | MediFY
+          Stores | MediFY
         </title>
       </Head>
       <Box
@@ -232,7 +232,7 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Customers
+                  Stores
                 </Typography>
                 <Stack
                   alignItems="center"
@@ -274,19 +274,19 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <CustomersSearch />
-            <CustomersTable
+            <StoresSearch />
+            <StoresTable
               count={data.length}
-              items={customers}
-              onDeselectAll={customersSelection.handleDeselectAll}
-              onDeselectOne={customersSelection.handleDeselectOne}
+              items={stores}
+              onDeselectAll={storesSelection.handleDeselectAll}
+              onDeselectOne={storesSelection.handleDeselectOne}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              onSelectAll={customersSelection.handleSelectAll}
-              onSelectOne={customersSelection.handleSelectOne}
+              onSelectAll={storesSelection.handleSelectAll}
+              onSelectOne={storesSelection.handleSelectOne}
               page={page}
               rowsPerPage={rowsPerPage}
-              selected={customersSelection.selected}
+              selected={storesSelection.selected}
             />
           </Stack>
         </Container>

@@ -5,7 +5,6 @@ import { Avatar, Box, Card, CardContent, Divider, Stack, SvgIcon, Typography } f
 
 export const CompanyCard = (props) => {
   const { company } = props;
-
   return (
     <Card
       sx={{

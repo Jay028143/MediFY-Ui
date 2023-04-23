@@ -3,28 +3,36 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
-import { Layout as AuthLayout } from 'src/layouts/auth/layout';
-import StoreService from 'src/services/Storeservice';
+import {
+  Box, Button, Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Divider, Container, Stack, TextField, Typography
+} from '@mui/material';
+import StoreService from 'src/services/StoreService';
+import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 
 const Page = () => {
+
+
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
       storeName: '',
       adminId: '',
-      storeId:'0',
+      storeId: '0',
       address: '',
       postCode: '',
-      createdAt:'2023-04-17',
-      updatedAt:'2013-04-17',
+      createdAt: '2023-04-17',
+      updatedAt: '2013-04-17',
       submit: null
     },
     response: {
-     message:'',
+      message: '',
     },
     validationSchema: Yup.object({
-    
+
       storeName: Yup
         .string()
         .max(255)
@@ -68,95 +76,106 @@ const Page = () => {
         </title>
       </Head>
       <Box
+        component="main"
         sx={{
-          flex: '1 1 auto',
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'center'
+          flexGrow: 1,
+          py: 8
         }}
       >
-        <Box
-          sx={{
-            maxWidth: 550,
-            px: 3,
-            py: '100px',
-            width: '100%'
-          }}
-        >
-          <div>
+
+        <Container maxWidth="xl">
+          <Stack spacing={3}>
+            <Typography variant="h4">
+              Stores
+            </Typography>
             <form
+
               noValidate
               onSubmit={formik.handleSubmit}
             >
-              <Stack spacing={3}>
-                <TextField
-                  error={!!(formik.touched.storeName && formik.errors.storeName)}
-                  fullWidth
-                  helperText={formik.touched.storeName && formik.errors.storeName}
-                  label="Store Name"
-                  name="storeName"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.firstName}
+              <Card>
+                <CardHeader
+                 // subheader="Add Store"
+                  title="Add Store"
                 />
-                <TextField
-                  error={!!(formik.touched.address && formik.errors.address)}
-                  fullWidth
-                  helperText={formik.touched.address && formik.errors.address}
-                  label="Address"
-                  name="address"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.address}
-                />
-                <TextField
-                  error={!!(formik.touched.postCode && formik.errors.postCode)}
-                  fullWidth
-                  helperText={formik.touched.postCode && formik.errors.postCode}
-                  label="Post Code"
-                  name="postCode"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.postCode}
-                />
-                {/* <DatePicker label="Date Of Joining"
+                <Divider />
+                <CardContent>
+                  <Stack spacing={3}
+                    sx={{ maxWidth: 400 }}
+                  >
+                    <TextField
+                      error={!!(formik.touched.storeName && formik.errors.storeName)}
+                      fullWidth
+                      helperText={formik.touched.storeName && formik.errors.storeName}
+                      label="Store Name"
+                      name="storeName"
+                      onBlur={formik.handleBlur}
+                      onChange={formik.handleChange}
+                      value={formik.values.firstName}
+                    />
+                    <TextField
+                      error={!!(formik.touched.address && formik.errors.address)}
+                      fullWidth
+                      helperText={formik.touched.address && formik.errors.address}
+                      label="Address"
+                      name="address"
+                      onBlur={formik.handleBlur}
+                      onChange={formik.handleChange}
+                      value={formik.values.address}
+                    />
+                    <TextField
+                      error={!!(formik.touched.postCode && formik.errors.postCode)}
+                      fullWidth
+                      helperText={formik.touched.postCode && formik.errors.postCode}
+                      label="Post Code"
+                      name="postCode"
+                      onBlur={formik.handleBlur}
+                      onChange={formik.handleChange}
+                      value={formik.values.postCode}
+                    />
+                    {/* <DatePicker label="Date Of Joining"
                   name="dateOfJoining"  
                   // onChange={formik.handleChange}
                   // value={formik.values.dateOfJoining}
                   />
                  */}
 
-              </Stack>
-              {formik.errors.submit && (
-                <Typography
-                  color="error"
-                  sx={{ mt: 3 }}
-                  variant="body2"
-                >
-                  {formik.errors.submit}
-                </Typography>
-              )}
-              <Button
-                fullWidth
-                size="large"
-                sx={{ mt: 3 }}
-                type="submit"
-                variant="contained"
-              >
-                Save
-              </Button>
+                  </Stack>
+                </CardContent>
+                <Divider />
+                {formik.errors.submit && (
+                  <Typography
+                    color="error"
+                    sx={{ mt: 3 }}
+                    variant="body2"
+                  >
+                    {formik.errors.submit}
+                  </Typography>
+                )}
+                <CardActions sx={{ justifyContent: 'flex-start' }}>
+                  <Button
+                    size="large"
+                    sx={{ mt: 3 }}
+                    type="submit"
+                    variant="contained"
+                  >
+                    Save
+                  </Button>
+                </CardActions>
+              </Card>
             </form>
-          </div>
-        </Box>
+
+          </Stack>
+        </Container>
       </Box>
     </>
   );
 };
 
 Page.getLayout = (page) => (
-  <AuthLayout>
+  <DashboardLayout>
     {page}
-  </AuthLayout>
+  </DashboardLayout>
 );
 
 export default Page;

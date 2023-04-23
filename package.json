@@ -5,6 +5,7 @@
   "licence": "MIT",
   "homepage": "https://devias.io",
   "private": false,
+  "proxy":"http://localhost:8080/medify",
   "scripts": {
     "dev": "next",
     "build": "next build",
@@ -34,6 +35,7 @@
     "react": "18.2.0",
     "react-apexcharts": "1.4.0",
     "react-dom": "18.2.0",
+    "react-router-dom": "^6.10.0",
     "simplebar-react": "^3.2.1",
     "yup": "1.0.0"
   },

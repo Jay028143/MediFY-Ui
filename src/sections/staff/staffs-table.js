@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import {  Button, Link } from '@mui/material';
+//import { useParams, useNavigate } from 'react-router-dom';
 import {
   Avatar,
   Box,
@@ -17,19 +18,21 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
+//import { json } from 'stream/consumers';
 
-export const CustomersTable = (props) => {
+export const StaffsTable = (props) => {
+  //let navigate = useNavigate();
   const {
     count = 0,
     items = [],
     onDeselectAll,
     onDeselectOne,
-    onPageChange = () => {},
+    onPageChange = () => { },
     onRowsPerPageChange,
     onSelectAll,
     onSelectOne,
-    deleteCustomer,
-    EditCustomer,
+    deleteStaff,
+    EditStaff,
     page = 0,
     rowsPerPage = 0,
     selected = []
@@ -46,16 +49,16 @@ export const CustomersTable = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  Customer Name
+                  Staff Name
                 </TableCell>
                 <TableCell>
-                  Email
+                  User Name
                 </TableCell>
                 <TableCell>
-                 NHS Number
+                 Email Id
                 </TableCell>
                 <TableCell>
-                  Date Of Birth
+                 NI Number
                 </TableCell>
                 <TableCell>
                   Location
@@ -64,7 +67,10 @@ export const CustomersTable = (props) => {
                   Post Code
                 </TableCell>
                 <TableCell>
-                 Mobile Number
+                  Mobile Number
+                </TableCell>
+                <TableCell>
+                  Date Of Joining
                 </TableCell>
                 <TableCell>
                   Edit
@@ -75,48 +81,50 @@ export const CustomersTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((customer) => {
-                const isSelected = selected.includes(customer.customerId);
-                //const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
+              {items.map((staff) => {
+                const isSelected = selected.includes(staff.userId);
+               //const createdAt = format(staff.createdAt, 'dd/MM/yyyy');
 
                 return (
                   <TableRow
                     hover
-                    key={customer.customerId}
+                    key={staff.userId}
                     selected={isSelected}
                   >
-                    
                     <TableCell>
                       <Stack
                         alignItems="center"
                         direction="row"
                         spacing={2}
                       >
-                        <Avatar src={customer.avatar}>
-                          {getInitials(customer.firstName)}
+                        <Avatar src={staff.avatar}>
+                          {getInitials(staff.firstName)}
                         </Avatar>
                         <Typography variant="subtitle2">
-                        {customer.firstName} {customer.lastName}
+                          {staff.firstName} {staff.lastName}
                         </Typography>
                       </Stack>
                     </TableCell>
                     <TableCell>
-                      {customer.email}
+                      {staff.userName}
                     </TableCell>
                     <TableCell>
-                      {customer.nhsNumber}
+                      {staff.email}
                     </TableCell>
                     <TableCell>
-                      {customer.dateOfBirth}
+                      {staff.niNumber}
                     </TableCell>
                     <TableCell>
-                       {customer.address}
+                      {staff.address}
                     </TableCell>
                     <TableCell>
-                       {customer.postCode}
+                      {staff.postCode}
                     </TableCell>
                     <TableCell>
-                      {customer.mobileNumber}
+                      {staff.mobileNumber}
+                    </TableCell>
+                    <TableCell>
+                      {staff.dateOfJoining}
                     </TableCell>
                     <TableCell>
                       <Button
@@ -125,7 +133,7 @@ export const CustomersTable = (props) => {
                         sx={{ mt: 3 }}
                         type="submit"
                         variant="contained"
-                        onClick={() =>EditCustomer(customer)}
+                        onClick={() =>EditStaff(staff)}
                       >
                         Edit
                       </Button>
@@ -137,11 +145,13 @@ export const CustomersTable = (props) => {
                         sx={{ mt: 3 }}
                         type="submit"
                         variant="contained"
-                        onClick={() => deleteCustomer(customer.customerId)}
+                        onClick={() => deleteStaff(staff.userId)}
                       >
                         Delete
                       </Button>
                     </TableCell>
+
+
                   </TableRow>
                 );
               })}
@@ -162,7 +172,7 @@ export const CustomersTable = (props) => {
   );
 };
 
-CustomersTable.propTypes = {
+StaffsTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,
@@ -174,6 +184,7 @@ CustomersTable.propTypes = {
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
   selected: PropTypes.array,
-  deleteCustomer:PropTypes.func,
-  EditCustomer:PropTypes.func
+  deleteStaff:PropTypes.func,
+  EditStaff:PropTypes.func
+  
 };

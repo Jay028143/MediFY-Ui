@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useState ,useEffect} from 'react';
 import Head from 'next/head';
-import NextLink from 'next/link';
 import { subDays, subHours } from 'date-fns';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
@@ -8,28 +7,36 @@ import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { StoresTable } from 'src/sections/store/stores-table';
-import { StoresSearch } from 'src/sections/store/stores-search';
+import { StaffsTable } from 'src/sections/staff/staffs-table';
+import { StaffsSearch } from 'src/sections/staff/staffs-search';
 import { applyPagination } from 'src/utils/apply-pagination';
-import StoreService from 'src/services/StoreService';
-import { AddStore } from './component/store';
+import UserService from 'src/services/UserService';
 //const now = new Date();
-//const data=[];
 const data = [
   {
-    storeId: '1',
+    userId: '1',
     address: "stone",
-    storeName: 'MedifyA',
+    firstName: 'Jay',
+    lastName:'Patel',
+    userName:'JayPatel',
+    email:'Jp@gmail.com',
+    niNumber:'78456122',
     postCode: 'AAAA',
-    mobileNumber: '123456789'
+    mobileNumber: '123456789',
+    dateOfJoining:'2023-02-15'
   },
   {
-    storeId: '2',
-    address: "barmingham",
-    storeName: 'MedifyB',
-    postCode: 'BBBBBB',
-    mobileNumber: '7895612'
-  }
+    userId: '2',
+    address: "stoke",
+    firstName: 'Hardik',
+    lastName:'Patel',
+    userName:'HardikPatel',
+    email:'Hp@gmail.com',
+    niNumber:'57241545',
+    postCode: 'BBBB',
+    mobileNumber: '565458',
+    dateOfJoining:'2023-02-20'
+  }];
   
   // {
   //   id: '5e887ac47eed253091be10cb',
@@ -171,9 +178,9 @@ const data = [
   //   name: 'Nasimiyu Danai',
   //   phone: '801-301-7894'
   // }
-];
+//];
 
-const useStores = (page, rowsPerPage) => {
+const useStaffs = (page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
@@ -182,56 +189,60 @@ const useStores = (page, rowsPerPage) => {
   );
 };
 
-const useStoreIds = (stores) => {
+const useStaffIds = (staffs) => {
   return useMemo(
     () => {
-      return stores.map((store) => store.id);
+      return staffs.map((staff) => staff.id);
     },
-    [stores]
+    [staffs]
   );
 };
 
-const deleteStore = (storeId) => {
+const deleteStaff = (staffId) => {
 
-  alert("storeId"+storeId);
-  //navigate("/stores");
+  alert("staffId"+staffId);
+  //navigate("/staffs");
 
-  // StoreService.remove(storeId)
+  // StaffService.remove(staffId)
   //   .then(response => {
   //     console.log(response.data);
-  //     navigate("/stores");
+  //     navigate("/staffs");
+  //   })
+  //   .catch(e => {
+  //     console.log(e);
+  //   });
+};
+const updateStaff = (staff) => {
+  alert("data.."+JSON.stringify(staff))
+  // StaffService.update(currentTutorial.id, currentTutorial)
+  //   .then(response => {
+  //     console.log(response.data);
+  //     //setMessage("The StaffService was updated successfully!");
   //   })
   //   .catch(e => {
   //     console.log(e);
   //   });
 };
 
-
-
-
-const updateStore = (store) => {
-  alert("data.."+JSON.stringify(store));
- 
-};
-
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const stores = useStores(page, rowsPerPage);
-  const storesIds = useStoreIds(stores);
-  const storesSelection = useSelection(storesIds);
-  const [storedata, setStores] = useState([]);
+  const staffs = useStaffs(page, rowsPerPage);
+  const staffsIds = useStaffIds(staffs);
+  const staffsSelection = useSelection(staffsIds);
+  //const [data, setStaffs] = useState(0);
 
   useEffect(() => {
-    retrieveStores();
+    retrieveStaffs();
   }, []);
 
-  const retrieveStores = () => {
-    StoreService.getAll()
+  const retrieveStaffs = () => {
+    UserService.getAll()
       .then(response => {
-        setStores(response.data);
+        alert(response.data)
+        //setStaffs(response.data);
         console.log(response.data);
-        alert(JSON.stringify(response.data));
+        
       })
       .catch(e => {
         console.log(e);
@@ -256,7 +267,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Stores | MediFY
+          Staffs | MediFY
         </title>
       </Head>
       <Box
@@ -275,9 +286,9 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Stores
+                  Staffs
                 </Typography>
-                {/* <Stack
+                <Stack
                   alignItems="center"
                   direction="row"
                   spacing={1}
@@ -302,7 +313,7 @@ const Page = () => {
                   >
                     Export
                   </Button>
-                </Stack> */}
+                </Stack>
               </Stack>
               <div>
                 <Button
@@ -312,29 +323,26 @@ const Page = () => {
                     </SvgIcon>
                   )}
                   variant="contained"
-                  component={NextLink}
-                  href="/component/store"
-                  underline="hover"
                 >
                   Add
                 </Button>
               </div>
             </Stack>
-            <StoresSearch />
-            <StoresTable
+            <StaffsSearch />
+            <StaffsTable
               count={data.length}
-              items={storedata}
-              onDeselectAll={storesSelection.handleDeselectAll}
-              onDeselectOne={storesSelection.handleDeselectOne}
+              items={staffs}
+              onDeselectAll={staffsSelection.handleDeselectAll}
+              onDeselectOne={staffsSelection.handleDeselectOne}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              onSelectAll={storesSelection.handleSelectAll}
-              onSelectOne={storesSelection.handleSelectOne}
+              onSelectAll={staffsSelection.handleSelectAll}
+              onSelectOne={staffsSelection.handleSelectOne}
               page={page}
               rowsPerPage={rowsPerPage}
-              selected={storesSelection.selected}
-              deleteStore={deleteStore}
-              updateStore={updateStore}
+              selected={staffsSelection.selected}
+              deleteStaff={deleteStaff}
+              updateStaff={updateStaff}
             />
           </Stack>
         </Container>

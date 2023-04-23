@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
+import {  Button, Link } from '@mui/material';
+//import { useParams, useNavigate } from 'react-router-dom';
 import {
   Avatar,
   Box,
@@ -16,17 +18,21 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
+//import { json } from 'stream/consumers';
 
 export const StoresTable = (props) => {
+  //let navigate = useNavigate();
   const {
     count = 0,
     items = [],
     onDeselectAll,
     onDeselectOne,
-    onPageChange = () => {},
+    onPageChange = () => { },
     onRowsPerPageChange,
     onSelectAll,
     onSelectOne,
+    deleteStore,
+    EditStore,
     page = 0,
     rowsPerPage = 0,
     selected = []
@@ -55,36 +61,24 @@ export const StoresTable = (props) => {
                   Mobile Number
                 </TableCell>
                 <TableCell>
-                 Update
+                  Update
                 </TableCell>
                 <TableCell>
-                 Delete
+                  Delete
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {items.map((store) => {
-                const isSelected = selected.includes(store.id);
-                const createdAt = format(store.createdAt, 'dd/MM/yyyy');
+                const isSelected = selected.includes(store.storeId);
+                //const createdAt = format(store.createdAt, 'dd/MM/yyyy');
 
                 return (
                   <TableRow
                     hover
-                    key={store.id}
+                    key={store.storeId}
                     selected={isSelected}
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isSelected}
-                        onChange={(event) => {
-                          if (event.target.checked) {
-                            onSelectOne?.(store.id);
-                          } else {
-                            onDeselectOne?.(store.id);
-                          }
-                        }}
-                      />
-                    </TableCell>
                     <TableCell>
                       <Stack
                         alignItems="center"
@@ -92,25 +86,48 @@ export const StoresTable = (props) => {
                         spacing={2}
                       >
                         <Avatar src={store.avatar}>
-                          {getInitials(store.name)}
+                          {getInitials(store.storeName)}
                         </Avatar>
                         <Typography variant="subtitle2">
-                          {store.name}
+                          {store.storeName}
                         </Typography>
                       </Stack>
                     </TableCell>
                     <TableCell>
-                      {store.email}
+                      {store.address}
                     </TableCell>
                     <TableCell>
-                      {store.address.city}, {store.address.state}, {store.address.country}
+                      {store.storeName}
                     </TableCell>
                     <TableCell>
-                      {store.phone}
+                      {store.mobileNumber}
                     </TableCell>
                     <TableCell>
-                      {createdAt}
+                      <Button
+                        fullWidth
+                        size="small"
+                        sx={{ mt: 3 }}
+                        type="submit"
+                        variant="contained"
+                        onClick={() =>EditStore(store)}
+                      >
+                        Edit
+                      </Button>
                     </TableCell>
+                    <TableCell>
+                      <Button
+                        fullWidth
+                        size="small"
+                        sx={{ mt: 3 }}
+                        type="submit"
+                        variant="contained"
+                        onClick={() => deleteStore(store.storeId)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+
+
                   </TableRow>
                 );
               })}
@@ -142,5 +159,8 @@ StoresTable.propTypes = {
   onSelectOne: PropTypes.func,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
-  selected: PropTypes.array
+  selected: PropTypes.array,
+  deleteStore:PropTypes.func,
+  EditStore:PropTypes.func
+  
 };

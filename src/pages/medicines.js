@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useState ,useEffect} from 'react';
 import Head from 'next/head';
-import NextLink from 'next/link';
 import { subDays, subHours } from 'date-fns';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
@@ -8,25 +7,24 @@ import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { StoresTable } from 'src/sections/store/stores-table';
-import { StoresSearch } from 'src/sections/store/stores-search';
+import { MedicinesTable } from 'src/sections/medicine/medicines-table';
+import { MedicinesSearch } from 'src/sections/medicine/medicines-search';
 import { applyPagination } from 'src/utils/apply-pagination';
-import StoreService from 'src/services/StoreService';
-import { AddStore } from './component/store';
+import MedicineService from 'src/services/MedicineService';
 //const now = new Date();
 //const data=[];
 const data = [
   {
-    storeId: '1',
+    medicineId: '1',
     address: "stone",
-    storeName: 'MedifyA',
+    medicineName: 'MedifyA',
     postCode: 'AAAA',
     mobileNumber: '123456789'
   },
   {
-    storeId: '2',
+    medicineId: '2',
     address: "barmingham",
-    storeName: 'MedifyB',
+    medicineName: 'MedifyB',
     postCode: 'BBBBBB',
     mobileNumber: '7895612'
   }
@@ -173,7 +171,7 @@ const data = [
   // }
 ];
 
-const useStores = (page, rowsPerPage) => {
+const useMedicines = (page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
@@ -182,61 +180,64 @@ const useStores = (page, rowsPerPage) => {
   );
 };
 
-const useStoreIds = (stores) => {
+const useMedicineIds = (medicines) => {
   return useMemo(
     () => {
-      return stores.map((store) => store.id);
+      return medicines.map((medicine) => medicine.id);
     },
-    [stores]
+    [medicines]
   );
 };
 
-const deleteStore = (storeId) => {
+const deleteMedicine = (medicineId) => {
 
-  alert("storeId"+storeId);
-  //navigate("/stores");
+  alert("medicineId"+medicineId);
+  //navigate("/medicines");
 
-  // StoreService.remove(storeId)
+  // MedicineService.remove(medicineId)
   //   .then(response => {
   //     console.log(response.data);
-  //     navigate("/stores");
+  //     navigate("/medicines");
+  //   })
+  //   .catch(e => {
+  //     console.log(e);
+  //   });
+};
+const updateMedicine = (medicine) => {
+  alert("data.."+JSON.stringify(medicine))
+  // MedicineService.update(currentTutorial.id, currentTutorial)
+  //   .then(response => {
+  //     console.log(response.data);
+  //     //setMessage("The MedicineService was updated successfully!");
   //   })
   //   .catch(e => {
   //     console.log(e);
   //   });
 };
 
-
-
-
-const updateStore = (store) => {
-  alert("data.."+JSON.stringify(store));
- 
-};
-
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const stores = useStores(page, rowsPerPage);
-  const storesIds = useStoreIds(stores);
-  const storesSelection = useSelection(storesIds);
-  const [storedata, setStores] = useState([]);
+  const medicines = useMedicines(page, rowsPerPage);
+  const medicinesIds = useMedicineIds(medicines);
+  const medicinesSelection = useSelection(medicinesIds);
+  const [medicinedata, setMedicines] = useState([]);
 
-  useEffect(() => {
-    retrieveStores();
-  }, []);
+  // useEffect(() => {
+  //   retrieveMedicines();
+  // }, []);
 
-  const retrieveStores = () => {
-    StoreService.getAll()
-      .then(response => {
-        setStores(response.data);
-        console.log(response.data);
-        alert(JSON.stringify(response.data));
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };    
+  // const retrieveMedicines = () => {
+  //   MedicineService.getAll()
+  //     .then(response => {
+  //       setMedicines(response.data);
+  //       console.log(response.data);
+  //       alert(response.data)
+  //     })
+  //     .catch(e => {
+  //       console.log(e);
+  //     });
+  // };    
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -256,7 +257,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Stores | MediFY
+          Medicines | MediFY
         </title>
       </Head>
       <Box
@@ -275,9 +276,9 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Stores
+                  Medicines
                 </Typography>
-                {/* <Stack
+                <Stack
                   alignItems="center"
                   direction="row"
                   spacing={1}
@@ -302,7 +303,7 @@ const Page = () => {
                   >
                     Export
                   </Button>
-                </Stack> */}
+                </Stack>
               </Stack>
               <div>
                 <Button
@@ -312,29 +313,26 @@ const Page = () => {
                     </SvgIcon>
                   )}
                   variant="contained"
-                  component={NextLink}
-                  href="/component/store"
-                  underline="hover"
                 >
                   Add
                 </Button>
               </div>
             </Stack>
-            <StoresSearch />
-            <StoresTable
+            <MedicinesSearch />
+            <MedicinesTable
               count={data.length}
-              items={storedata}
-              onDeselectAll={storesSelection.handleDeselectAll}
-              onDeselectOne={storesSelection.handleDeselectOne}
+              items={medicines}
+              onDeselectAll={medicinesSelection.handleDeselectAll}
+              onDeselectOne={medicinesSelection.handleDeselectOne}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              onSelectAll={storesSelection.handleSelectAll}
-              onSelectOne={storesSelection.handleSelectOne}
+              onSelectAll={medicinesSelection.handleSelectAll}
+              onSelectOne={medicinesSelection.handleSelectOne}
               page={page}
               rowsPerPage={rowsPerPage}
-              selected={storesSelection.selected}
-              deleteStore={deleteStore}
-              updateStore={updateStore}
+              selected={medicinesSelection.selected}
+              deleteMedicine={deleteMedicine}
+              updateMedicine={updateMedicine}
             />
           </Stack>
         </Container>

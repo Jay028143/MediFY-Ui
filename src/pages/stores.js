@@ -12,7 +12,8 @@ import { StoresTable } from 'src/sections/store/stores-table';
 import { StoresSearch } from 'src/sections/store/stores-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import StoreService from 'src/services/StoreService';
-import { AddStore } from './component/store';
+//import { Store } from './component/store';
+import { AddStore } from 'src/components/store';
 //const now = new Date();
 //const data=[];
 const data = [
@@ -191,6 +192,8 @@ const useStoreIds = (stores) => {
   );
 };
 
+
+
 const deleteStore = (storeId) => {
 
   alert("storeId"+storeId);
@@ -209,10 +212,7 @@ const deleteStore = (storeId) => {
 
 
 
-const updateStore = (store) => {
-  alert("data.."+JSON.stringify(store));
- 
-};
+
 
 const Page = () => {
   const [page, setPage] = useState(0);
@@ -220,11 +220,20 @@ const Page = () => {
   const stores = useStores(page, rowsPerPage);
   const storesIds = useStoreIds(stores);
   const storesSelection = useSelection(storesIds);
-  const [storedata, setStores] = useState([]);
+  const [storedata, setStores] = useState({});
+  const [addstore, setAddstore] = useState(false);
 
   useEffect(() => {
     retrieveStores();
   }, []);
+  
+
+  const updateStore = (store)=> {
+    console.log("data..."+JSON.stringify(store));
+    setStores(store);
+      setAddstore(true);
+    console.log("setStores..."+JSON.stringify(storedata));
+  };
 
   const retrieveStores = () => {
     StoreService.getAll()
@@ -237,6 +246,8 @@ const Page = () => {
         console.log(e);
       });
   };    
+
+ 
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -252,21 +263,25 @@ const Page = () => {
     []
   );
 
+  const handleAddStore=()=>{
+    setAddstore(true);
+  }
+
   return (
-    <>
+    <>{!addstore?<>
       <Head>
         <title>
           Stores | MediFY
         </title>
       </Head>
-      <Box
+       <Box
         component="main"
         sx={{
           flexGrow: 1,
           py: 8
         }}
       >
-        <Container maxWidth="xl">
+       <Container maxWidth="xl">
           <Stack spacing={3}>
             <Stack
               direction="row"
@@ -312,8 +327,8 @@ const Page = () => {
                     </SvgIcon>
                   )}
                   variant="contained"
-                  component={NextLink}
-                  href="/component/store"
+                  onClick={handleAddStore}
+                  
                   underline="hover"
                 >
                   Add
@@ -322,9 +337,8 @@ const Page = () => {
             </Stack>
             <StoresSearch />
             <StoresTable
-            
               count={data.length}
-              items={storedata}
+              items={data}
               onDeselectAll={storesSelection.handleDeselectAll}
               onDeselectOne={storesSelection.handleDeselectOne}
               onPageChange={handlePageChange}
@@ -335,12 +349,12 @@ const Page = () => {
               rowsPerPage={rowsPerPage}
               selected={storesSelection.selected}
               deleteStore={deleteStore}
-              updateStore={updateStore}
+              EditStore={updateStore}
             />
           </Stack>
         </Container>
       </Box>
-    </>
+    </>:<><AddStore items={storedata}/></>}</>
   );
 };
 

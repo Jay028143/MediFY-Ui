@@ -1,8 +1,8 @@
 import Head from 'next/head';
-import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import PropTypes from 'prop-types';
 import {
   Box, Button, Card,
   CardActions,
@@ -11,11 +11,13 @@ import {
   Divider, Container, Stack, TextField, Typography
 } from '@mui/material';
 import StoreService from 'src/services/StoreService';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 
-const Page = () => {
+ export const AddStore = (props) => {
 
-
+  const {
+    items,
+  } = props;
+  console.log("data.eee.."+JSON.stringify(items));
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -172,10 +174,6 @@ const Page = () => {
   );
 };
 
-Page.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
-
-export default Page;
+AddStore.prototype={
+  items: PropTypes.array
+}

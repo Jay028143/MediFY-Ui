@@ -322,6 +322,7 @@ const Page = () => {
             </Stack>
             <StoresSearch />
             <StoresTable
+            
               count={data.length}
               items={storedata}
               onDeselectAll={storesSelection.handleDeselectAll}

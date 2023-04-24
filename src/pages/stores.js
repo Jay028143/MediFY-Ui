@@ -13,7 +13,7 @@ import { StoresSearch } from 'src/sections/store/stores-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import StoreService from 'src/services/StoreService';
 //import { Store } from './component/store';
-import { AddStore } from 'src/components/store';
+import { AddUpdateStore } from 'src/components/addUpdateStore';
 const now = new Date();
 //const data=[];
 const data = [
@@ -219,7 +219,7 @@ console.log("date.."+now);
 
   const deleteStore = (storeId) => {
 
-    alert("storeId"+storeId);
+    //alert("storeId"+storeId);
   
     StoreService.remove(storeId)
       .then(response => {
@@ -244,11 +244,11 @@ console.log("date.."+now);
     const userRole=localStorage.getItem('userRole');
     const user=JSON.parse(localStorage.getItem('user'));
     if(userRole=="ROLE_ADMIN"){
-    StoreService.getStoreByUserId(user.id)
+      StoreService.getStoreByUserId(user.id)
       .then(response => {
         setStores(response.data);
         console.log(response.data);
-        alert(JSON.stringify(response.data));
+       // alert(JSON.stringify(response.data));
       })
       .catch(e => {
         console.log(e);
@@ -258,10 +258,10 @@ console.log("date.."+now);
     {
       StoreService.get(user.storeId)
       .then(response => {
-        alert("response.data"+JSON.stringify(response.data));
+       // alert("response.data"+JSON.stringify(response.data));
         setStores([response.data]);
         console.log(response.data);
-        alert(JSON.stringify(response.data));
+       // alert(JSON.stringify(response.data));
       })
       .catch(e => {
         console.log(e);
@@ -381,7 +381,7 @@ console.log("date.."+now);
           </Stack>
         </Container>
       </Box>
-    </>:<><AddStore items={storedata}
+    </>:<><AddUpdateStore items={storedata}
      handleAddStore={handleAddStore}/></>}</>
   );
 };

@@ -22,7 +22,7 @@ const Page = () => {
       password: '',
       niNumber: '',
       dateOfBirth: '',
-      role:['manager'],
+      role:['admin'],
       dateOfJoining: '',
       address: '',
       postCode: '',

@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import StoreService from 'src/services/StoreService';
 
-export const AddStore = (props) => {
+export const AddUpdateStore = (props) => {
 
   const {
     items,
@@ -198,7 +198,7 @@ export const AddStore = (props) => {
   );
 };
 
-AddStore.prototype = {
+AddUpdateStore.prototype = {
   items: PropTypes.array,
   handleAddStore:PropTypes.func
 }

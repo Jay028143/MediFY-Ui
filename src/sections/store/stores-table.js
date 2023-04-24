@@ -61,7 +61,7 @@ export const StoresTable = (props) => {
                   Mobile Number
                 </TableCell>
                 <TableCell>
-                  Update
+                  Edit
                 </TableCell>
                 {user.roles=="ROLE_ADMIN"?<TableCell>
                   Delete

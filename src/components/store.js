@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
 import {
   Box, Button, Card,
   CardActions,
@@ -12,22 +13,30 @@ import {
 } from '@mui/material';
 import StoreService from 'src/services/StoreService';
 
- export const AddStore = (props) => {
+export const AddStore = (props) => {
 
   const {
     items,
+    handleAddStore
   } = props;
-  console.log("data.eee.."+JSON.stringify(items));
+  const buttonval=items.storeId>0?'Update':'Save';
+  const now = new Date();
+  const currentdatetime = format(now, "yyyy-MM-dd HH:mm:ss");
+  const user=JSON.parse(localStorage.getItem('user'));
+  const createdAt=items.storeId>0?items.createdAt:currentdatetime;
+  const adminId=items.storeId>0?items.adminId :user.id;
+  console.log("data.eee.." + JSON.stringify(items));
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      storeName: '',
-      adminId: '',
-      storeId: '0',
-      address: '',
-      postCode: '',
-      createdAt: '2023-04-17',
-      updatedAt: '2013-04-17',
+      storeName: items.storeName || '',
+      adminId:  adminId,
+      storeId: items.storeId ||'0',
+      address: items.address || '',
+      postCode: items.postCode || '',
+      mobileNumber:items.mobileNumber || '',
+      createdAt: createdAt,
+      updatedAt: currentdatetime,
       submit: null
     },
     response: {
@@ -46,22 +55,27 @@ import StoreService from 'src/services/StoreService';
       postCode: Yup
         .string()
         .max(255)
-        .required('Post Code is required')
+        .required('Post Code is required'),
+      mobileNumber: Yup
+        .string()
+        .max(255)
+        .required('Mobile Number is required')
     }),
     onSubmit: async (values, helpers) => {
       try {
         StoreService.create(values)
           .then(response => {
             alert(JSON.stringify(response));
-            setSubmitted(true);
+            //auth.skip();
+            //router.push('/stores');
+            //setSubmitted(true);
+            handleAddStore(false);
             console.log(response.data);
           })
           .catch(e => {
             console.log(e);
           });
-
-
-        router.push('/');
+        
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -97,7 +111,7 @@ import StoreService from 'src/services/StoreService';
             >
               <Card>
                 <CardHeader
-                 // subheader="Add Store"
+                  // subheader="Add Store"
                   title="Add Store"
                 />
                 <Divider />
@@ -113,7 +127,7 @@ import StoreService from 'src/services/StoreService';
                       name="storeName"
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
-                      value={formik.values.firstName}
+                      value={formik.values.storeName}
                     />
                     <TextField
                       error={!!(formik.touched.address && formik.errors.address)}
@@ -134,6 +148,16 @@ import StoreService from 'src/services/StoreService';
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
                       value={formik.values.postCode}
+                    />
+                    <TextField
+                      error={!!(formik.touched.mobileNumber && formik.errors.mobileNumber)}
+                      fullWidth
+                      helperText={formik.touched.pomobileNumberstCode && formik.errors.mobileNumber}
+                      label="Mobile Number"
+                      name="mobileNumber"
+                      onBlur={formik.handleBlur}
+                      onChange={formik.handleChange}
+                      value={formik.values.mobileNumber}
                     />
                     {/* <DatePicker label="Date Of Joining"
                   name="dateOfJoining"  
@@ -161,7 +185,7 @@ import StoreService from 'src/services/StoreService';
                     type="submit"
                     variant="contained"
                   >
-                    Save
+                    {buttonval}
                   </Button>
                 </CardActions>
               </Card>
@@ -174,6 +198,7 @@ import StoreService from 'src/services/StoreService';
   );
 };
 
-AddStore.prototype={
-  items: PropTypes.array
+AddStore.prototype = {
+  items: PropTypes.array,
+  handleAddStore:PropTypes.func
 }

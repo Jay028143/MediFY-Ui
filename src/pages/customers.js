@@ -35,6 +35,72 @@ const data = [
     postCode: 'dddd',
     mobileNumber: '4548448',
     dateOfBirth:'1993-02-20'
+  },
+  {
+    customerId: '1',
+    address: "stone",
+    firstName: 'Vijin',
+    lastName:'wales',
+    email:'vw@gmail.com',
+    nhsNumber:'003',
+    postCode: 'cccc',
+    mobileNumber: '5645459895',
+    dateOfBirth:'1995-02-15'
+  },
+  {
+    customerId: '2',
+    address: "stoke",
+    firstName: 'Rohan',
+    lastName:'Patel',
+    email:'Hp@gmail.com',
+    nhsNumber:'004',
+    postCode: 'dddd',
+    mobileNumber: '4548448',
+    dateOfBirth:'1993-02-20'
+  },
+  {
+    customerId: '1',
+    address: "stone",
+    firstName: 'Vijin',
+    lastName:'wales',
+    email:'vw@gmail.com',
+    nhsNumber:'003',
+    postCode: 'cccc',
+    mobileNumber: '5645459895',
+    dateOfBirth:'1995-02-15'
+  },
+  {
+    customerId: '2',
+    address: "stoke",
+    firstName: 'Rohan',
+    lastName:'Patel',
+    email:'Hp@gmail.com',
+    nhsNumber:'004',
+    postCode: 'dddd',
+    mobileNumber: '4548448',
+    dateOfBirth:'1993-02-20'
+  },
+  {
+    customerId: '1',
+    address: "stone",
+    firstName: 'Vijin',
+    lastName:'wales',
+    email:'vw@gmail.com',
+    nhsNumber:'003',
+    postCode: 'cccc',
+    mobileNumber: '5645459895',
+    dateOfBirth:'1995-02-15'
+  },
+  {
+    customerId: '2',
+    address: "stoke",
+    firstName: 'Rohan',
+    lastName:'Patel',
+    email:'Hp@gmail.com',
+    nhsNumber:'004',
+    postCode: 'dddd',
+    mobileNumber: '4548448',
+    dateOfBirth:'1993-02-20'
   }
 ];
 

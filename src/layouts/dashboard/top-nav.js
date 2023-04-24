@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import BellIcon from '@heroicons/react/24/solid/BellIcon';
 import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import Bars3Icon from '@heroicons/react/24/solid/Bars3Icon';
+import { getInitials } from 'src/utils/get-initials';
 import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon';
 import {
   Avatar,
@@ -24,7 +25,7 @@ export const TopNav = (props) => {
   const { onNavOpen } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   const accountPopover = usePopover();
-
+  const user=JSON.parse(localStorage.getItem('user'));
   return (
     <>
       <Box
@@ -99,8 +100,8 @@ export const TopNav = (props) => {
                 height: 40,
                 width: 40
               }}
-              src="/assets/avatars/avatar-anika-visser.png"
-            />
+              src={getInitials(user.username)}
+            >{getInitials(user.username)}</Avatar>
           </Stack>
         </Stack>
       </Box>

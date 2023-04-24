@@ -19,6 +19,7 @@ import {
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import LoginService from 'src/services/LoginService';
+//import { json } from 'stream/consumers';
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
@@ -45,15 +46,21 @@ const Page = () => {
 
        LoginService.login(values)
        .then(response => {
-          if(response.data.success==200)
+        //alert("Json..."+JSON.stringify(response));
+          if(response.status==200)
           {
-            router.push('http://localhost:3000/customers');
+            auth.skip();
+            localStorage.setItem('user',JSON.stringify(response.data));
+            localStorage.setItem('userRole',response.data.roles);
+            
+            router.push('/');
+
           }
-         setSubmitted(true);
-         console.log(response.data);
        })
        .catch(e => {
-         console.log(e);
+        helpers.setStatus({ success: false });
+        helpers.setErrors({ submit: "Bad credentials" });
+         console.log(""+e.message); 
        });
         
       } catch (err) {
@@ -172,16 +179,9 @@ const Page = () => {
                   type="submit"
                   variant="contained"
                 >
-                  Continue
+                  Login
                 </Button>
-                <Button
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 3 }}
-                  onClick={handleSkip}
-                >
-                  Skip authentication
-                </Button>
+                
                 {/* <Alert
                   color="primary"
                   severity="info"

@@ -37,10 +37,10 @@ export const StoresTable = (props) => {
     rowsPerPage = 0,
     selected = []
   } = props;
-
+  
   const selectedSome = (selected.length > 0) && (selected.length < items.length);
   const selectedAll = (items.length > 0) && (selected.length === items.length);
-
+  const user=JSON.parse(localStorage.getItem('user'));
   return (
     <Card>
       <Scrollbar>
@@ -63,16 +63,15 @@ export const StoresTable = (props) => {
                 <TableCell>
                   Update
                 </TableCell>
-                <TableCell>
+                {user.roles=="ROLE_ADMIN"?<TableCell>
                   Delete
-                </TableCell>
+                </TableCell>:<></>}
               </TableRow>
             </TableHead>
             <TableBody>
               {items.map((store) => {
                 const isSelected = selected.includes(store.storeId);
-                //const createdAt = format(store.createdAt, 'dd/MM/yyyy');
-
+              
                 return (
                   <TableRow
                     hover
@@ -97,7 +96,7 @@ export const StoresTable = (props) => {
                       {store.address}
                     </TableCell>
                     <TableCell>
-                      {store.storeName}
+                      {store.postCode}
                     </TableCell>
                     <TableCell>
                       {store.mobileNumber}
@@ -114,7 +113,7 @@ export const StoresTable = (props) => {
                         Edit
                       </Button>
                     </TableCell>
-                    <TableCell>
+                    {user.roles=="ROLE_ADMIN"?<TableCell>
                       <Button
                         fullWidth
                         size="small"
@@ -125,7 +124,7 @@ export const StoresTable = (props) => {
                       >
                         Delete
                       </Button>
-                    </TableCell>
+                    </TableCell>:<></>}
 
 
                   </TableRow>
@@ -161,6 +160,6 @@ StoresTable.propTypes = {
   rowsPerPage: PropTypes.number,
   selected: PropTypes.array,
   deleteStore:PropTypes.func,
-  EditStore:PropTypes.func
+  EditStore:PropTypes.func,
   
 };

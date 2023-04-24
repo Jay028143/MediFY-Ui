@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState ,useEffect} from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
-import { subDays, subHours } from 'date-fns';
+import { subDays, subHours ,getTime} from 'date-fns';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
@@ -14,7 +14,7 @@ import { applyPagination } from 'src/utils/apply-pagination';
 import StoreService from 'src/services/StoreService';
 //import { Store } from './component/store';
 import { AddStore } from 'src/components/store';
-//const now = new Date();
+const now = new Date();
 //const data=[];
 const data = [
   {
@@ -31,6 +31,7 @@ const data = [
     postCode: 'BBBBBB',
     mobileNumber: '7895612'
   }
+  
   
   // {
   //   id: '5e887ac47eed253091be10cb',
@@ -194,20 +195,6 @@ const useStoreIds = (stores) => {
 
 
 
-const deleteStore = (storeId) => {
-
-  alert("storeId"+storeId);
-  //navigate("/stores");
-
-  // StoreService.remove(storeId)
-  //   .then(response => {
-  //     console.log(response.data);
-  //     navigate("/stores");
-  //   })
-  //   .catch(e => {
-  //     console.log(e);
-  //   });
-};
 
 
 
@@ -220,23 +207,44 @@ const Page = () => {
   const stores = useStores(page, rowsPerPage);
   const storesIds = useStoreIds(stores);
   const storesSelection = useSelection(storesIds);
-  const [storedata, setStores] = useState({});
+  const [storedata, setStores] = useState([]);
   const [addstore, setAddstore] = useState(false);
+  const userRole=localStorage.getItem('userRole');
+  const user=JSON.parse(localStorage.getItem('user'));
 
+console.log("date.."+now);
   useEffect(() => {
     retrieveStores();
   }, []);
+
+  const deleteStore = (storeId) => {
+
+    alert("storeId"+storeId);
+  
+    StoreService.remove(storeId)
+      .then(response => {
+        console.log(response.data);
+        retrieveStores();
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+  
   
 
   const updateStore = (store)=> {
     console.log("data..."+JSON.stringify(store));
-    setStores(store);
+      setStores(store);
       setAddstore(true);
     console.log("setStores..."+JSON.stringify(storedata));
   };
 
   const retrieveStores = () => {
-    StoreService.getAll()
+    const userRole=localStorage.getItem('userRole');
+    const user=JSON.parse(localStorage.getItem('user'));
+    if(userRole=="ROLE_ADMIN"){
+    StoreService.getStoreByUserId(user.id)
       .then(response => {
         setStores(response.data);
         console.log(response.data);
@@ -245,6 +253,20 @@ const Page = () => {
       .catch(e => {
         console.log(e);
       });
+    }
+    else
+    {
+      StoreService.get(user.storeId)
+      .then(response => {
+        alert("response.data"+JSON.stringify(response.data));
+        setStores([response.data]);
+        console.log(response.data);
+        alert(JSON.stringify(response.data));
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    }
   };    
 
  
@@ -263,8 +285,13 @@ const Page = () => {
     []
   );
 
-  const handleAddStore=()=>{
-    setAddstore(true);
+  const handleAddStore=(isStore)=>{
+    setStores([]);
+    setAddstore(isStore);
+    if(!isStore)
+    {
+      retrieveStores();
+    }
   }
 
   return (
@@ -327,7 +354,7 @@ const Page = () => {
                     </SvgIcon>
                   )}
                   variant="contained"
-                  onClick={handleAddStore}
+                  onClick={() =>handleAddStore(true)}
                   
                   underline="hover"
                 >
@@ -338,7 +365,7 @@ const Page = () => {
             <StoresSearch />
             <StoresTable
               count={data.length}
-              items={data}
+              items={storedata}
               onDeselectAll={storesSelection.handleDeselectAll}
               onDeselectOne={storesSelection.handleDeselectOne}
               onPageChange={handlePageChange}
@@ -354,7 +381,8 @@ const Page = () => {
           </Stack>
         </Container>
       </Box>
-    </>:<><AddStore items={storedata}/></>}</>
+    </>:<><AddStore items={storedata}
+     handleAddStore={handleAddStore}/></>}</>
   );
 };
 

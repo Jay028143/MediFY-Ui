@@ -22,7 +22,7 @@ const Page = () => {
       password: '',
       niNumber: '',
       dateOfBirth: '',
-      role:['admin'],
+      role:['manager'],
       dateOfJoining: '',
       address: '',
       postCode: '',
@@ -79,24 +79,26 @@ const Page = () => {
       password: Yup
         .string()
         .max(255)
-        .required('Password is required')
+        .required('Password is required'),
+        mobileNumber: Yup
+        .string()
+        .max(255)
+        .required('Mobile Number is required')
     }),
     onSubmit: async (values, helpers) => {
       try {
-        alert("called signin");
       //  await auth.signUp(values.email, values.name, values.password);
         LoginService.register(values)
           .then(response => {
             alert(JSON.stringify(response));
-            setSubmitted(true);
+            //setSubmitted(true);
             console.log(response.data);
+            router.push('/');
           })
           .catch(e => {
             console.log(e);
           });
-
-
-        router.push('/');
+        
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -246,15 +248,15 @@ const Page = () => {
                   onChange={formik.handleChange}
                   value={formik.values.postCode}
                 />
-                <TextField
-                  error={!!(formik.touched.mobilenumber && formik.errors.mobilenumber)}
+                 <TextField
+                  error={!!(formik.touched.mobileNumber && formik.errors.mobileNumber)}
                   fullWidth
-                  helperText={formik.touched.mobilenumber && formik.errors.mobilenumber}
+                  helperText={formik.touched.pomobileNumberstCode && formik.errors.mobileNumber}
                   label="Mobile Number"
-                  name="mobilenumber"
+                  name="mobileNumber"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.mobilenumber}
+                  value={formik.values.mobileNumber}
                 />
                 <TextField
                   error={!!(formik.touched.niNumber && formik.errors.niNumber)}
@@ -300,7 +302,7 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Continue
+                Register
               </Button>
             </form>
           </div>

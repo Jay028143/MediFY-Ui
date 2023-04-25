@@ -181,6 +181,14 @@ const Page = () => {
                 >
                   Login
                 </Button>
+                <Button
+                  fullWidth
+                  size="large"
+                  sx={{ mt: 3 }}
+                  onClick={handleSkip}
+                >
+                  Skip authentication
+                </Button>
                 
                 {/* <Alert
                   color="primary"

@@ -48,9 +48,7 @@ export const CustomersTable = (props) => {
                 <TableCell>
                   Customer Name
                 </TableCell>
-                <TableCell>
-                  Email
-                </TableCell>
+                
                 <TableCell>
                  NHS Number
                 </TableCell>
@@ -59,6 +57,12 @@ export const CustomersTable = (props) => {
                 </TableCell>
                 <TableCell>
                   Location
+                </TableCell>
+                <TableCell>
+                  State
+                </TableCell>
+                <TableCell>
+                  Country
                 </TableCell>
                 <TableCell>
                   Post Code
@@ -100,9 +104,7 @@ export const CustomersTable = (props) => {
                         </Typography>
                       </Stack>
                     </TableCell>
-                    <TableCell>
-                      {customer.email}
-                    </TableCell>
+    
                     <TableCell>
                       {customer.nhsNumber}
                     </TableCell>
@@ -110,7 +112,13 @@ export const CustomersTable = (props) => {
                       {customer.dateOfBirth}
                     </TableCell>
                     <TableCell>
-                       {customer.address}
+                    {customer.houseNo} , {customer.streetName} ,{customer.city}
+                    </TableCell>
+                    <TableCell>
+                      {customer.state}
+                    </TableCell>
+                    <TableCell>
+                      {customer.country}
                     </TableCell>
                     <TableCell>
                        {customer.postCode}

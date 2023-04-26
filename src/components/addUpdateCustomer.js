@@ -149,208 +149,255 @@ export const AddUpdateCustomer = (props) => {
 
                 <Container maxWidth="xl">
                     <Stack spacing={3}>
-                        <Typography variant="h4">
-                            Stores
-                        </Typography>
-                        <form
+                        <div>
+                            <Typography variant="h4">
+                                Customers
+                            </Typography>
+                        </div>
+                        <div>
+                            <Grid
+                                container
+                                spacing={3}
+                            >
+                                <Grid
+                                    xs={12}
+                                    md={6}
+                                    lg={8}
+                                >
+                                    <form
 
-                            noValidate
-                            onSubmit={formik.handleSubmit}
-                        >
-                            <Card>
-                                <CardHeader
-                                    // subheader="Add Customer"
-                                    title="Add Customer"
-                                />
-                                <Divider />
-                                <CardContent>
-                                    <Stack spacing={3}
-                                        sx={{ maxWidth: 400 }}
+                                        noValidate
+                                        onSubmit={formik.handleSubmit}
                                     >
-                                        <TextField
-                                            error={!!(formik.touched.firstName && formik.errors.firstName)}
-                                            fullWidth
-                                            helperText={formik.touched.firstName && formik.errors.firstName}
-                                            label="First Name"
-                                            name="firstName"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.firstName}
-                                        />
+                                        <Card>
+                                            <CardHeader
+                                                // subheader="Add Customer"
+                                                title="Add Customer"
+                                            />
+                                            <Divider />
+                                            <CardContent sx={{ pt: 0 }}>
+                                                <Box sx={{ m: 10}}>
+                                                    <Grid
+                                                        container
+                                                        spacing={3}
+                                                        
+                                                    >
+                                                        <Grid
+                                                            xs={12}
+                                                            md={6}
+                                                        >
+                                                            <TextField
+                                                                error={!!(formik.touched.firstName && formik.errors.firstName)}
+                                                                fullWidth
+                                                                helperText={formik.touched.firstName && formik.errors.firstName}
+                                                                label="First Name"
+                                                                name="firstName"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.firstName}
+                                                            />
 
-                                        <TextField
-                                            error={!!(formik.touched.middleName && formik.errors.middleName)}
-                                            fullWidth
-                                            helperText={formik.touched.middleName && formik.errors.middleName}
-                                            label="Middle Name"
-                                            name="middleName"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.middleName}
-                                        />
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.lastName && formik.errors.lastName)}
+                                                                fullWidth
+                                                                helperText={formik.touched.lastName && formik.errors.lastName}
+                                                                label="Last Name"
+                                                                name="lastName"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.lastName}
+                                                            />
 
-                                        <TextField
-                                            error={!!(formik.touched.lastName && formik.errors.lastName)}
-                                            fullWidth
-                                            helperText={formik.touched.lastName && formik.errors.lastName}
-                                            label="Last Name"
-                                            name="lastName"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.lastName}
-                                        />
-
-                                        {/* <DatePicker label="Date Of Birth"
+                                                            {/* <DatePicker label="Date Of Birth"
                   name="dateOfBirth" 
                   // onChange={formik.handleChange}
                   // value={formik.values.dateOfBirth}
                   
                   /> */}
 
-                                        <TextField
-                                            error={!!(formik.touched.gender && formik.errors.gender)}
-                                            fullWidth
-                                            helperText={formik.touched.gender && formik.errors.gender}
-                                            label="Gender"
-                                            name="gender"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.gender}
-                                        />
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.gender && formik.errors.gender)}
+                                                                fullWidth
+                                                                helperText={formik.touched.gender && formik.errors.gender}
+                                                                label="Gender"
+                                                                name="gender"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.gender}
+                                                            />
 
 
-                                        <TextField
-                                            error={!!(formik.touched.dateOfBirth && formik.errors.dateOfBirth)}
-                                            fullWidth
-                                            helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
-                                            label="Date Of Birth"
-                                            name="dateOfBirth"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.dateOfBirth}
-                                        />
-                                        <TextField
-                                            error={!!(formik.touched.email && formik.errors.email)}
-                                            fullWidth
-                                            helperText={formik.touched.email && formik.errors.email}
-                                            label="Email Address"
-                                            name="email"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            type="email"
-                                            value={formik.values.email}
-                                        />
-                                        <TextField
-                                            error={!!(formik.touched.houseNo && formik.errors.houseNo)}
-                                            fullWidth
-                                            helperText={formik.touched.houseNo && formik.errors.houseNo}
-                                            label="House No"
-                                            name="houseNo"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.houseNo}
-                                        />
-                                        <TextField
-                                            error={!!(formik.touched.streetName && formik.errors.streetName)}
-                                            fullWidth
-                                            helperText={formik.touched.streetName && formik.errors.streetName}
-                                            label="Street Name"
-                                            name="streetName"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-
-                                            value={formik.values.streetName}
-                                        />
-                                        <TextField
-                                            error={!!(formik.touched.city && formik.errors.city)}
-                                            fullWidth
-                                            helperText={formik.touched.city && formik.errors.city}
-                                            label="City"
-                                            name="city"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.city}
-                                        />
-                                        <TextField
-                                            error={!!(formik.touched.state && formik.errors.state)}
-                                            fullWidth
-                                            helperText={formik.touched.state && formik.errors.state}
-                                            label="State"
-                                            name="state"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.state}
-                                        />
-
-                                        <TextField
-                                            error={!!(formik.touched.country && formik.errors.country)}
-                                            fullWidth
-                                            helperText={formik.touched.country && formik.errors.country}
-                                            label="Country"
-                                            name="country"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.country}
-                                        />
-                                        <TextField
-                                            error={!!(formik.touched.postCode && formik.errors.postCode)}
-                                            fullWidth
-                                            helperText={formik.touched.postCode && formik.errors.postCode}
-                                            label="Post Code"
-                                            name="postCode"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.postCode}
-                                        />
-                                        <TextField
-                                            error={!!(formik.touched.mobileNumber && formik.errors.mobileNumber)}
-                                            fullWidth
-                                            helperText={formik.touched.pomobileNumberstCode && formik.errors.mobileNumber}
-                                            label="Mobile Number"
-                                            name="mobileNumber"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.mobileNumber}
-                                        />
-                                        <TextField
-                                            error={!!(formik.touched.nhsNumber && formik.errors.nhsNumber)}
-                                            fullWidth
-                                            helperText={formik.touched.nhsNumber && formik.errors.nhsNumber}
-                                            label="NHS Number"
-                                            name="nhsNumber"
-                                            onBlur={formik.handleBlur}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.nhsNumber}
-                                        />
-                
-                
 
 
-                                    </Stack>
-                                </CardContent>
-                                <Divider />
-                                {formik.errors.submit && (
-                                    <Typography
-                                        color="error"
-                                        sx={{ mt: 3 }}
-                                        variant="body2"
-                                    >
-                                        {formik.errors.submit}
-                                    </Typography>
-                                )}
-                                <CardActions sx={{ justifyContent: 'flex-start' }}>
-                                    <Button
-                                        size="large"
-                                        sx={{ mt: 3 }}
-                                        type="submit"
-                                        variant="contained"
-                                    >
-                                        {buttonval}
-                                    </Button>
-                                </CardActions>
-                            </Card>
-                        </form>
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.houseNo && formik.errors.houseNo)}
+                                                                fullWidth
+                                                                helperText={formik.touched.houseNo && formik.errors.houseNo}
+                                                                label="House No"
+                                                                name="houseNo"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.houseNo}
+                                                            />
 
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.city && formik.errors.city)}
+                                                                fullWidth
+                                                                helperText={formik.touched.city && formik.errors.city}
+                                                                label="City"
+                                                                name="city"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.city}
+                                                            />
+
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.country && formik.errors.country)}
+                                                                fullWidth
+                                                                helperText={formik.touched.country && formik.errors.country}
+                                                                label="Country"
+                                                                name="country"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.country}
+                                                            />
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.mobileNumber && formik.errors.mobileNumber)}
+                                                                fullWidth
+                                                                helperText={formik.touched.pomobileNumberstCode && formik.errors.mobileNumber}
+                                                                label="Mobile Number"
+                                                                name="mobileNumber"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.mobileNumber}
+                                                            />
+                                                        </Grid>
+                                                      
+                                                        <Grid
+                                                            xs={12}
+                                                            md={6}
+                                                        >
+
+                                                            <TextField
+                                                                error={!!(formik.touched.middleName && formik.errors.middleName)}
+                                                                fullWidth
+                                                                helperText={formik.touched.middleName && formik.errors.middleName}
+                                                                label="Middle Name"
+                                                                name="middleName"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.middleName}
+                                                            />
+
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.email && formik.errors.email)}
+                                                                fullWidth
+                                                                helperText={formik.touched.email && formik.errors.email}
+                                                                label="Email Address"
+                                                                name="email"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                type="email"
+                                                                value={formik.values.email}
+                                                            />
+
+                                                            <TextField
+                                                             sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.dateOfBirth && formik.errors.dateOfBirth)}
+                                                                fullWidth
+                                                                helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
+                                                                label="Date Of Birth"
+                                                                name="dateOfBirth"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.dateOfBirth}
+                                                            />
+
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.streetName && formik.errors.streetName)}
+                                                                fullWidth
+                                                                helperText={formik.touched.streetName && formik.errors.streetName}
+                                                                label="Street Name"
+                                                                name="streetName"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+
+                                                                value={formik.values.streetName}
+                                                            />
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.state && formik.errors.state)}
+                                                                fullWidth
+                                                                helperText={formik.touched.state && formik.errors.state}
+                                                                label="State"
+                                                                name="state"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.state}
+                                                            />
+
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.postCode && formik.errors.postCode)}
+                                                                fullWidth
+                                                                helperText={formik.touched.postCode && formik.errors.postCode}
+                                                                label="Post Code"
+                                                                name="postCode"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.postCode}
+                                                            />
+
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.nhsNumber && formik.errors.nhsNumber)}
+                                                                fullWidth
+                                                                helperText={formik.touched.nhsNumber && formik.errors.nhsNumber}
+                                                                label="NHS Number"
+                                                                name="nhsNumber"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.nhsNumber}
+                                                            />
+
+                                                        </Grid>
+
+                                                    </Grid>
+                                                </Box>
+                                            </CardContent>
+                                            <Divider />
+                                            {formik.errors.submit && (
+                                                <Typography
+                                                    color="error"
+                                                    sx={{ mt: 3 }}
+                                                    variant="body2"
+                                                >
+                                                    {formik.errors.submit}
+                                                </Typography>
+                                            )}
+                                            <CardActions sx={{ justifyContent: 'center' }}>
+                                                <Button
+                                                    size="large"
+                                                    sx={{ mt: 3 }}
+                                                    type="submit"
+                                                    variant="contained"
+                                                >
+                                                    {buttonval}
+                                                </Button>
+                                            </CardActions>
+                                        </Card>
+                                    </form>
+                                </Grid>
+                            </Grid>
+                        </div>
                     </Stack>
                 </Container>
             </Box>

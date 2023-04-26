@@ -55,6 +55,12 @@ export const StoresTable = (props) => {
                   Location
                 </TableCell>
                 <TableCell>
+                  State
+                </TableCell>
+                <TableCell>
+                  Country
+                </TableCell>
+                <TableCell>
                   Post Code
                 </TableCell>
                 <TableCell>
@@ -93,7 +99,13 @@ export const StoresTable = (props) => {
                       </Stack>
                     </TableCell>
                     <TableCell>
-                      {store.address}
+                      {store.houseNo} , {store.streetName} ,{store.city}
+                    </TableCell>
+                    <TableCell>
+                      {store.state}
+                    </TableCell>
+                    <TableCell>
+                      {store.country}
                     </TableCell>
                     <TableCell>
                       {store.postCode}

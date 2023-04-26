@@ -11,7 +11,7 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { StoresTable } from 'src/sections/store/stores-table';
 import { StoresSearch } from 'src/sections/store/stores-search';
 import { applyPagination } from 'src/utils/apply-pagination';
-import StoreService from 'src/services/StoreService';
+import StoreService from 'src/services/Storeservice';
 //import { Store } from './component/store';
 import { AddUpdateStore } from 'src/components/addUpdateStore';
 const now = new Date();
@@ -381,7 +381,7 @@ console.log("date.."+now);
           </Stack>
         </Container>
       </Box>
-    </>:<><AddUpdateStore items={storedata}
+    </>:<><AddUpdateStore store={storedata}
      handleAddStore={handleAddStore}/></>}</>
   );
 };

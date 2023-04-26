@@ -9,32 +9,37 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Divider, Container, Stack, TextField, Typography
+  Divider, Container, Stack, TextField, Typography, Unstable_Grid2 as Grid
 } from '@mui/material';
-import StoreService from 'src/services/StoreService';
+import StoreService from 'src/services/Storeservice';
 
 export const AddUpdateStore = (props) => {
 
   const {
-    items,
+    store,
     handleAddStore
   } = props;
-  const buttonval=items.storeId>0?'Update':'Save';
+  const buttonval = store.storeId > 0 ? 'Update' : 'Save';
   const now = new Date();
   const currentdatetime = format(now, "yyyy-MM-dd HH:mm:ss");
-  const user=JSON.parse(localStorage.getItem('user'));
-  const createdAt=items.storeId>0?items.createdAt:currentdatetime;
-  const adminId=items.storeId>0?items.adminId :user.id;
-  console.log("data.eee.." + JSON.stringify(items));
+  const user = JSON.parse(localStorage.getItem('user'));
+  const createdAt = store.storeId > 0 ? store.createdAt : currentdatetime;
+  const adminId = store.storeId > 0 ? store.adminId : user.id;
+  console.log("data.eee.." + JSON.stringify(store));
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      storeName: items.storeName || '',
-      adminId:  adminId,
-      storeId: items.storeId ||'0',
-      address: items.address || '',
-      postCode: items.postCode || '',
-      mobileNumber:items.mobileNumber || '',
+      storeName: store.storeName || '',
+      adminId: adminId,
+      storeId: store.storeId || '0',
+      address: store.address || '',
+      postCode: store.postCode || '',
+      mobileNumber: store.mobileNumber || '',
+      houseNo: store.houseNo || '',
+      streetName: store.streetName || '',
+      state: store.state || '',
+      country: store.country || '',
+      city: store.city || '',
       createdAt: createdAt,
       updatedAt: currentdatetime,
       submit: null
@@ -48,10 +53,6 @@ export const AddUpdateStore = (props) => {
         .string()
         .max(255)
         .required('Store Name is required'),
-      address: Yup
-        .string()
-        .max(255)
-        .required('Address is required'),
       postCode: Yup
         .string()
         .max(255)
@@ -59,7 +60,27 @@ export const AddUpdateStore = (props) => {
       mobileNumber: Yup
         .string()
         .max(255)
-        .required('Mobile Number is required')
+        .required('Mobile Number is required'),
+      houseNo: Yup
+        .string()
+        .max(255)
+        .required('House No is required'),
+      streetName: Yup
+        .string()
+        .max(255)
+        .required('Street Name is required'),
+      state: Yup
+        .string()
+        .max(255)
+        .required('State is required'),
+      country: Yup
+        .string()
+        .max(255)
+        .required('Country is required'),
+      city: Yup
+        .string()
+        .max(255)
+        .required('City is required'),
     }),
     onSubmit: async (values, helpers) => {
       try {
@@ -75,7 +96,7 @@ export const AddUpdateStore = (props) => {
           .catch(e => {
             console.log(e);
           });
-        
+
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -86,7 +107,7 @@ export const AddUpdateStore = (props) => {
 
   return (
     <>
-      <Head>
+      <Head  >
         <title>
           Add Store | MediFY
         </title>
@@ -101,96 +122,177 @@ export const AddUpdateStore = (props) => {
 
         <Container maxWidth="xl">
           <Stack spacing={3}>
-            <Typography variant="h4">
-              Stores
-            </Typography>
-            <form
+            <div>
+              <Typography variant="h4" >
+                Stores
+              </Typography>
+            </div>
+            <div>
+              <Grid
+                container
+                spacing={3}
+              >
+                <Grid
+                  xs={12}
+                  md={6}
+                  lg={8}
+                >
 
-              noValidate
-              onSubmit={formik.handleSubmit}
-            >
-              <Card>
-                <CardHeader
-                  // subheader="Add Store"
-                  title="Add Store"
-                />
-                <Divider />
-                <CardContent>
-                  <Stack spacing={3}
-                    sx={{ maxWidth: 400 }}
+                  <form
+
+                    noValidate
+                    onSubmit={formik.handleSubmit}
                   >
-                    <TextField
-                      error={!!(formik.touched.storeName && formik.errors.storeName)}
-                      fullWidth
-                      helperText={formik.touched.storeName && formik.errors.storeName}
-                      label="Store Name"
-                      name="storeName"
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      value={formik.values.storeName}
-                    />
-                    <TextField
-                      error={!!(formik.touched.address && formik.errors.address)}
-                      fullWidth
-                      helperText={formik.touched.address && formik.errors.address}
-                      label="Address"
-                      name="address"
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      value={formik.values.address}
-                    />
-                    <TextField
-                      error={!!(formik.touched.postCode && formik.errors.postCode)}
-                      fullWidth
-                      helperText={formik.touched.postCode && formik.errors.postCode}
-                      label="Post Code"
-                      name="postCode"
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      value={formik.values.postCode}
-                    />
-                    <TextField
-                      error={!!(formik.touched.mobileNumber && formik.errors.mobileNumber)}
-                      fullWidth
-                      helperText={formik.touched.pomobileNumberstCode && formik.errors.mobileNumber}
-                      label="Mobile Number"
-                      name="mobileNumber"
-                      onBlur={formik.handleBlur}
-                      onChange={formik.handleChange}
-                      value={formik.values.mobileNumber}
-                    />
-                    {/* <DatePicker label="Date Of Joining"
+                    <Card>
+                      <CardHeader
+                        // subheader="Add Store"
+                        title="Add Store"
+                      />
+                      <Divider />
+                      <CardContent sx={{ pt: 0 }}>
+                        <Box sx={{ m: -1.5 }}>
+                          <Grid
+                            container
+                            spacing={3}
+                          >
+                            <Grid
+                              xs={12}
+                              md={6}
+                            >
+                              <TextField
+                                error={!!(formik.touched.storeName && formik.errors.storeName)}
+                                fullWidth
+                                helperText={formik.touched.storeName && formik.errors.storeName}
+                                label="Store Name"
+                                name="storeName"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.storeName}
+                              />
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.houseNo && formik.errors.houseNo)}
+                                fullWidth
+                                helperText={formik.touched.houseNo && formik.errors.houseNo}
+                                label="House No"
+                                name="houseNo"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.houseNo}
+                              />
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.city && formik.errors.city)}
+                                fullWidth
+                                helperText={formik.touched.city && formik.errors.city}
+                                label="City"
+                                name="city"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.city}
+                              />
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.country && formik.errors.country)}
+                                fullWidth
+                                helperText={formik.touched.country && formik.errors.country}
+                                label="Country"
+                                name="country"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.country}
+                              />
+
+                            </Grid>
+                            <Grid
+                              xs={12}
+                              md={6}
+                            >
+                              <TextField
+
+                                error={!!(formik.touched.mobileNumber && formik.errors.mobileNumber)}
+                                fullWidth
+                                helperText={formik.touched.pomobileNumberstCode && formik.errors.mobileNumber}
+                                label="Mobile Number"
+                                name="mobileNumber"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.mobileNumber}
+                              />
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.streetName && formik.errors.streetName)}
+                                fullWidth
+                                helperText={formik.touched.streetName && formik.errors.streetName}
+                                label="Street Name"
+                                name="streetName"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+
+                                value={formik.values.streetName}
+                              />
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.state && formik.errors.state)}
+                                fullWidth
+                                helperText={formik.touched.state && formik.errors.state}
+                                label="State"
+                                name="state"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.state}
+                              />
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.postCode && formik.errors.postCode)}
+                                fullWidth
+                                helperText={formik.touched.postCode && formik.errors.postCode}
+                                label="Post Code"
+                                name="postCode"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.postCode}
+                              />
+
+                            </Grid>
+                          </Grid>
+                          {/* <DatePicker label="Date Of Joining"
                   name="dateOfJoining"  
                   // onChange={formik.handleChange}
                   // value={formik.values.dateOfJoining}
                   />
                  */}
 
-                  </Stack>
-                </CardContent>
-                <Divider />
-                {formik.errors.submit && (
-                  <Typography
-                    color="error"
-                    sx={{ mt: 3 }}
-                    variant="body2"
-                  >
-                    {formik.errors.submit}
-                  </Typography>
-                )}
-                <CardActions sx={{ justifyContent: 'flex-start' }}>
-                  <Button
-                    size="large"
-                    sx={{ mt: 3 }}
-                    type="submit"
-                    variant="contained"
-                  >
-                    {buttonval}
-                  </Button>
-                </CardActions>
-              </Card>
-            </form>
-
+                        </Box>
+                      </CardContent>
+                      <Divider />
+                      {formik.errors.submit && (
+                        <Typography
+                          color="error"
+                          sx={{ mt: 3 }}
+                          variant="body2"
+                        >
+                          {formik.errors.submit}
+                        </Typography>
+                      )}
+                      <CardActions sx={{ justifyContent: 'center' }}>
+                        <Button
+                          size="large"
+                          sx={{ mt: 3 }}
+                          type="submit"
+                          variant="contained"
+                        >
+                          {buttonval}
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </form>
+                </Grid>
+              </Grid>
+            </div>
           </Stack>
         </Container>
       </Box>
@@ -199,6 +301,6 @@ export const AddUpdateStore = (props) => {
 };
 
 AddUpdateStore.prototype = {
-  items: PropTypes.array,
-  handleAddStore:PropTypes.func
+  store: PropTypes.array,
+  handleAddStore: PropTypes.func
 }

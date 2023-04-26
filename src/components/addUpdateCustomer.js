@@ -15,6 +15,17 @@ import CustomerService from 'src/services/CustomerService';
 
 export const AddUpdateCustomer = (props) => {
 
+    const genders = [
+        {
+            value: 'male',
+            label: 'Male'
+        },
+        {
+            value: '',
+            label: 'Female'
+        }
+    ];
+
     const {
         customer,
         handleAddCustomer
@@ -225,10 +236,20 @@ export const AddUpdateCustomer = (props) => {
                                                                 name="gender"
                                                                 onBlur={formik.handleBlur}
                                                                 onChange={formik.handleChange}
+                                                                select
+                                                                SelectProps={{ native: true }}
                                                                 value={formik.values.gender}
-                                                            />
+                                                            >
+                                                             {genders.map((option) => (
+                                                                    <option
+                                                                        key={option.value}
+                                                                        value={option.value}
+                                                                    >
+                                                                        {option.label}
+                                                                    </option>
+                                                                ))}
 
-
+                                                          </TextField>
 
 
                                                             <TextField
@@ -237,6 +258,7 @@ export const AddUpdateCustomer = (props) => {
                                                                 fullWidth
                                                                 helperText={formik.touched.houseNo && formik.errors.houseNo}
                                                                 label="House No"
+                                                                type="number"
                                                                 name="houseNo"
                                                                 onBlur={formik.handleBlur}
                                                                 onChange={formik.handleChange}
@@ -270,12 +292,13 @@ export const AddUpdateCustomer = (props) => {
                                                                 sx={{ marginTop: 2 }}
                                                                 error={!!(formik.touched.mobileNumber && formik.errors.mobileNumber)}
                                                                 fullWidth
-                                                                helperText={formik.touched.pomobileNumberstCode && formik.errors.mobileNumber}
+                                                                helperText={formik.touched.mobileNumber && formik.errors.mobileNumber}
                                                                 label="Mobile Number"
                                                                 name="mobileNumber"
                                                                 onBlur={formik.handleBlur}
                                                                 onChange={formik.handleChange}
                                                                 value={formik.values.mobileNumber}
+                                                                type="number"
                                                             />
                                                         </Grid>
                                                       

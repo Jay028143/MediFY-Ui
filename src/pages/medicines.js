@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState ,useEffect} from 'react';
 import Head from 'next/head';
-import { subDays, subHours } from 'date-fns';
+import NextLink from 'next/link';
+import { subDays, subHours ,getTime} from 'date-fns';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
 import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
@@ -11,7 +12,9 @@ import { MedicinesTable } from 'src/sections/medicine/medicines-table';
 import { MedicinesSearch } from 'src/sections/medicine/medicines-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import MedicineService from 'src/services/MedicineService';
-//const now = new Date();
+//import { Medicine } from './component/medicine';
+import { AddUpdateMedicine } from 'src/components/addUpdateMedicine';
+const now = new Date();
 //const data=[];
 const data = [
   {
@@ -28,6 +31,7 @@ const data = [
     postCode: 'BBBBBB',
     mobileNumber: '7895612'
   }
+  
   
   // {
   //   id: '5e887ac47eed253091be10cb',
@@ -189,32 +193,6 @@ const useMedicineIds = (medicines) => {
   );
 };
 
-const deleteMedicine = (medicineId) => {
-
-  alert("medicineId"+medicineId);
-  //navigate("/medicines");
-
-  // MedicineService.remove(medicineId)
-  //   .then(response => {
-  //     console.log(response.data);
-  //     navigate("/medicines");
-  //   })
-  //   .catch(e => {
-  //     console.log(e);
-  //   });
-};
-const updateMedicine = (medicine) => {
-  alert("data.."+JSON.stringify(medicine))
-  // MedicineService.update(currentTutorial.id, currentTutorial)
-  //   .then(response => {
-  //     console.log(response.data);
-  //     //setMessage("The MedicineService was updated successfully!");
-  //   })
-  //   .catch(e => {
-  //     console.log(e);
-  //   });
-};
-
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -222,22 +200,68 @@ const Page = () => {
   const medicinesIds = useMedicineIds(medicines);
   const medicinesSelection = useSelection(medicinesIds);
   const [medicinedata, setMedicines] = useState([]);
+  const [addmedicine, setAddmedicine] = useState(false);
+  const userRole=localStorage.getItem('userRole');
+  const user=JSON.parse(localStorage.getItem('user'));
 
-  // useEffect(() => {
-  //   retrieveMedicines();
-  // }, []);
+console.log("date.."+now);
+  useEffect(() => {
+    retrieveMedicines();
+  }, []);
 
-  // const retrieveMedicines = () => {
-  //   MedicineService.getAll()
-  //     .then(response => {
-  //       setMedicines(response.data);
-  //       console.log(response.data);
-  //       alert(response.data)
-  //     })
-  //     .catch(e => {
-  //       console.log(e);
-  //     });
-  // };    
+  const deleteMedicine = (medicineId) => {
+
+    //alert("medicineId"+medicineId);
+  
+    MedicineService.remove(medicineId)
+      .then(response => {
+        console.log(response.data);
+        retrieveMedicines();
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+  
+  
+
+  const updateMedicine = (medicine)=> {
+    console.log("data..."+JSON.stringify(medicine));
+      setMedicines(medicine);
+      setAddmedicine(true);
+    console.log("setMedicines..."+JSON.stringify(medicinedata));
+  };
+
+  const retrieveMedicines = () => {
+    const userRole=localStorage.getItem('userRole');
+    const user=JSON.parse(localStorage.getItem('user'));
+    if(userRole=="ROLE_ADMIN"){
+      MedicineService.getAll()
+      .then(response => {
+        setMedicines(response.data);
+        console.log(response.data);
+       // alert(JSON.stringify(response.data));
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    }
+    else
+    {
+      MedicineService.get(user.storeId)
+      .then(response => {
+       // alert("response.data"+JSON.stringify(response.data));
+        setMedicines([response.data]);
+        console.log(response.data);
+       // alert(JSON.stringify(response.data));
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    }
+  };    
+
+ 
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -253,21 +277,30 @@ const Page = () => {
     []
   );
 
+  const handleAddMedicine=(isMedicine)=>{
+    setMedicines([]);
+    setAddmedicine(isMedicine);
+    if(!isMedicine)
+    {
+      retrieveMedicines();
+    }
+  }
+
   return (
-    <>
+    <>{!addmedicine?<>
       <Head>
         <title>
           Medicines | MediFY
         </title>
       </Head>
-      <Box
+       <Box
         component="main"
         sx={{
           flexGrow: 1,
           py: 8
         }}
       >
-        <Container maxWidth="xl">
+       <Container maxWidth="xl">
           <Stack spacing={3}>
             <Stack
               direction="row"
@@ -278,7 +311,7 @@ const Page = () => {
                 <Typography variant="h4">
                   Medicines
                 </Typography>
-                <Stack
+                {/* <Stack
                   alignItems="center"
                   direction="row"
                   spacing={1}
@@ -303,7 +336,7 @@ const Page = () => {
                   >
                     Export
                   </Button>
-                </Stack>
+                </Stack> */}
               </Stack>
               <div>
                 <Button
@@ -313,6 +346,9 @@ const Page = () => {
                     </SvgIcon>
                   )}
                   variant="contained"
+                  onClick={() =>handleAddMedicine(true)}
+                  
+                  underline="hover"
                 >
                   Add
                 </Button>
@@ -321,7 +357,7 @@ const Page = () => {
             <MedicinesSearch />
             <MedicinesTable
               count={data.length}
-              items={medicines}
+              items={medicinedata}
               onDeselectAll={medicinesSelection.handleDeselectAll}
               onDeselectOne={medicinesSelection.handleDeselectOne}
               onPageChange={handlePageChange}
@@ -332,12 +368,13 @@ const Page = () => {
               rowsPerPage={rowsPerPage}
               selected={medicinesSelection.selected}
               deleteMedicine={deleteMedicine}
-              updateMedicine={updateMedicine}
+              EditMedicine={updateMedicine}
             />
           </Stack>
         </Container>
       </Box>
-    </>
+    </>:<><AddUpdateMedicine medicine={medicinedata}
+     handleAddMedicine={handleAddMedicine}/></>}</>
   );
 };
 

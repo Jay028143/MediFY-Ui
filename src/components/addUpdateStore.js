@@ -175,6 +175,7 @@ export const AddUpdateStore = (props) => {
                                 fullWidth
                                 helperText={formik.touched.houseNo && formik.errors.houseNo}
                                 label="House No"
+                                type="number"
                                 name="houseNo"
                                 onBlur={formik.handleBlur}
                                 onChange={formik.handleChange}
@@ -214,12 +215,13 @@ export const AddUpdateStore = (props) => {
 
                                 error={!!(formik.touched.mobileNumber && formik.errors.mobileNumber)}
                                 fullWidth
-                                helperText={formik.touched.pomobileNumberstCode && formik.errors.mobileNumber}
+                                helperText={formik.touched.mobileNumber && formik.errors.mobileNumber}
                                 label="Mobile Number"
                                 name="mobileNumber"
                                 onBlur={formik.handleBlur}
                                 onChange={formik.handleChange}
                                 value={formik.values.mobileNumber}
+                                type="number"
                               />
                               <TextField
                                 sx={{ marginTop: 2 }}

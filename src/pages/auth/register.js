@@ -251,9 +251,10 @@ const Page = () => {
                  <TextField
                   error={!!(formik.touched.mobileNumber && formik.errors.mobileNumber)}
                   fullWidth
-                  helperText={formik.touched.pomobileNumberstCode && formik.errors.mobileNumber}
+                  helperText={formik.touched.mobileNumber && formik.errors.mobileNumber}
                   label="Mobile Number"
                   name="mobileNumber"
+                  type="number"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   value={formik.values.mobileNumber}

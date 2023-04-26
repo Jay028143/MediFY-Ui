@@ -1,9 +1,5 @@
 import { useCallback, useMemo, useState ,useEffect} from 'react';
 import Head from 'next/head';
-import NextLink from 'next/link';
-import { subDays, subHours ,getTime} from 'date-fns';
-import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
-import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
@@ -235,7 +231,7 @@ console.log("date.."+now);
   const retrieveCustomers = () => {
     const userRole=localStorage.getItem('userRole');
     const user=JSON.parse(localStorage.getItem('user'));
-    if(userRole=="ROLE_ADMIN"){
+    if(userRole=="ADMIN"){
       CustomerService.getAll()
       .then(response => {
         setCustomers(response.data);

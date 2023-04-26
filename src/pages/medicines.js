@@ -235,7 +235,7 @@ console.log("date.."+now);
   const retrieveMedicines = () => {
     const userRole=localStorage.getItem('userRole');
     const user=JSON.parse(localStorage.getItem('user'));
-    if(userRole=="ROLE_ADMIN"){
+    if(userRole=="ADMIN"){
       MedicineService.getAll()
       .then(response => {
         setMedicines(response.data);

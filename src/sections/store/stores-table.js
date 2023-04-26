@@ -69,7 +69,7 @@ export const StoresTable = (props) => {
                 <TableCell>
                   Edit
                 </TableCell>
-                {user.roles=="ROLE_ADMIN"?<TableCell>
+                {user.roles=="ADMIN"?<TableCell>
                   Delete
                 </TableCell>:<></>}
               </TableRow>
@@ -125,7 +125,7 @@ export const StoresTable = (props) => {
                         Edit
                       </Button>
                     </TableCell>
-                    {user.roles=="ROLE_ADMIN"?<TableCell>
+                    {user.roles=="ADMIN"?<TableCell>
                       <Button
                         fullWidth
                         size="small"

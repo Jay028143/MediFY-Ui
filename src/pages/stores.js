@@ -243,7 +243,7 @@ console.log("date.."+now);
   const retrieveStores = () => {
     const userRole=localStorage.getItem('userRole');
     const user=JSON.parse(localStorage.getItem('user'));
-    if(userRole=="ROLE_ADMIN"){
+    if(userRole=="ADMIN"){
       StoreService.getStoreByUserId(user.id)
       .then(response => {
         setStores(response.data);

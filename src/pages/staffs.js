@@ -11,6 +11,9 @@ import { StaffsTable } from 'src/sections/staff/staffs-table';
 import { StaffsSearch } from 'src/sections/staff/staffs-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import UserService from 'src/services/UserService';
+import { AddUpdateStaff } from 'src/components/addUpdateStaff';
+import RoleService from 'src/services/RoleService';
+import StoreService from 'src/services/Storeservice';
 //const now = new Date();
 const data = [
   {
@@ -198,56 +201,113 @@ const useStaffIds = (staffs) => {
   );
 };
 
-const deleteStaff = (staffId) => {
-
-  alert("staffId"+staffId);
-  //navigate("/staffs");
-
-  // StaffService.remove(staffId)
-  //   .then(response => {
-  //     console.log(response.data);
-  //     navigate("/staffs");
-  //   })
-  //   .catch(e => {
-  //     console.log(e);
-  //   });
-};
-const updateStaff = (staff) => {
-  alert("data.."+JSON.stringify(staff))
-  // StaffService.update(currentTutorial.id, currentTutorial)
-  //   .then(response => {
-  //     console.log(response.data);
-  //     //setMessage("The StaffService was updated successfully!");
-  //   })
-  //   .catch(e => {
-  //     console.log(e);
-  //   });
-};
-
 const Page = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const staffs = useStaffs(page, rowsPerPage);
   const staffsIds = useStaffIds(staffs);
   const staffsSelection = useSelection(staffsIds);
-  //const [data, setStaffs] = useState(0);
-
+  const [staffdata, setStaffs] = useState([]);
+  //const[roledata,setRoles]=useState([]);
+  const[storedata,setStores]=useState([]);
+  const [addstaff, setAddstaff] = useState(false);
+  const userRole=localStorage.getItem('userRole');
+  const user=JSON.parse(localStorage.getItem('user'));
   useEffect(() => {
     retrieveStaffs();
   }, []);
 
-  const retrieveStaffs = () => {
-    UserService.getAll()
+  useEffect(() => {
+    retrieveStores();
+  }, []);
+
+  // useEffect(() => {
+  //   retrieveRoles();
+  // }, []);
+
+
+  const retrieveStores = () => {
+    const userRole=localStorage.getItem('userRole');
+    const user=JSON.parse(localStorage.getItem('user'));
+    if(userRole=="ADMIN"){
+      StoreService.getStoreByUserId(user.id)
       .then(response => {
-        alert(response.data)
-        //setStaffs(response.data);
+        setStores(response.data);
         console.log(response.data);
-        
+       // alert(JSON.stringify(response.data));
       })
       .catch(e => {
         console.log(e);
       });
+    }
+  };   
+
+  // const retrieveRoles = () => {
+  //   RoleService.getAll()
+  //     .then(response => {
+  //       setRoles(response.data);
+  //       console.log(response.data);
+  //      // alert(JSON.stringify(response.data));
+  //     })
+  //     .catch(e => {
+  //       console.log(e);
+  //     });
+    
+  // };  
+
+  const deleteStaff = (staffId) => {
+
+    //alert("staffId"+staffId);
+  
+    UserService.remove(staffId)
+      .then(response => {
+        console.log(response.data);
+        retrieveStaffs();
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+  
+  
+
+  const updateStaff = (staff)=> {
+    console.log("data..."+JSON.stringify(staff));
+      setStaffs(staff);
+      setAddstaff(true);
+    console.log("setStaffs..."+JSON.stringify(staffdata));
+  };
+
+  const retrieveStaffs = () => {
+    const userRole=localStorage.getItem('userRole');
+    const user=JSON.parse(localStorage.getItem('user'));
+    if(userRole=="ADMIN"){
+      UserService.getAll()
+      .then(response => {
+        setStaffs(response.data);
+        console.log(response.data);
+       // alert(JSON.stringify(response.data));
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    }
+    else
+    {
+      UserService.get(user.storeId)
+      .then(response => {
+       // alert("response.data"+JSON.stringify(response.data));
+        setStaffs([response.data]);
+        console.log(response.data);
+       // alert(JSON.stringify(response.data));
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    }
   };    
+
+ 
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -263,21 +323,30 @@ const Page = () => {
     []
   );
 
+  const handleAddStaff=(isStaff)=>{
+    setStaffs([]);
+    setAddstaff(isStaff);
+    if(!isStaff)
+    {
+      retrieveStaffs();
+    }
+  }
+
   return (
-    <>
+    <>{!addstaff?<>
       <Head>
         <title>
           Staffs | MediFY
         </title>
       </Head>
-      <Box
+       <Box
         component="main"
         sx={{
           flexGrow: 1,
           py: 8
         }}
       >
-        <Container maxWidth="xl">
+       <Container maxWidth="xl">
           <Stack spacing={3}>
             <Stack
               direction="row"
@@ -288,6 +357,32 @@ const Page = () => {
                 <Typography variant="h4">
                   Staffs
                 </Typography>
+                {/* <Stack
+                  alignItems="center"
+                  direction="row"
+                  spacing={1}
+                >
+                  <Button
+                    color="inherit"
+                    startIcon={(
+                      <SvgIcon fontSize="small">
+                        <ArrowUpOnSquareIcon />
+                      </SvgIcon>
+                    )}
+                  >
+                    Import
+                  </Button>
+                  <Button
+                    color="inherit"
+                    startIcon={(
+                      <SvgIcon fontSize="small">
+                        <ArrowDownOnSquareIcon />
+                      </SvgIcon>
+                    )}
+                  >
+                    Export
+                  </Button>
+                </Stack> */}
               </Stack>
               <div>
                 <Button
@@ -297,6 +392,9 @@ const Page = () => {
                     </SvgIcon>
                   )}
                   variant="contained"
+                  onClick={() =>handleAddStaff(true)}
+                  
+                  underline="hover"
                 >
                   Add
                 </Button>
@@ -305,7 +403,7 @@ const Page = () => {
             <StaffsSearch />
             <StaffsTable
               count={data.length}
-              items={staffs}
+              items={staffdata}
               onDeselectAll={staffsSelection.handleDeselectAll}
               onDeselectOne={staffsSelection.handleDeselectOne}
               onPageChange={handlePageChange}
@@ -316,12 +414,16 @@ const Page = () => {
               rowsPerPage={rowsPerPage}
               selected={staffsSelection.selected}
               deleteStaff={deleteStaff}
-              updateStaff={updateStaff}
+              EditStaff={updateStaff}
             />
           </Stack>
         </Container>
       </Box>
-    </>
+    </>:<><AddUpdateStaff staff={staffdata}
+     stores={storedata}
+     handleAddStaff={handleAddStaff}
+    
+     /></>}</>
   );
 };
 

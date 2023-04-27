@@ -169,6 +169,7 @@ export const AddUpdateCustomer = (props) => {
                             <Grid
                                 container
                                 spacing={3}
+                                sx={{ justifyContent: 'center' }}
                             >
                                 <Grid
                                     xs={12}

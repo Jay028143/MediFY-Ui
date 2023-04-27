@@ -19,6 +19,10 @@ export const AddUpdateStaff = (props) => {
 
     const genders = [
         {
+            value: 'gender',
+            label: '--Select Gender--'
+        },
+        {
             value: 'male',
             label: 'Male'
         },
@@ -32,6 +36,10 @@ export const AddUpdateStaff = (props) => {
 
 
     const roles = [
+        {
+            value: 'select Role',
+            label: '--select Role--'
+        },
         {
             value: 'manager',
             label: 'Manager'
@@ -47,10 +55,15 @@ export const AddUpdateStaff = (props) => {
         handleAddStaff,
         stores,
     } = props;
-    const [selectedrole, setRole] = useState(['manager']);
-    const handlerole = (roles) => {
-        console.log(roles);
-        setRole([roles]);
+    const [selectedrole, setRole] = useState([]);
+    const [selectedgender, setGender] = useState('');
+    const handlerole = (e) => {
+        console.log("Gender.."+e.target.value);
+        setRole([e.target.value]);
+    }
+    const handleGender = (e) => {
+        console.log("Gender.."+e.target.value);
+        setGender([e.target.value]);
     }
     console.log("selected role.."+selectedrole);
     const buttonval = staff.userId > 0 ? 'Update' : 'Save';
@@ -66,7 +79,7 @@ export const AddUpdateStaff = (props) => {
             firstName: staff.firstName || '',
             middleName: staff.middleName || '',
             lastName: staff.lastName || '',
-            gender: staff.gender || '',
+            gender: staff.gender || selectedgender,
             email: staff.email || '',
             houseNo: staff.houseNo || '',
             username: staff.userName || '',
@@ -85,21 +98,20 @@ export const AddUpdateStaff = (props) => {
             userId: userId || '0',
             createdAt: createdAt,
             updatedAt: currentdatetime,
-            role: staff.role || selectedrole,
+            role: selectedrole,
             submit: null
         },
         response: {
             message: '',
         },
         validationSchema: Yup.object({
+
+          
             username: Yup
                 .string()
                 .max(255)
                 .required('User Name is required'),
-                role: Yup
-                .string()
-                .max(255)
-                .required('Role is required'),
+              
             password: Yup
                 .string()
                 .max(255)
@@ -244,6 +256,7 @@ export const AddUpdateStaff = (props) => {
                             <Grid
                                 container
                                 spacing={3}
+                                sx={{ justifyContent: 'center' }}
                             >
                                 <Grid
                                     xs={12}
@@ -266,30 +279,9 @@ export const AddUpdateStaff = (props) => {
                                                 xs={6}
                                                 md={6}
                                             >
-                                                <TextField
-
-                                                     error={!!(formik.touched.storeId && formik.errors.storeId)}
-                                                    fullWidth
-                                                     helperText={formik.touched.storeId && formik.errors.storeId}
-                                                    label="Store"
-                                                    name="storeId"
-                                                    onBlur={formik.handleBlur}
-                                                    onChange={formik.handleChange}
-                                                    select
-                                                    SelectProps={{ native: true }}
-                                                    value={formik.values.storeId}
-                                                >
-                                                    {stores.map((option) => (
-                                                        <option
-                                                            key={option.storeId}
-                                                            value={option.storeId}
-                                                        >
-                                                            {option.storeName}
-                                                        </option>
-                                                    ))}
-                                                </TextField>
+                                              
                                             </Grid>
-                                            <Divider />
+                                           
                                             <CardContent sx={{ pt: 0 }}>
                                                 <Box sx={{ m: -1.5 }}>
                                                     <Grid
@@ -339,16 +331,16 @@ export const AddUpdateStaff = (props) => {
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.gender && formik.errors.gender)}
+                                                              
                                                                 fullWidth
-                                                                helperText={formik.touched.gender && formik.errors.gender}
+                                                                
                                                                 label="Gender"
                                                                 name="gender"
-                                                                onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
+                                                             
+                                                                onClick={handleGender}
                                                                 select
                                                                 SelectProps={{ native: true }}
-                                                                value={formik.values.gender}
+                                                                
                                                             >
                                                                 {genders.map((option) => (
                                                                     <option
@@ -468,17 +460,17 @@ export const AddUpdateStaff = (props) => {
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.gender && formik.errors.gender)}
+                                                               // error={!!(formik.touched.gender && formik.errors.gender)}
                                                                 fullWidth
                                                                 // helperText={formik.touched.gender && formik.errors.gender}
                                                                 label="Role"
                                                                 name="role"
                                                                // onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
-                                                                onClick={()=>{handlerole(value)}}
+                                                                //onChange={formik.handleChange}
+                                                                onClick={handlerole}
                                                                 select
                                                                 SelectProps={{ native: true }}
-                                                                value={formik.values.role}
+                                                                
                                                             >
                                                                 {roles.map((option) => (
                                                                     <option

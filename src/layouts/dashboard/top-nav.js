@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import BellIcon from '@heroicons/react/24/solid/BellIcon';
 import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import Bars3Icon from '@heroicons/react/24/solid/Bars3Icon';
@@ -12,11 +13,12 @@ import {
   Stack,
   SvgIcon,
   Tooltip,
-  useMediaQuery
+  useMediaQuery,TextField
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { usePopover } from 'src/hooks/use-popover';
 import { AccountPopover } from './account-popover';
+import StoreService from 'src/services/Storeservice';
 
 const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
@@ -25,7 +27,48 @@ export const TopNav = (props) => {
   const { onNavOpen } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   const accountPopover = usePopover();
-  const user=JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem('user'));
+  const [storedata, setStores] = useState([]);
+
+  const handleStore = (e) => {
+    retrieveStores();
+    console.log("default..."+e.target.value);
+    localStorage.setItem('defaultstore',e.target.value);
+    
+  }
+  const retrieveStores = () => {
+    const userdetail = JSON.parse(localStorage.getItem('user'));
+    const userRole = localStorage.getItem('userRole');
+    if (userRole == "ADMIN") {
+      StoreService.getStoreByUserId(userdetail.id)
+        .then(response => {
+          setStores(response.data);
+          console.log(response.data);
+          // alert(JSON.stringify(response.data));
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
+    else {
+      StoreService.get(userdetail.storeId)
+        .then(response => {
+          // alert("response.data"+JSON.stringify(response.data));
+          setStores([response.data]);
+          console.log(response.data);
+          // alert(JSON.stringify(response.data));
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    }
+  };
+
+  useEffect(() => {
+    retrieveStores();
+  }, []);
+
+
   return (
     <>
       <Box
@@ -67,31 +110,31 @@ export const TopNav = (props) => {
               </IconButton>
             )}
           </Stack>
+          <Stack>
+            <TextField
+              fullWidth
+              label="Store"
+              name="storeId"
+              select
+              SelectProps={{ native: true }}
+              onClick={handleStore}
+            >
+              {storedata.map((option) => (
+                <option
+                  key={option.storeId}
+                  value={option.storeId}
+                >
+                  {option.storeName}
+                </option>
+              ))}
+            </TextField>
+
+          </Stack>
           <Stack
             alignItems="center"
             direction="row"
             spacing={2}
           >
-            <Tooltip title="Contacts">
-              <IconButton>
-                <SvgIcon fontSize="small">
-                  <UsersIcon />
-                </SvgIcon>
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Notifications">
-              <IconButton>
-                <Badge
-                  badgeContent={4}
-                  color="success"
-                  variant="dot"
-                >
-                  <SvgIcon fontSize="small">
-                    <BellIcon />
-                  </SvgIcon>
-                </Badge>
-              </IconButton>
-            </Tooltip>
             <Avatar
               onClick={accountPopover.handleOpen}
               ref={accountPopover.anchorRef}

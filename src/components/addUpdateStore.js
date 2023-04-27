@@ -131,6 +131,7 @@ export const AddUpdateStore = (props) => {
               <Grid
                 container
                 spacing={3}
+                sx={{ justifyContent: 'center' }}
               >
                 <Grid
                   xs={12}
@@ -150,7 +151,7 @@ export const AddUpdateStore = (props) => {
                       />
                       <Divider />
                       <CardContent sx={{ pt: 0 }}>
-                        <Box sx={{ m: -1.5 }}>
+                        <Box sx={{ m: 2.5 }}>
                           <Grid
                             container
                             spacing={3}

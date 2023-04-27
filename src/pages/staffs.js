@@ -209,7 +209,7 @@ const Page = () => {
   const staffsSelection = useSelection(staffsIds);
   const [staffdata, setStaffs] = useState([]);
   //const[roledata,setRoles]=useState([]);
-  const[storedata,setStores]=useState([]);
+
   const [addstaff, setAddstaff] = useState(false);
   const userRole=localStorage.getItem('userRole');
   const user=JSON.parse(localStorage.getItem('user'));
@@ -217,30 +217,13 @@ const Page = () => {
     retrieveStaffs();
   }, []);
 
-  useEffect(() => {
-    retrieveStores();
-  }, []);
 
   // useEffect(() => {
   //   retrieveRoles();
   // }, []);
 
 
-  const retrieveStores = () => {
-    const userRole=localStorage.getItem('userRole');
-    const user=JSON.parse(localStorage.getItem('user'));
-    if(userRole=="ADMIN"){
-      StoreService.getStoreByUserId(user.id)
-      .then(response => {
-        setStores(response.data);
-        console.log(response.data);
-       // alert(JSON.stringify(response.data));
-      })
-      .catch(e => {
-        console.log(e);
-      });
-    }
-  };   
+ 
 
   // const retrieveRoles = () => {
   //   RoleService.getAll()
@@ -279,32 +262,28 @@ const Page = () => {
   };
 
   const retrieveStaffs = () => {
-    const userRole=localStorage.getItem('userRole');
-    const user=JSON.parse(localStorage.getItem('user'));
-    if(userRole=="ADMIN"){
-      UserService.getAll()
+   
+    const defaultStoreId = localStorage.getItem('defaultStoreId');
+    const user = JSON.parse(localStorage.getItem('user'));
+      UserService.getByStoreId(defaultStoreId)
       .then(response => {
-        setStaffs(response.data);
-        console.log(response.data);
-       // alert(JSON.stringify(response.data));
+        const temp=[];
+        const staff=response.data;
+        staff.forEach((res, index) => {
+          if (res.userId !== user.id) {
+              temp.push(res)
+          }
+      })
+        setStaffs(temp);
+        console.log(JSON.stringify(temp));
+        console.log(JSON.stringify(response.data));
+        //alert(JSON.stringify(response.data));
       })
       .catch(e => {
         console.log(e);
       });
-    }
-    else
-    {
-      UserService.get(user.storeId)
-      .then(response => {
-       // alert("response.data"+JSON.stringify(response.data));
-        setStaffs([response.data]);
-        console.log(response.data);
-       // alert(JSON.stringify(response.data));
-      })
-      .catch(e => {
-        console.log(e);
-      });
-    }
+    
+   
   };    
 
  
@@ -420,7 +399,6 @@ const Page = () => {
         </Container>
       </Box>
     </>:<><AddUpdateStaff staff={staffdata}
-     stores={storedata}
      handleAddStaff={handleAddStaff}
     
      /></>}</>

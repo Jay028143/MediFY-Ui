@@ -55,17 +55,14 @@ export const AddUpdateStaff = (props) => {
         handleAddStaff,
         stores,
     } = props;
-    const [selectedrole, setRole] = useState([]);
-    const [selectedgender, setGender] = useState('');
-    const handlerole = (e) => {
-        console.log("Gender.."+e.target.value);
-        setRole([e.target.value]);
-    }
-    const handleGender = (e) => {
-        console.log("Gender.."+e.target.value);
-        setGender([e.target.value]);
-    }
-    console.log("selected role.."+selectedrole);
+    // const [selectedrole, setRole] = useState([]);
+    // const [selectedgender, setGender] = useState('');
+    // const handlerole = (e) => {
+    //     console.log("Gender.."+e.target.value);
+    //     setRole([e.target.value]);
+    // }
+    
+    // console.log("selected role.."+selectedrole);
     const buttonval = staff.userId > 0 ? 'Update' : 'Save';
     const now = new Date();
     const currentdatetime = format(now, "yyyy-MM-dd HH:mm:ss");
@@ -73,13 +70,13 @@ export const AddUpdateStaff = (props) => {
     const userId = staff.userId > 0 ? staff.userId : user.id;
     const createdAt = staff.userId > 0 ? staff.createdAt : currentdatetime;
     console.log("data.eee.." + JSON.stringify(staff));
-
+    const defaultStoreId = localStorage.getItem('defaultStoreId');
     const formik = useFormik({
         initialValues: {
             firstName: staff.firstName || '',
             middleName: staff.middleName || '',
             lastName: staff.lastName || '',
-            gender: staff.gender || selectedgender,
+            gender: staff.gender ,
             email: staff.email || '',
             houseNo: staff.houseNo || '',
             username: staff.userName || '',
@@ -94,11 +91,11 @@ export const AddUpdateStaff = (props) => {
             mobileNumber: staff.mobileNumber || '',
             dateOfBirth: staff.dateOfBirth || '',
             dateOfJoining: staff.dateOfJoining || '',
-            storeId: staff.storeId || '0',
+            storeId: staff.storeId || defaultStoreId,
             userId: userId || '0',
             createdAt: createdAt,
             updatedAt: currentdatetime,
-            role: selectedrole,
+            role: '',
             submit: null
         },
         response: {
@@ -337,7 +334,8 @@ export const AddUpdateStaff = (props) => {
                                                                 label="Gender"
                                                                 name="gender"
                                                              
-                                                                onClick={handleGender}
+                                                               
+                                                                onClick={(e)=>formik.setFieldValue('gender',e.target.value)}
                                                                 select
                                                                 SelectProps={{ native: true }}
                                                                 
@@ -467,7 +465,7 @@ export const AddUpdateStaff = (props) => {
                                                                 name="role"
                                                                // onBlur={formik.handleBlur}
                                                                 //onChange={formik.handleChange}
-                                                                onClick={handlerole}
+                                                                onClick={(e)=>formik.setFieldValue('role',[e.target.value])}
                                                                 select
                                                                 SelectProps={{ native: true }}
                                                                 

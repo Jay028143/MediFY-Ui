@@ -12,8 +12,8 @@ import {
   IconButton,
   Stack,
   SvgIcon,
-  Tooltip,
-  useMediaQuery,TextField
+  Tooltip,Card,
+  useMediaQuery, TextField,Unstable_Grid2 as Grid,Typography
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { usePopover } from 'src/hooks/use-popover';
@@ -32,9 +32,9 @@ export const TopNav = (props) => {
 
   const handleStore = (e) => {
     retrieveStores();
-    console.log("default..."+e.target.value);
-    localStorage.setItem('defaultstore',e.target.value);
-    
+    console.log("default..." + e.target.value);
+    localStorage.setItem('defaultStoreId', e.target.value);
+
   }
   const retrieveStores = () => {
     const userdetail = JSON.parse(localStorage.getItem('user'));
@@ -111,15 +111,35 @@ export const TopNav = (props) => {
             )}
           </Stack>
           <Stack>
+          <Grid
+                                container
+                                spacing={3}
+                                sx={{ justifyContent: 'left' }}
+                            >
+          
+
+          <div>
+                            <Typography variant="h4" >
+                                Set Default Store
+                            </Typography>
+                        </div>
+                        <Card>
             <TextField
               fullWidth
-              label="Store"
+            
               name="storeId"
+              placeholder='Select Store'
               select
               SelectProps={{ native: true }}
               onClick={handleStore}
             >
+              <option value='-1'
+                key='-1'
+                selected>
+                Select Store
+              </option>
               {storedata.map((option) => (
+
                 <option
                   key={option.storeId}
                   value={option.storeId}
@@ -128,7 +148,9 @@ export const TopNav = (props) => {
                 </option>
               ))}
             </TextField>
-
+              </Card>
+        
+          </Grid>
           </Stack>
           <Stack
             alignItems="center"

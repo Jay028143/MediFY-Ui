@@ -54,14 +54,21 @@ export const StaffsTable = (props) => {
                 <TableCell>
                   User Name
                 </TableCell>
+                
                 <TableCell>
-                 Email Id
+                 Gender
                 </TableCell>
                 <TableCell>
                  NI Number
                 </TableCell>
                 <TableCell>
                   Location
+                </TableCell>
+                <TableCell>
+                  State
+                </TableCell>
+                <TableCell>
+                  Country
                 </TableCell>
                 <TableCell>
                   Post Code
@@ -108,14 +115,21 @@ export const StaffsTable = (props) => {
                     <TableCell>
                       {staff.userName}
                     </TableCell>
+                    
                     <TableCell>
-                      {staff.email}
+                      {staff.gender}
                     </TableCell>
                     <TableCell>
                       {staff.niNumber}
                     </TableCell>
                     <TableCell>
-                      {staff.address}
+                    {staff.houseNo} , {staff.streetName} ,{staff.city}
+                    </TableCell>
+                    <TableCell>
+                      {staff.state}
+                    </TableCell>
+                    <TableCell>
+                      {staff.country}
                     </TableCell>
                     <TableCell>
                       {staff.postCode}

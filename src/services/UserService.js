@@ -8,6 +8,10 @@ const get = id => {
   return http.get(`/user/${id}`);
 };
 
+const getByStoreId = id => {
+  return http.get(`/user/getUserByStoreId/${id}`);
+};
+
 const create = data => {
   return http.post("/user", data);
 };
@@ -30,7 +34,8 @@ const UserService = {
   create,
   update,
   remove,
-  removeAll
+  removeAll,
+  getByStoreId
 };
 
 export default UserService;

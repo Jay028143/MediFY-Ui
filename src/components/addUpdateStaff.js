@@ -23,20 +23,23 @@ export const AddUpdateStaff = (props) => {
             label: 'Male'
         },
         {
-            value: '',
+            value: 'female',
             label: 'Female'
         }
     ];
 
-    const [selectedrole, setRole] = useState(['manager']);
-    const handlerole = (role) => {
-        setRole([role]);
-    }
+   
 
 
     const roles = [
-        'Manager',
-        'Staff'
+        {
+            value: 'manager',
+            label: 'Manager'
+        },
+        {
+            value: 'staff',
+            label: 'Staff'
+        }
     ];
 
     const {
@@ -44,6 +47,12 @@ export const AddUpdateStaff = (props) => {
         handleAddStaff,
         stores,
     } = props;
+    const [selectedrole, setRole] = useState(['manager']);
+    const handlerole = (roles) => {
+        console.log(roles);
+        setRole([roles]);
+    }
+    console.log("selected role.."+selectedrole);
     const buttonval = staff.userId > 0 ? 'Update' : 'Save';
     const now = new Date();
     const currentdatetime = format(now, "yyyy-MM-dd HH:mm:ss");
@@ -54,7 +63,6 @@ export const AddUpdateStaff = (props) => {
 
     const formik = useFormik({
         initialValues: {
-            userId: staff.userId || '',
             firstName: staff.firstName || '',
             middleName: staff.middleName || '',
             lastName: staff.lastName || '',
@@ -88,6 +96,10 @@ export const AddUpdateStaff = (props) => {
                 .string()
                 .max(255)
                 .required('User Name is required'),
+                role: Yup
+                .string()
+                .max(255)
+                .required('Role is required'),
             password: Yup
                 .string()
                 .max(255)
@@ -148,6 +160,10 @@ export const AddUpdateStaff = (props) => {
                 .string()
                 .max(255)
                 .required('Date Of Joining is required'),
+            storeId: Yup
+                .string()
+                .max(255)
+                .required('Please Select the Store required'),
         }),
         onSubmit: async (values, helpers) => {
             if(buttonval=="Save"){ 
@@ -175,7 +191,12 @@ export const AddUpdateStaff = (props) => {
         }
         else{
             try {
-               
+
+    const clonedObj = Object.assign({}, values);
+    const targetKey = clonedObj['username'];
+    delete clonedObj['username'];
+    clonedObj['userName'] = targetKey;
+    values=clonedObj  ;
                 UserService.create(values)
                     .then(response => {
                         alert(JSON.stringify(response));
@@ -247,9 +268,9 @@ export const AddUpdateStaff = (props) => {
                                             >
                                                 <TextField
 
-                                                    // error={!!(formik.touched.gender && formik.errors.gender)}
+                                                     error={!!(formik.touched.storeId && formik.errors.storeId)}
                                                     fullWidth
-                                                    // helperText={formik.touched.gender && formik.errors.gender}
+                                                     helperText={formik.touched.storeId && formik.errors.storeId}
                                                     label="Store"
                                                     name="storeId"
                                                     onBlur={formik.handleBlur}
@@ -447,29 +468,30 @@ export const AddUpdateStaff = (props) => {
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
-                                                                // error={!!(formik.touched.gender && formik.errors.gender)}
+                                                                error={!!(formik.touched.gender && formik.errors.gender)}
                                                                 fullWidth
                                                                 // helperText={formik.touched.gender && formik.errors.gender}
                                                                 label="Role"
                                                                 name="role"
-                                                                onBlur={formik.handleBlur}
-                                                                //onChange={handlerole}
+                                                               // onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                onClick={()=>{handlerole(value)}}
                                                                 select
                                                                 SelectProps={{ native: true }}
                                                                 value={formik.values.role}
                                                             >
                                                                 {roles.map((option) => (
                                                                     <option
-                                                                        key={option}
-                                                                        value={option}
-                                                                        onChange={() => handlerole(option)}
+                                                                        key={option.value}
+                                                                        value={option.value}
+    
                                                                     >
-                                                                        {option}
+                                                                        {option.label}
                                                                     </option>
                                                                 ))}
                                                             </TextField>
                                                             {/* role */}
-
+                                                            
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}

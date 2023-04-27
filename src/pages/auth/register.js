@@ -3,32 +3,60 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
+import { format } from 'date-fns';
+import {
+  Box, Button, Card, Link,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Divider, Container, Stack, TextField, Typography, Unstable_Grid2 as Grid
+} from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import LoginService from 'src/services/LoginService';
+
 //import {DatePicker} from '@mui/x-date-pickers/DatePicker'; 
 
 const Page = () => {
+
+  const genders = [
+    {
+      value: 'male',
+      label: 'Male'
+    },
+    {
+      value: 'female',
+      label: 'Female'
+    }
+  ];
+  const now = new Date();
+  const currentdatetime = format(now, "yyyy-MM-dd HH:mm:ss");
   const router = useRouter();
-  const auth = useAuth();
   const formik = useFormik({
     initialValues: {
       firstName: '',
+      middleName: '',
       lastName: '',
+      gender: '',
       email: '',
-      storeId:'0',
+      houseNo: '',
       username: '',
       password: '',
-      niNumber: '',
-      dateOfBirth: '',
-      role:['admin'],
-      dateOfJoining: '',
-      address: '',
+      streetName: '',
+      state: '',
+      country: '',
+      city: '',
       postCode: '',
+      niNumber: '',
+      email: '',
       mobileNumber: '',
-      createdAt:'2023-04-17',
-      updatedAt:'2013-04-17',
+      dateOfBirth: '',
+      dateOfJoining: '',
+      storeId: '-1',
+      userId: '0',
+      createdAt: currentdatetime,
+      updatedAt: currentdatetime,
+      role: ['admin'],
       submit: null
     },
     response: {
@@ -48,6 +76,10 @@ const Page = () => {
         .string()
         .max(255)
         .required('First Name is required'),
+      middleName: Yup
+        .string()
+        .max(255)
+        .required('Middle Name is required'),
       lastName: Yup
         .string()
         .max(255)
@@ -60,10 +92,26 @@ const Page = () => {
         .string()
         .max(255)
         .required('NI Number is required'),
-      address: Yup
+      houseNo: Yup
         .string()
         .max(255)
-        .required('Address is required'),
+        .required('House No is required'),
+      streetName: Yup
+        .string()
+        .max(255)
+        .required('Street Name is required'),
+      state: Yup
+        .string()
+        .max(255)
+        .required('State is required'),
+      country: Yup
+        .string()
+        .max(255)
+        .required('Country is required'),
+      city: Yup
+        .string()
+        .max(255)
+        .required('City is required'),
       postCode: Yup
         .string()
         .max(255)
@@ -80,14 +128,14 @@ const Page = () => {
         .string()
         .max(255)
         .required('Password is required'),
-        mobileNumber: Yup
+      mobileNumber: Yup
         .string()
         .max(255)
         .required('Mobile Number is required')
     }),
     onSubmit: async (values, helpers) => {
       try {
-      //  await auth.signUp(values.email, values.name, values.password);
+        //  await auth.signUp(values.email, values.name, values.password);
         LoginService.register(values)
           .then(response => {
             alert(JSON.stringify(response));
@@ -98,7 +146,7 @@ const Page = () => {
           .catch(e => {
             console.log(e);
           });
-        
+
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -109,207 +157,353 @@ const Page = () => {
 
   return (
     <>
-      <Head>
+      <Head  >
         <title>
           Register | MediFY
         </title>
       </Head>
       <Box
+        component="main"
         sx={{
-          flex: '1 1 auto',
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: 'center'
+          flexGrow: 1,
+          py: 8
         }}
       >
-        <Box
-          sx={{
-            maxWidth: 550,
-            px: 3,
-            py: '100px',
-            width: '100%'
-          }}
-        >
-          <div>
-            <Stack
-              spacing={1}
-              sx={{ mb: 3 }}
-            >
-              <Typography variant="h4">
-                Register
-              </Typography>
-              <Typography
-                color="text.secondary"
-                variant="body2"
+
+        <Container maxWidth="xl" >
+          <Stack spacing={3}  >
+
+            <div>
+            
+              <Grid
+                container
+                spacing={3}
+                sx={{ justifyContent: 'center' }}
               >
-                Already have an account?
-                &nbsp;
-                <Link
-                  component={NextLink}
-                  href="/auth/login"
-                  underline="hover"
-                  variant="subtitle2"
+                <Grid
+                  xs={12}
+                  md={6}
+                  lg={8}
                 >
-                  Log in
-                </Link>
-              </Typography>
-            </Stack>
-            <form
-              noValidate
-              onSubmit={formik.handleSubmit}
-            >
-              <Stack spacing={3}>
-                <TextField
-                  error={!!(formik.touched.firstName && formik.errors.firstName)}
-                  fullWidth
-                  helperText={formik.touched.firstName && formik.errors.firstName}
-                  label="First Name"
-                  name="firstName"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.firstName}
-                />
-                <TextField
-                  error={!!(formik.touched.lastName && formik.errors.lastName)}
-                  fullWidth
-                  helperText={formik.touched.lastName && formik.errors.lastName}
-                  label="Last Name"
-                  name="lastName"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.lastName}
-                />
 
-                {/* <DatePicker label="Date Of Birth"
-                  name="dateOfBirth" 
-                  // onChange={formik.handleChange}
-                  // value={formik.values.dateOfBirth}
-                  /> */}
+                  <form
 
-                <TextField
-                  error={!!(formik.touched.dateOfBirth && formik.errors.dateOfBirth)}
-                  fullWidth
-                  helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
-                  label="Date Of Birth"
-                  name="dateOfBirth"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.dateOfBirth}
-                />
-                <TextField
-                  error={!!(formik.touched.email && formik.errors.email)}
-                  fullWidth
-                  helperText={formik.touched.email && formik.errors.email}
-                  label="Email Address"
-                  name="email"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="email"
-                  value={formik.values.email}
-                />
-                <TextField
-                  error={!!(formik.touched.username && formik.errors.username)}
-                  fullWidth
-                  helperText={formik.touched.username && formik.errors.username}
-                  label="User Name"
-                  name="username"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.username}
-                />
-                <TextField
-                  error={!!(formik.touched.password && formik.errors.password)}
-                  fullWidth
-                  helperText={formik.touched.password && formik.errors.password}
-                  label="Password"
-                  name="password"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  type="password"
-                  value={formik.values.password}
-                />
-                <TextField
-                  error={!!(formik.touched.address && formik.errors.address)}
-                  fullWidth
-                  helperText={formik.touched.address && formik.errors.address}
-                  label="Address"
-                  name="address"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.address}
-                />
-                <TextField
-                  error={!!(formik.touched.postCode && formik.errors.postCode)}
-                  fullWidth
-                  helperText={formik.touched.postCode && formik.errors.postCode}
-                  label="Post Code"
-                  name="postCode"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.postCode}
-                />
-                 <TextField
-                  error={!!(formik.touched.mobileNumber && formik.errors.mobileNumber)}
-                  fullWidth
-                  helperText={formik.touched.mobileNumber && formik.errors.mobileNumber}
-                  label="Mobile Number"
-                  name="mobileNumber"
-                  type="number"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.mobileNumber}
-                />
-                <TextField
-                  error={!!(formik.touched.niNumber && formik.errors.niNumber)}
-                  fullWidth
-                  helperText={formik.touched.niNumber && formik.errors.niNumber}
-                  label="NI Number"
-                  name="niNumber"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.niNumber}
-                />
-                {/* <DatePicker label="Date Of Joining"
-                  name="dateOfJoining"  
-                  // onChange={formik.handleChange}
-                  // value={formik.values.dateOfJoining}
-                  />
-                 */}
-                <TextField
-                  error={!!(formik.touched.dateOfJoining && formik.errors.dateOfJoining)}
-                  fullWidth
-                  helperText={formik.touched.dateOfJoining && formik.errors.dateOfJoining}
-                  label="Date Of Joining"
-                  name="dateOfJoining"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.dateOfJoining}
-                />
+                    noValidate
+                    onSubmit={formik.handleSubmit}
+                  >
+                    <Card>
+                      <CardHeader
+                        
+                        title="Register"
 
-              </Stack>
-              {formik.errors.submit && (
-                <Typography
-                  color="error"
-                  sx={{ mt: 3 }}
-                  variant="body2"
-                >
-                  {formik.errors.submit}
-                </Typography>
-              )}
-              <Button
-                fullWidth
-                size="large"
-                sx={{ mt: 3 }}
-                type="submit"
-                variant="contained"
-              >
-                Register
-              </Button>
-            </form>
-          </div>
-        </Box>
+                      />
+
+                      <Typography
+                        color="text.secondary"
+                        variant="body2"
+                      >
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;  
+                        Already have an account?
+                        &nbsp;
+                        <Link
+                          component={NextLink}
+                          href="/auth/login"
+                          underline="hover"
+                          variant="subtitle2"
+                        >
+                          Log in
+                        </Link>
+                      </Typography>
+                      <Divider />
+                      <Grid
+                        xs={6}
+                        md={6}
+                        ml={10}
+                      >
+                        
+                      </Grid>
+
+                      <CardContent sx={{ pt: 0 }}>
+                        <Box sx={{ m: -1.5 }}>
+                          <Grid
+                            container
+                            spacing={3}
+                          >
+                            <Grid
+                              xs={12}
+                              md={6}
+                            >
+
+
+                              <TextField
+                                error={!!(formik.touched.firstName && formik.errors.firstName)}
+                                fullWidth
+                                helperText={formik.touched.firstName && formik.errors.firstName}
+                                label="First Name"
+                                name="firstName"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.firstName}
+                              />
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.lastName && formik.errors.lastName)}
+                                fullWidth
+                                helperText={formik.touched.lastName && formik.errors.lastName}
+                                label="Last Name"
+                                name="lastName"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.lastName}
+                              />
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.username && formik.errors.username)}
+                                fullWidth
+                                helperText={formik.touched.username && formik.errors.username}
+                                label="User Name"
+                                name="username"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.username}
+                              />
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.gender && formik.errors.gender)}
+                                fullWidth
+                                helperText={formik.touched.gender && formik.errors.gender}
+                                label="Gender"
+                                name="gender"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                select
+                                SelectProps={{ native: true }}
+                                value={formik.values.gender}
+                              >
+                                {genders.map((option) => (
+                                  <option
+                                    key={option.value}
+                                    value={option.value}
+                                  >
+                                    {option.label}
+                                  </option>
+                                ))}
+
+                              </TextField>
+
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.houseNo && formik.errors.houseNo)}
+                                fullWidth
+                                helperText={formik.touched.houseNo && formik.errors.houseNo}
+                                label="House No"
+                                type="number"
+                                name="houseNo"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.houseNo}
+                              />
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.city && formik.errors.city)}
+                                fullWidth
+                                helperText={formik.touched.city && formik.errors.city}
+                                label="City"
+                                name="city"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.city}
+                              />
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.country && formik.errors.country)}
+                                fullWidth
+                                helperText={formik.touched.country && formik.errors.country}
+                                label="Country"
+                                name="country"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.country}
+                              />
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.mobileNumber && formik.errors.mobileNumber)}
+                                fullWidth
+                                helperText={formik.touched.mobileNumber && formik.errors.mobileNumber}
+                                label="Mobile Number"
+                                name="mobileNumber"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.mobileNumber}
+                                type="number"
+                              />
+                             
+                             <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.dateOfJoining && formik.errors.dateOfJoining)}
+                                fullWidth
+                                helperText={formik.touched.dateOfJoining && formik.errors.dateOfJoining}
+                                label="Date Of Joining"
+                                name="dateOfJoining"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.dateOfJoining}
+                              />
+
+                            </Grid>
+                            <Grid
+                              xs={12}
+                              md={6}
+                            >
+                              <TextField
+                                error={!!(formik.touched.middleName && formik.errors.middleName)}
+                                fullWidth
+                                helperText={formik.touched.middleName && formik.errors.middleName}
+                                label="Middle Name"
+                                name="middleName"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.middleName}
+                              />
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.email && formik.errors.email)}
+                                fullWidth
+                                helperText={formik.touched.email && formik.errors.email}
+                                label="Email Address"
+                                name="email"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                type="email"
+                                value={formik.values.email}
+                              />
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.password && formik.errors.password)}
+                                fullWidth
+                                helperText={formik.touched.password && formik.errors.password}
+                                label="Password"
+                                name="password"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                type="password"
+                                value={formik.values.password}
+                              />
+                               <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.dateOfBirth && formik.errors.dateOfBirth)}
+                                fullWidth
+                                helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
+                                label="Date Of Birth"
+                                name="dateOfBirth"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.dateOfBirth}
+                              />
+
+
+                              {/* role */}
+
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.streetName && formik.errors.streetName)}
+                                fullWidth
+                                helperText={formik.touched.streetName && formik.errors.streetName}
+                                label="Street Name"
+                                name="streetName"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+
+                                value={formik.values.streetName}
+                              />
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.state && formik.errors.state)}
+                                fullWidth
+                                helperText={formik.touched.state && formik.errors.state}
+                                label="State"
+                                name="state"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.state}
+                              />
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.postCode && formik.errors.postCode)}
+                                fullWidth
+                                helperText={formik.touched.postCode && formik.errors.postCode}
+                                label="Post Code"
+                                name="postCode"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.postCode}
+                              />
+
+                              <TextField
+                                sx={{ marginTop: 2 }}
+                                error={!!(formik.touched.niNumber && formik.errors.niNumber)}
+                                fullWidth
+                                helperText={formik.touched.niNumber && formik.errors.niNumber}
+                                label="NI Number"
+                                name="niNumber"
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
+                                value={formik.values.niNumber}
+                              />
+                            
+                            </Grid>
+                          </Grid>
+                          {/* <DatePicker label="Date Of Joining"
+          name="dateOfJoining"  
+          // onChange={formik.handleChange}
+          // value={formik.values.dateOfJoining}
+          />
+         */}
+
+                        </Box>
+                      </CardContent>
+                      <Divider />
+                      {formik.errors.submit && (
+                        <Typography
+                          color="error"
+                          sx={{ mt: 3 }}
+                          variant="body2"
+                        >
+                          {formik.errors.submit}
+                        </Typography>
+                      )}
+                      <CardActions sx={{ justifyContent: 'center' }}>
+                        <Button
+                          size="large"
+                          sx={{ mt: 3 }}
+                          type="submit"
+                          variant="contained"
+                        >
+                          Register
+                        </Button>
+                      </CardActions>
+                    </Card>
+                  </form>
+                </Grid>
+              </Grid>
+            </div>
+          </Stack>
+        </Container>
       </Box>
     </>
+
   );
 };
 

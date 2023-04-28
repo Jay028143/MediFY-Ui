@@ -4,10 +4,10 @@ import BellIcon from '@heroicons/react/24/solid/BellIcon';
 import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import Bars3Icon from '@heroicons/react/24/solid/Bars3Icon';
 import { getInitials } from 'src/utils/get-initials';
-import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon';
+import { useRouter } from 'next/navigation';
+import { useAuth } from 'src/hooks/use-auth';
 import {
   Avatar,
-  Badge,
   Box,
   IconButton,
   Stack, CardContent,
@@ -24,6 +24,8 @@ const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
 
 export const TopNav = (props) => {
+  const router = useRouter();
+  const auth = useAuth();
   const { onNavOpen } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   const accountPopover = usePopover();
@@ -31,9 +33,11 @@ export const TopNav = (props) => {
   const [storedata, setStores] = useState([]);
 
   const handleStore = (e) => {
-    retrieveStores();
-    console.log("default..." + e.target.value);
+   // retrieveStores();
+    //console.log("default..." + e.target.value);
     localStorage.setItem('defaultStoreId', e.target.value);
+    auth.skip();
+    router.push('/');
 
   }
   const retrieveStores = () => {
@@ -87,6 +91,7 @@ export const TopNav = (props) => {
           zIndex: (theme) => theme.zIndex.appBar
         }}
       >
+        
         <Stack
           alignItems="center"
           direction="row"
@@ -110,7 +115,57 @@ export const TopNav = (props) => {
               </IconButton>
             )}
           </Stack>
-          <Stack>
+          <Stack
+            alignItems="left"
+           // direction="row"
+            spacing={2}
+          >
+          <TextField
+                  
+                
+                  name="storeId"
+                  placeholder='Select Store'
+                  label="Default Store"
+                  select
+                  SelectProps={{ native: true }}
+                  onChange={handleStore}
+                  onClick={retrieveStores}
+                >
+                  <option value='-1'
+                    key='-1'
+                    selected>
+                    Select Store
+                  </option>
+                  {storedata.map((option) => (
+
+                    <option
+                      key={option.storeId}
+                      value={option.storeId}
+                    >
+                      {option.storeName}
+                    </option>
+                  ))}
+                </TextField>
+         </Stack>
+          <Stack
+            alignItems="center"
+            direction="row"
+            spacing={2}
+          >
+              
+            <Avatar
+              onClick={accountPopover.handleOpen}
+              ref={accountPopover.anchorRef}
+              sx={{
+                cursor: 'pointer',
+                height: 40,
+                width: 40
+              }}
+              src={getInitials(user.username)}
+            >{getInitials(user.username)}</Avatar>
+          </Stack>
+        </Stack>
+        {/* <Stack>
             <CardContent sx={{ pt: 0 }}>
 
               <Grid
@@ -120,14 +175,15 @@ export const TopNav = (props) => {
               >
 
                 <TextField
-                  fullWidth
+                  
                   sx={{ marginTop: 4 }}
                   name="storeId"
                   placeholder='Select Store'
                   label="Default Store"
                   select
                   SelectProps={{ native: true }}
-                  onClick={handleStore}
+                  onChange={handleStore}
+                  onClick={retrieveStores}
                 >
                   <option value='-1'
                     key='-1'
@@ -148,25 +204,9 @@ export const TopNav = (props) => {
 
               </Grid>
             </CardContent>
-          </Stack>
-          <Stack
-            alignItems="center"
-            direction="row"
-            spacing={2}
-          >
-            <Avatar
-              onClick={accountPopover.handleOpen}
-              ref={accountPopover.anchorRef}
-              sx={{
-                cursor: 'pointer',
-                height: 40,
-                width: 40
-              }}
-              src={getInitials(user.username)}
-            >{getInitials(user.username)}</Avatar>
-          </Stack>
-        </Stack>
+          </Stack> */}
       </Box>
+    
       <AccountPopover
         anchorEl={accountPopover.anchorRef.current}
         open={accountPopover.open}

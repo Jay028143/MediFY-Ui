@@ -122,11 +122,7 @@ export const AddUpdateStore = (props) => {
 
         <Container maxWidth="xl">
           <Stack spacing={3}>
-            <div>
-              <Typography variant="h4" >
-                Stores
-              </Typography>
-            </div>
+           
             <div>
               <Grid
                 container
@@ -146,8 +142,8 @@ export const AddUpdateStore = (props) => {
                   >
                     <Card>
                       <CardHeader
-                        // subheader="Add Store"
-                        title="Add Store"
+                         subheader="Add Store"
+                        title="Stores"
                       />
                       <Divider />
                       <CardContent sx={{ pt: 0 }}>

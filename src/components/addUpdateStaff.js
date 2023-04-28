@@ -19,15 +19,15 @@ export const AddUpdateStaff = (props) => {
 
     const genders = [
         {
-            value: 'gender',
+            value: '-1',
             label: '--Select Gender--'
         },
         {
-            value: 'male',
+            value: 'Male',
             label: 'Male'
         },
         {
-            value: 'female',
+            value: 'Female',
             label: 'Female'
         }
     ];
@@ -244,11 +244,7 @@ export const AddUpdateStaff = (props) => {
 
                 <Container maxWidth="xl">
                     <Stack spacing={3}>
-                        <div>
-                            <Typography variant="h4" >
-                                Staffs
-                            </Typography>
-                        </div>
+                      
                         <div>
                             <Grid
                                 container
@@ -268,8 +264,8 @@ export const AddUpdateStaff = (props) => {
                                     >
                                         <Card>
                                             <CardHeader
-                                                // subheader="Add Staff"
-                                                title="Add Staff"
+                                              subheader="Add Staff"
+                                                title="Staffs"
                                             />
                                             <Divider />
                                             <Grid

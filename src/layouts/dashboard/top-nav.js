@@ -10,10 +10,10 @@ import {
   Badge,
   Box,
   IconButton,
-  Stack,
+  Stack, CardContent,
   SvgIcon,
-  Tooltip,Card,
-  useMediaQuery, TextField,Unstable_Grid2 as Grid,Typography
+  Tooltip, Card, CardHeader, Container,
+  useMediaQuery, TextField, Unstable_Grid2 as Grid, Typography, Divider
 } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { usePopover } from 'src/hooks/use-popover';
@@ -111,46 +111,43 @@ export const TopNav = (props) => {
             )}
           </Stack>
           <Stack>
-          <Grid
-                                container
-                                spacing={3}
-                                sx={{ justifyContent: 'left' }}
-                            >
-          
+            <CardContent sx={{ pt: 0 }}>
 
-          <div>
-                            <Typography variant="h4" >
-                                Set Default Store
-                            </Typography>
-                        </div>
-                        <Card>
-            <TextField
-              fullWidth
-            
-              name="storeId"
-              placeholder='Select Store'
-              select
-              SelectProps={{ native: true }}
-              onClick={handleStore}
-            >
-              <option value='-1'
-                key='-1'
-                selected>
-                Select Store
-              </option>
-              {storedata.map((option) => (
+              <Grid
+                xs={12}
+                md={6}
+                sx={{ justifyContent: 'left' }}
+              >
 
-                <option
-                  key={option.storeId}
-                  value={option.storeId}
+                <TextField
+                  fullWidth
+                  sx={{ marginTop: 4 }}
+                  name="storeId"
+                  placeholder='Select Store'
+                  label="Default Store"
+                  select
+                  SelectProps={{ native: true }}
+                  onClick={handleStore}
                 >
-                  {option.storeName}
-                </option>
-              ))}
-            </TextField>
-              </Card>
-        
-          </Grid>
+                  <option value='-1'
+                    key='-1'
+                    selected>
+                    Select Store
+                  </option>
+                  {storedata.map((option) => (
+
+                    <option
+                      key={option.storeId}
+                      value={option.storeId}
+                    >
+                      {option.storeName}
+                    </option>
+                  ))}
+                </TextField>
+
+
+              </Grid>
+            </CardContent>
           </Stack>
           <Stack
             alignItems="center"

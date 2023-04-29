@@ -21,11 +21,15 @@ const Page = () => {
 
   const genders = [
     {
-      value: 'male',
+      value: '-1',
+      label: '--Select Gender--'
+    },
+    {
+      value: 'Male',
       label: 'Male'
     },
     {
-      value: 'female',
+      value: 'Female',
       label: 'Female'
     }
   ];
@@ -47,10 +51,8 @@ const Page = () => {
       country: '',
       city: '',
       postCode: '',
-      niNumber: '',
       email: '',
       mobileNumber: '',
-      dateOfBirth: '',
       dateOfJoining: '',
       storeId: '-1',
       userId: '0',
@@ -88,10 +90,7 @@ const Page = () => {
         .string()
         .max(255)
         .required('User Name is required'),
-      niNumber: Yup
-        .string()
-        .max(255)
-        .required('NI Number is required'),
+
       houseNo: Yup
         .string()
         .max(255)
@@ -116,10 +115,6 @@ const Page = () => {
         .string()
         .max(255)
         .required('Post Code is required'),
-      dateOfBirth: Yup
-        .string()
-        .max(255)
-        .required('Date Of Birth is required'),
       dateOfJoining: Yup
         .string()
         .max(255)
@@ -174,7 +169,7 @@ const Page = () => {
           <Stack spacing={3}  >
 
             <div>
-            
+
               <Grid
                 container
                 spacing={3}
@@ -193,7 +188,7 @@ const Page = () => {
                   >
                     <Card>
                       <CardHeader
-                        
+
                         title="Register"
 
                       />
@@ -204,7 +199,7 @@ const Page = () => {
                       >
                         &nbsp;
                         &nbsp;
-                        &nbsp;  
+                        &nbsp;
                         Already have an account?
                         &nbsp;
                         <Link
@@ -222,7 +217,7 @@ const Page = () => {
                         md={6}
                         ml={10}
                       >
-                        
+
                       </Grid>
 
                       <CardContent sx={{ pt: 0 }}>
@@ -274,16 +269,15 @@ const Page = () => {
 
                               <TextField
                                 sx={{ marginTop: 2 }}
-                                error={!!(formik.touched.gender && formik.errors.gender)}
+
                                 fullWidth
-                                helperText={formik.touched.gender && formik.errors.gender}
+
                                 label="Gender"
                                 name="gender"
-                                onBlur={formik.handleBlur}
-                                onChange={formik.handleChange}
+                                onClick={(e) => formik.setFieldValue('gender', e.target.value)}
                                 select
                                 SelectProps={{ native: true }}
-                                value={formik.values.gender}
+
                               >
                                 {genders.map((option) => (
                                   <option
@@ -345,18 +339,8 @@ const Page = () => {
                                 value={formik.values.mobileNumber}
                                 type="number"
                               />
-                             
-                             <TextField
-                                sx={{ marginTop: 2 }}
-                                error={!!(formik.touched.dateOfJoining && formik.errors.dateOfJoining)}
-                                fullWidth
-                                helperText={formik.touched.dateOfJoining && formik.errors.dateOfJoining}
-                                label="Date Of Joining"
-                                name="dateOfJoining"
-                                onBlur={formik.handleBlur}
-                                onChange={formik.handleChange}
-                                value={formik.values.dateOfJoining}
-                              />
+
+
 
                             </Grid>
                             <Grid
@@ -399,16 +383,16 @@ const Page = () => {
                                 type="password"
                                 value={formik.values.password}
                               />
-                               <TextField
-                                sx={{ marginTop: 2 }}
-                                error={!!(formik.touched.dateOfBirth && formik.errors.dateOfBirth)}
-                                fullWidth
-                                helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
-                                label="Date Of Birth"
-                                name="dateOfBirth"
-                                onBlur={formik.handleBlur}
-                                onChange={formik.handleChange}
-                                value={formik.values.dateOfBirth}
+                              <TextField
+                              sx={{ marginTop: 2 }}
+                              error={!!(formik.touched.dateOfJoining && formik.errors.dateOfJoining)}
+                              fullWidth
+                              helperText={formik.touched.dateOfJoining && formik.errors.dateOfJoining}
+                              label="Date Of Joining"
+                              name="dateOfJoining"
+                              onBlur={formik.handleBlur}
+                              onChange={formik.handleChange}
+                              value={formik.values.dateOfJoining}
                               />
 
 
@@ -451,17 +435,7 @@ const Page = () => {
                                 value={formik.values.postCode}
                               />
 
-                              <TextField
-                                sx={{ marginTop: 2 }}
-                                error={!!(formik.touched.niNumber && formik.errors.niNumber)}
-                                fullWidth
-                                helperText={formik.touched.niNumber && formik.errors.niNumber}
-                                label="NI Number"
-                                name="niNumber"
-                                onBlur={formik.handleBlur}
-                                onChange={formik.handleChange}
-                                value={formik.values.niNumber}
-                              />
+                            
                             
                             </Grid>
                           </Grid>

@@ -52,7 +52,6 @@ export const AddUpdateCustomer = (props) => {
             country: customer.country || '',
             city: customer.city || '',
             postCode: customer.postCode || '',
-            nhsNumber: customer.nhsNumber || '',
             email: customer.email || '',
             mobileNumber: customer.mobileNumber || '',
             dateOfBirth: customer.dateOfBirth || '',
@@ -103,10 +102,6 @@ export const AddUpdateCustomer = (props) => {
                 .string()
                 .max(255)
                 .required('Post Code is required'),
-            nhsNumber: Yup
-                .string()
-                .max(255)
-                .required('NHS Number is required'),
             email: Yup
                 .string()
                 .max(255)
@@ -375,19 +370,6 @@ export const AddUpdateCustomer = (props) => {
                                                                 onChange={formik.handleChange}
                                                                 value={formik.values.postCode}
                                                             />
-
-                                                            <TextField
-                                                                sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.nhsNumber && formik.errors.nhsNumber)}
-                                                                fullWidth
-                                                                helperText={formik.touched.nhsNumber && formik.errors.nhsNumber}
-                                                                label="NHS Number"
-                                                                name="nhsNumber"
-                                                                onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
-                                                                value={formik.values.nhsNumber}
-                                                            />
-
                                                         </Grid>
 
                                                     </Grid>

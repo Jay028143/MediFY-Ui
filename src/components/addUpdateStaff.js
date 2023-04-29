@@ -32,7 +32,7 @@ export const AddUpdateStaff = (props) => {
         }
     ];
 
-   
+
 
 
     const roles = [
@@ -61,7 +61,7 @@ export const AddUpdateStaff = (props) => {
     //     console.log("Gender.."+e.target.value);
     //     setRole([e.target.value]);
     // }
-    
+
     // console.log("selected role.."+selectedrole);
     const buttonval = staff.userId > 0 ? 'Update' : 'Save';
     const now = new Date();
@@ -76,7 +76,7 @@ export const AddUpdateStaff = (props) => {
             firstName: staff.firstName || '',
             middleName: staff.middleName || '',
             lastName: staff.lastName || '',
-            gender: staff.gender ,
+            gender: staff.gender,
             email: staff.email || '',
             houseNo: staff.houseNo || '',
             username: staff.userName || '',
@@ -86,7 +86,6 @@ export const AddUpdateStaff = (props) => {
             country: staff.country || '',
             city: staff.city || '',
             postCode: staff.postCode || '',
-            niNumber: staff.niNumber || '',
             email: staff.email || '',
             mobileNumber: staff.mobileNumber || '',
             dateOfBirth: staff.dateOfBirth || '',
@@ -103,12 +102,12 @@ export const AddUpdateStaff = (props) => {
         },
         validationSchema: Yup.object({
 
-          
+
             username: Yup
                 .string()
                 .max(255)
                 .required('User Name is required'),
-              
+
             password: Yup
                 .string()
                 .max(255)
@@ -149,10 +148,6 @@ export const AddUpdateStaff = (props) => {
                 .string()
                 .max(255)
                 .required('Post Code is required'),
-            niNumber: Yup
-                .string()
-                .max(255)
-                .required('NHS Number is required'),
             email: Yup
                 .string()
                 .max(255)
@@ -175,54 +170,54 @@ export const AddUpdateStaff = (props) => {
                 .required('Please Select the Store required'),
         }),
         onSubmit: async (values, helpers) => {
-            if(buttonval=="Save"){ 
-            try {
-                console.log(JSON.stringify(values));
-                LoginService.register(values)
-                    .then(response => {
-                        alert(JSON.stringify(response));
-                        //auth.skip();
-                        //router.push('/staffs');
-                        //setSubmitted(true);
-                        handleAddStaff(false);
-                        console.log(response.data);
-                    })
-                    .catch(e => {
-                        console.log(e);
-                    });
+            if (buttonval == "Save") {
+                try {
+                    console.log(JSON.stringify(values));
+                    LoginService.register(values)
+                        .then(response => {
+                            alert(JSON.stringify(response));
+                            //auth.skip();
+                            //router.push('/staffs');
+                            //setSubmitted(true);
+                            handleAddStaff(false);
+                            console.log(response.data);
+                        })
+                        .catch(e => {
+                            console.log(e);
+                        });
 
-            } catch (err) {
-                helpers.setStatus({ success: false });
-                helpers.setErrors({ submit: err.message });
-                helpers.setSubmitting(false);
+                } catch (err) {
+                    helpers.setStatus({ success: false });
+                    helpers.setErrors({ submit: err.message });
+                    helpers.setSubmitting(false);
+                }
+
             }
+            else {
+                try {
 
-        }
-        else{
-            try {
+                    const clonedObj = Object.assign({}, values);
+                    const targetKey = clonedObj['username'];
+                    delete clonedObj['username'];
+                    clonedObj['userName'] = targetKey;
+                    values = clonedObj;
+                    UserService.create(values)
+                        .then(response => {
+                            alert(JSON.stringify(response));
+                            handleAddStaff(false);
+                            console.log(response.data);
+                        })
+                        .catch(e => {
+                            console.log(e);
+                        });
 
-    const clonedObj = Object.assign({}, values);
-    const targetKey = clonedObj['username'];
-    delete clonedObj['username'];
-    clonedObj['userName'] = targetKey;
-    values=clonedObj  ;
-                UserService.create(values)
-                    .then(response => {
-                        alert(JSON.stringify(response));
-                        handleAddStaff(false);
-                        console.log(response.data);
-                    })
-                    .catch(e => {
-                        console.log(e);
-                    });
+                } catch (err) {
+                    helpers.setStatus({ success: false });
+                    helpers.setErrors({ submit: err.message });
+                    helpers.setSubmitting(false);
+                }
 
-            } catch (err) {
-                helpers.setStatus({ success: false });
-                helpers.setErrors({ submit: err.message });
-                helpers.setSubmitting(false);
             }
-
-        }
 
         }
     });
@@ -244,7 +239,7 @@ export const AddUpdateStaff = (props) => {
 
                 <Container maxWidth="xl">
                     <Stack spacing={3}>
-                      
+
                         <div>
                             <Grid
                                 container
@@ -264,7 +259,7 @@ export const AddUpdateStaff = (props) => {
                                     >
                                         <Card>
                                             <CardHeader
-                                              subheader="Add Staff"
+                                                subheader="Add Staff"
                                                 title="Staffs"
                                             />
                                             <Divider />
@@ -272,9 +267,9 @@ export const AddUpdateStaff = (props) => {
                                                 xs={6}
                                                 md={6}
                                             >
-                                              
+
                                             </Grid>
-                                           
+
                                             <CardContent sx={{ pt: 0 }}>
                                                 <Box sx={{ m: -1.5 }}>
                                                     <Grid
@@ -324,17 +319,17 @@ export const AddUpdateStaff = (props) => {
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
-                                                              
+
                                                                 fullWidth
-                                                                
+
                                                                 label="Gender"
                                                                 name="gender"
-                                                             
-                                                               
-                                                                onClick={(e)=>formik.setFieldValue('gender',e.target.value)}
+
+
+                                                                onClick={(e) => formik.setFieldValue('gender', e.target.value)}
                                                                 select
                                                                 SelectProps={{ native: true }}
-                                                                
+
                                                             >
                                                                 {genders.map((option) => (
                                                                     <option
@@ -396,17 +391,7 @@ export const AddUpdateStaff = (props) => {
                                                                 value={formik.values.mobileNumber}
                                                                 type="number"
                                                             />
-                                                            <TextField
-                                                                sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.dateOfBirth && formik.errors.dateOfBirth)}
-                                                                fullWidth
-                                                                helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
-                                                                label="Date Of Birth"
-                                                                name="dateOfBirth"
-                                                                onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
-                                                                value={formik.values.dateOfBirth}
-                                                            />
+                                    
 
 
                                                         </Grid>
@@ -439,7 +424,7 @@ export const AddUpdateStaff = (props) => {
                                                             />
 
                                                             <TextField
-                                                             sx={{ marginTop: 2 }}
+                                                                sx={{ marginTop: 2 }}
                                                                 error={!!(formik.touched.password && formik.errors.password)}
                                                                 fullWidth
                                                                 helperText={formik.touched.password && formik.errors.password}
@@ -454,30 +439,30 @@ export const AddUpdateStaff = (props) => {
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
-                                                               // error={!!(formik.touched.gender && formik.errors.gender)}
+                                                                // error={!!(formik.touched.gender && formik.errors.gender)}
                                                                 fullWidth
                                                                 // helperText={formik.touched.gender && formik.errors.gender}
                                                                 label="Role"
                                                                 name="role"
-                                                               // onBlur={formik.handleBlur}
+                                                                // onBlur={formik.handleBlur}
                                                                 //onChange={formik.handleChange}
-                                                                onClick={(e)=>formik.setFieldValue('role',[e.target.value])}
+                                                                onClick={(e) => formik.setFieldValue('role', [e.target.value])}
                                                                 select
                                                                 SelectProps={{ native: true }}
-                                                                
+
                                                             >
                                                                 {roles.map((option) => (
                                                                     <option
                                                                         key={option.value}
                                                                         value={option.value}
-    
+
                                                                     >
                                                                         {option.label}
                                                                     </option>
                                                                 ))}
                                                             </TextField>
                                                             {/* role */}
-                                                            
+
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
@@ -515,17 +500,6 @@ export const AddUpdateStaff = (props) => {
                                                                 value={formik.values.postCode}
                                                             />
 
-                                                            <TextField
-                                                                sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.niNumber && formik.errors.niNumber)}
-                                                                fullWidth
-                                                                helperText={formik.touched.niNumber && formik.errors.niNumber}
-                                                                label="NI Number"
-                                                                name="niNumber"
-                                                                onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
-                                                                value={formik.values.niNumber}
-                                                            />
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
                                                                 error={!!(formik.touched.dateOfJoining && formik.errors.dateOfJoining)}

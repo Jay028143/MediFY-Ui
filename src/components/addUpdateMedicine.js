@@ -55,7 +55,10 @@ export const AddUpdateMedicine = (props) => {
             storeId: storeId || '0',
             createdAt: createdAt,
             updatedAt: currentdatetime,
-            quantity: medicine.quantity || '',
+            stocks:[{
+                quantity: '0',
+                expiryDate: '2023-05-20',
+            }],
             submit: null
         },
         response: {

@@ -4,6 +4,10 @@ const getAll = () => {
   return http.get("/medicine");
 };
 
+const getByStoreId = id => {
+  return http.get(`/medicine/getMedicinesByStoreId/${id}`);
+};
+
 const get = id => {
   return http.get(`/medicine/${id}`);
 };
@@ -31,7 +35,8 @@ const MedicineService = {
   create,
   update,
   remove,
-  removeAll
+  removeAll,
+  getByStoreId
 };
 
 export default MedicineService;

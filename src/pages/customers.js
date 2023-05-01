@@ -229,22 +229,8 @@ console.log("date.."+now);
   };
 
   const retrieveCustomers = () => {
-    const userRole=localStorage.getItem('userRole');
-    const user=JSON.parse(localStorage.getItem('user'));
-    if(userRole=="ADMIN"){
-      CustomerService.getAll()
-      .then(response => {
-        setCustomers(response.data);
-        console.log(response.data);
-       // //alert(JSON.stringify(response.data));
-      })
-      .catch(e => {
-        console.log(e);
-      });
-    }
-    else
-    {
-      CustomerService.get(user.storeId)
+    const defaultStoreId = localStorage.getItem('defaultStoreId');
+      CustomerService.getByStoreId(defaultStoreId)
       .then(response => {
        // //alert("response.data"+JSON.stringify(response.data));
         setCustomers([response.data]);
@@ -254,7 +240,7 @@ console.log("date.."+now);
       .catch(e => {
         console.log(e);
       });
-    }
+    
   };    
 
  

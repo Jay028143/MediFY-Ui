@@ -8,6 +8,10 @@ const get = id => {
   return http.get(`/customer/${id}`);
 };
 
+const getByStoreId = id => {
+  return http.get(`/customer/getCustomerByStoreId/${id}`);
+};
+
 const create = data => {
   return http.post("/customer", data);
 };
@@ -32,6 +36,7 @@ const CustomerService = {
   update,
   remove,
   removeAll,
+  getByStoreId
 };
 
 export default CustomerService;

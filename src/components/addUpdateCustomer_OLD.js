@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
@@ -8,44 +9,36 @@ import {
     CardActions,
     CardContent,
     CardHeader,
-    Divider, Container, Stack, TextField, Typography, Unstable_Grid2 as Grid
+    Divider, Container, Stack, TextField, Typography, Grid
 } from '@mui/material';
-import CustomerService from 'src/services/Customerservice';
+import CustomerService from 'src/services/CustomerService';
 
 export const AddUpdateCustomer = (props) => {
 
     const genders = [
         {
-          value: '-1',
-          label: '--Select Gender--'
+            value: 'male',
+            label: 'Male'
         },
         {
-          value: 'Male',
-          label: 'Male'
-        },
-        {
-          value: 'Female',
-          label: 'Female'
+            value: 'female',
+            label: 'Female'
         }
-      ];
-
-
+    ];
 
     const {
         customer,
         handleAddCustomer
     } = props;
-    const buttonval = customer.customerId > 0 ? 'Update' : 'Save';
+    const buttonval = customer.storeId > 0 ? 'Update' : 'Save';
     const now = new Date();
     const currentdatetime = format(now, "yyyy-MM-dd HH:mm:ss");
     const user = JSON.parse(localStorage.getItem('user'));
+    const createdAt = customer.customerId > 0 ? customer.createdAt : currentdatetime;
     const userId = customer.customerId > 0 ? customer.userId : user.id;
     const defaultStoreId = localStorage.getItem('defaultStoreId');
     const storeId = customer.customerId > 0 ? customer.storeId : defaultStoreId;
-    const createdAt = customer.customerId > 0 ? customer.createdAt : currentdatetime;
-
     console.log("data.eee.." + JSON.stringify(customer));
-
     const formik = useFormik({
         initialValues: {
             customerId: customer.customerId || '',
@@ -75,49 +68,49 @@ export const AddUpdateCustomer = (props) => {
         validationSchema: Yup.object({
 
             firstName: Yup
-            .string()
-            .max(255)
-            .required('First Name is required'),
-        middleName: Yup
-            .string()
-            .max(255)
-            .required('Middle Name is required'),
-        lastName: Yup
-            .string()
-            .max(255)
-            .required('last Name is required'),
-        houseNo: Yup
-            .string()
-            .max(255)
-            .required('House No is required'),
-        streetName: Yup
-            .string()
-            .max(255)
-            .required('Street Name is required'),
-        state: Yup
-            .string()
-            .max(255)
-            .required('State is required'),
-        country: Yup
-            .string()
-            .max(255)
-            .required('Country is required'),
-        city: Yup
-            .string()
-            .max(255)
-            .required('City is required'),
-        postCode: Yup
-            .string()
-            .max(255)
-            .required('Post Code is required'),
-        mobileNumber: Yup
-            .string()
-            .max(255)
-            .required('Mobile Number is required'),
-        dateOfBirth: Yup
-            .string()
-            .max(255)
-            .required('Date Of Birth is required'),
+                .string()
+                .max(255)
+                .required('First Name is required'),
+            middleName: Yup
+                .string()
+                .max(255)
+                .required('Middle Name is required'),
+            lastName: Yup
+                .string()
+                .max(255)
+                .required('last Name is required'),
+            houseNo: Yup
+                .string()
+                .max(255)
+                .required('House No is required'),
+            streetName: Yup
+                .string()
+                .max(255)
+                .required('Street Name is required'),
+            state: Yup
+                .string()
+                .max(255)
+                .required('State is required'),
+            country: Yup
+                .string()
+                .max(255)
+                .required('Country is required'),
+            city: Yup
+                .string()
+                .max(255)
+                .required('City is required'),
+            postCode: Yup
+                .string()
+                .max(255)
+                .required('Post Code is required'),
+            mobileNumber: Yup
+                .string()
+                .max(255)
+                .required('Mobile Number is required'),
+            dateOfBirth: Yup
+                .string()
+                .max(255)
+                .required('Date Of Birth is required'),
         }),
         onSubmit: async (values, helpers) => {
             try {
@@ -125,7 +118,7 @@ export const AddUpdateCustomer = (props) => {
                     .then(response => {
                         ////alert(JSON.stringify(response));
                         //auth.skip();
-                        //router.push('/customers');
+                        //router.push('/stores');
                         //setSubmitted(true);
                         handleAddCustomer(false);
                         console.log(response.data);
@@ -144,7 +137,7 @@ export const AddUpdateCustomer = (props) => {
 
     return (
         <>
-            <Head  >
+            <Head>
                 <title>
                     Add Customer | MediFY
                 </title>
@@ -171,7 +164,6 @@ export const AddUpdateCustomer = (props) => {
                                     md={6}
                                     lg={8}
                                 >
-
                                     <form
 
                                         noValidate
@@ -184,16 +176,17 @@ export const AddUpdateCustomer = (props) => {
                                             />
                                             <Divider />
                                             <CardContent sx={{ pt: 0 }}>
-                                                <Box sx={{ m: -1.5 }}>
+                                                <Box sx={{ m: 10 }}>
                                                     <Grid
                                                         container
                                                         spacing={3}
+
                                                     >
                                                         <Grid
                                                             xs={12}
                                                             md={6}
                                                         >
-                                                             <TextField
+                                                            <TextField
                                                                 error={!!(formik.touched.firstName && formik.errors.firstName)}
                                                                 fullWidth
                                                                 helperText={formik.touched.firstName && formik.errors.firstName}
@@ -235,7 +228,6 @@ export const AddUpdateCustomer = (props) => {
                                                                 select
                                                                 SelectProps={{ native: true }}
                                                                 value={formik.values.gender}
-                                                                InputLabelProps={{ shrink: true }}
                                                             >
                                                                 {genders.map((option) => (
                                                                     <option
@@ -287,11 +279,13 @@ export const AddUpdateCustomer = (props) => {
                                                             />
 
                                                         </Grid>
+
                                                         <Grid
                                                             xs={12}
                                                             md={6}
                                                         >
-                                                             <TextField
+
+                                                            <TextField
                                                                 error={!!(formik.touched.middleName && formik.errors.middleName)}
                                                                 fullWidth
                                                                 helperText={formik.touched.middleName && formik.errors.middleName}
@@ -367,14 +361,8 @@ export const AddUpdateCustomer = (props) => {
                                                                 value={formik.values.postCode}
                                                             />
                                                         </Grid>
-                                                    </Grid>
-                                                    {/* <DatePicker label="Date Of Joining"
-                  name="dateOfJoining"  
-                  // onChange={formik.handleChange}
-                  // value={formik.values.dateOfJoining}
-                  />
-                 */}
 
+                                                    </Grid>
                                                 </Box>
                                             </CardContent>
                                             <Divider />

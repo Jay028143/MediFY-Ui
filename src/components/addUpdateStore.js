@@ -86,7 +86,7 @@ export const AddUpdateStore = (props) => {
       try {
         StoreService.create(values)
           .then(response => {
-            alert(JSON.stringify(response));
+            //alert(JSON.stringify(response));
             //auth.skip();
             //router.push('/stores');
             //setSubmitted(true);

@@ -134,7 +134,7 @@ const Page = () => {
         //  await auth.signUp(values.email, values.name, values.password);
         LoginService.register(values)
           .then(response => {
-            alert(JSON.stringify(response));
+            //alert(JSON.stringify(response));
             //setSubmitted(true);
             console.log(response.data);
             router.push('/');
@@ -384,9 +384,9 @@ const Page = () => {
                                 type="password"
                                 value={formik.values.password}
                               />
-                             
-                             
-                               <TextField
+
+
+                              <TextField
                                 sx={{ marginTop: 2 }}
 
                                 fullWidth
@@ -398,12 +398,10 @@ const Page = () => {
                                 value={formik.values.dateOfJoining}
                                 onBlur={formik.handleBlur}
                                 onChange={formik.handleChange}
-
-                             InputLabelProps={{ shrink: true }}
-
+                                InputLabelProps={{ shrink: true }}
                               >
-                             
-                             
+
+
                               </TextField>
 
                               <TextField

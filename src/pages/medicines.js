@@ -211,7 +211,7 @@ console.log("date.."+now);
 
   const deleteMedicine = (medicineId) => {
 
-    //alert("medicineId"+medicineId);
+    ////alert("medicineId"+medicineId);
   
     MedicineService.remove(medicineId)
       .then(response => {
@@ -240,7 +240,7 @@ console.log("date.."+now);
       .then(response => {
         setMedicines(response.data);
         console.log(response.data);
-       // alert(JSON.stringify(response.data));
+       // //alert(JSON.stringify(response.data));
       })
       .catch(e => {
         console.log(e);
@@ -250,10 +250,10 @@ console.log("date.."+now);
     {
       MedicineService.get(user.storeId)
       .then(response => {
-       // alert("response.data"+JSON.stringify(response.data));
+       // //alert("response.data"+JSON.stringify(response.data));
         setMedicines([response.data]);
         console.log(response.data);
-       // alert(JSON.stringify(response.data));
+       // //alert(JSON.stringify(response.data));
       })
       .catch(e => {
         console.log(e);

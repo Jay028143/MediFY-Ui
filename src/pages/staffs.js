@@ -23,7 +23,6 @@ const data = [
     lastName:'Patel',
     userName:'JayPatel',
     email:'Jp@gmail.com',
-    niNumber:'78456122',
     postCode: 'AAAA',
     mobileNumber: '123456789',
     dateOfJoining:'2023-02-15'
@@ -35,7 +34,6 @@ const data = [
     lastName:'Patel',
     userName:'HardikPatel',
     email:'Hp@gmail.com',
-    niNumber:'57241545',
     postCode: 'BBBB',
     mobileNumber: '565458',
     dateOfJoining:'2023-02-20'
@@ -230,7 +228,7 @@ const Page = () => {
   //     .then(response => {
   //       setRoles(response.data);
   //       console.log(response.data);
-  //      // alert(JSON.stringify(response.data));
+  //      // //alert(JSON.stringify(response.data));
   //     })
   //     .catch(e => {
   //       console.log(e);
@@ -240,7 +238,7 @@ const Page = () => {
 
   const deleteStaff = (staffId) => {
 
-    //alert("staffId"+staffId);
+    ////alert("staffId"+staffId);
   
     UserService.remove(staffId)
       .then(response => {
@@ -277,7 +275,7 @@ const Page = () => {
         setStaffs(temp);
         console.log(JSON.stringify(temp));
         console.log(JSON.stringify(response.data));
-        //alert(JSON.stringify(response.data));
+        ////alert(JSON.stringify(response.data));
       })
       .catch(e => {
         console.log(e);

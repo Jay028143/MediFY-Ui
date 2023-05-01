@@ -104,9 +104,6 @@ export const CustomersTable = (props) => {
                     </TableCell>
     
                     <TableCell>
-                      {customer.nhsNumber}
-                    </TableCell>
-                    <TableCell>
                       {customer.dateOfBirth}
                     </TableCell>
                     <TableCell>

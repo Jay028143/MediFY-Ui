@@ -219,7 +219,7 @@ console.log("date.."+now);
 
   const deleteStore = (storeId) => {
 
-    //alert("storeId"+storeId);
+    ////alert("storeId"+storeId);
   
     StoreService.remove(storeId)
       .then(response => {
@@ -248,7 +248,7 @@ console.log("date.."+now);
       .then(response => {
         setStores(response.data);
         console.log(response.data);
-       // alert(JSON.stringify(response.data));
+       // //alert(JSON.stringify(response.data));
       })
       .catch(e => {
         console.log(e);
@@ -258,10 +258,10 @@ console.log("date.."+now);
     {
       StoreService.get(user.storeId)
       .then(response => {
-       // alert("response.data"+JSON.stringify(response.data));
+       // //alert("response.data"+JSON.stringify(response.data));
         setStores([response.data]);
         console.log(response.data);
-       // alert(JSON.stringify(response.data));
+       // //alert(JSON.stringify(response.data));
       })
       .catch(e => {
         console.log(e);

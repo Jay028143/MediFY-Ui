@@ -48,7 +48,7 @@ export const TopNav = (props) => {
         .then(response => {
           setStores(response.data);
           console.log(response.data);
-          // alert(JSON.stringify(response.data));
+          // //alert(JSON.stringify(response.data));
         })
         .catch(e => {
           console.log(e);
@@ -57,10 +57,10 @@ export const TopNav = (props) => {
     else {
       StoreService.get(userdetail.storeId)
         .then(response => {
-          // alert("response.data"+JSON.stringify(response.data));
+          // //alert("response.data"+JSON.stringify(response.data));
           setStores([response.data]);
           console.log(response.data);
-          // alert(JSON.stringify(response.data));
+          // //alert(JSON.stringify(response.data));
         })
         .catch(e => {
           console.log(e);

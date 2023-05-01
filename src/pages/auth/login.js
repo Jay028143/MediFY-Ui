@@ -46,7 +46,7 @@ const Page = () => {
 
        LoginService.login(values)
        .then(response => {
-        //alert("Json..."+JSON.stringify(response));
+        ////alert("Json..."+JSON.stringify(response));
           if(response.status==200)
           {
             auth.skip();

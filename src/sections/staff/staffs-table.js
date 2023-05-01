@@ -58,9 +58,7 @@ export const StaffsTable = (props) => {
                 <TableCell>
                  Gender
                 </TableCell>
-                <TableCell>
-                 NI Number
-                </TableCell>
+               
                 <TableCell>
                   Location
                 </TableCell>
@@ -119,9 +117,7 @@ export const StaffsTable = (props) => {
                     <TableCell>
                       {staff.gender}
                     </TableCell>
-                    <TableCell>
-                      {staff.niNumber}
-                    </TableCell>
+                  
                     <TableCell>
                     {staff.houseNo} , {staff.streetName} ,{staff.city}
                     </TableCell>

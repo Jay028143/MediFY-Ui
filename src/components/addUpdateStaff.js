@@ -37,8 +37,8 @@ export const AddUpdateStaff = (props) => {
 
     const roles = [
         {
-            value: 'select Role',
-            label: '--select Role--'
+            value: 'Select Role',
+            label: '--Select Role--'
         },
         {
             value: 'manager',
@@ -170,7 +170,7 @@ export const AddUpdateStaff = (props) => {
                     console.log(JSON.stringify(values));
                     LoginService.register(values)
                         .then(response => {
-                            alert(JSON.stringify(response));
+                            //////alert(JSON.stringify(response));
                             //auth.skip();
                             //router.push('/staffs');
                             //setSubmitted(true);
@@ -198,7 +198,7 @@ export const AddUpdateStaff = (props) => {
                     values = clonedObj;
                     UserService.create(values)
                         .then(response => {
-                            alert(JSON.stringify(response));
+                            //alert(JSON.stringify(response));
                             handleAddStaff(false);
                             console.log(response.data);
                         })
@@ -386,7 +386,7 @@ export const AddUpdateStaff = (props) => {
                                                                 value={formik.values.mobileNumber}
                                                                 type="number"
                                                             />
-                                    
+
 
 
                                                         </Grid>
@@ -495,17 +495,22 @@ export const AddUpdateStaff = (props) => {
                                                                 value={formik.values.postCode}
                                                             />
 
+
                                                             <TextField
-                                                                sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.dateOfJoining && formik.errors.dateOfJoining)}
-                                                                fullWidth
-                                                                helperText={formik.touched.dateOfJoining && formik.errors.dateOfJoining}
-                                                                label="Date Of Joining"
-                                                                name="dateOfJoining"
+                                                                 sx={{ marginTop: 2 }}
+                                                                 error={!!(formik.touched.dateOfJoining && formik.errors.dateOfJoining)}
+                                                                 fullWidth
+                                                                 helperText={formik.touched.dateOfJoining && formik.errors.dateOfJoining}
+                                                                 label="Date Of Joining"
+                                                                 name="dateOfJoining"
+                                                                //label="Date Of Joining"
+                                                                type={'date'}
+                                                                value={formik.values.dateOfJoining}
                                                                 onBlur={formik.handleBlur}
                                                                 onChange={formik.handleChange}
-                                                                value={formik.values.dateOfJoining}
+                                                                InputLabelProps={{ shrink: true }}
                                                             />
+
                                                         </Grid>
                                                     </Grid>
                                                     {/* <DatePicker label="Date Of Joining"

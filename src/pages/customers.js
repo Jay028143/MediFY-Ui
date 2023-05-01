@@ -207,7 +207,7 @@ console.log("date.."+now);
 
   const deleteCustomer = (customerId) => {
 
-    //alert("customerId"+customerId);
+    ////alert("customerId"+customerId);
   
     CustomerService.remove(customerId)
       .then(response => {
@@ -236,7 +236,7 @@ console.log("date.."+now);
       .then(response => {
         setCustomers(response.data);
         console.log(response.data);
-       // alert(JSON.stringify(response.data));
+       // //alert(JSON.stringify(response.data));
       })
       .catch(e => {
         console.log(e);
@@ -246,10 +246,10 @@ console.log("date.."+now);
     {
       CustomerService.get(user.storeId)
       .then(response => {
-       // alert("response.data"+JSON.stringify(response.data));
+       // //alert("response.data"+JSON.stringify(response.data));
         setCustomers([response.data]);
         console.log(response.data);
-       // alert(JSON.stringify(response.data));
+       // //alert(JSON.stringify(response.data));
       })
       .catch(e => {
         console.log(e);

@@ -106,14 +106,14 @@ const Page = () => {
   };
 
   const retrieveOrders = () => {
-   alert("called..");
+   //alert("called..");
     const defaultStoreId = localStorage.getItem('defaultStoreId');
      OrderService.getByStoreId(defaultStoreId)
       .then(response => {
-        alert(JSON.stringify(response.data));
+        //alert(JSON.stringify(response.data));
         setOrders(response.data);
         console.log(JSON.stringify(response.data));
-        //alert(JSON.stringify(response.data));
+        ////alert(JSON.stringify(response.data));
       })
       .catch(e => {
         console.log(e);

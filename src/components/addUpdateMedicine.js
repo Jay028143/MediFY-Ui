@@ -36,10 +36,12 @@ export const AddUpdateMedicine = (props) => {
     const currentdatetime = format(now, "yyyy-MM-dd HH:mm:ss");
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = medicine.medicineId > 0 ? medicine.userId : user.id;
-    const storeId = medicine.medicineId > 0 ? medicine.storeId : user.storeId;
+    const defaultStoreId = localStorage.getItem('defaultStoreId');
+    const storeId = medicine.medicineId > 0 ? medicine.storeId : defaultStoreId;
     const createdAt = medicine.medicineId > 0 ? medicine.createdAt : currentdatetime;
+
     console.log("data.eee.." + JSON.stringify(medicine));
-    
+
     const formik = useFormik({
         initialValues: {
             medicineId: medicine.medicineId || '',
@@ -55,7 +57,7 @@ export const AddUpdateMedicine = (props) => {
             storeId: storeId || '0',
             createdAt: createdAt,
             updatedAt: currentdatetime,
-            stock:[{
+            stock: [{
                 quantity: '',
                 expiryDate: '',
             }],
@@ -95,7 +97,7 @@ export const AddUpdateMedicine = (props) => {
             try {
                 MedicineService.create(values)
                     .then(response => {
-                        alert(JSON.stringify(response));
+                        ////alert(JSON.stringify(response));
                         //auth.skip();
                         //router.push('/medicines');
                         //setSubmitted(true);
@@ -131,7 +133,7 @@ export const AddUpdateMedicine = (props) => {
 
                 <Container maxWidth="xl">
                     <Stack spacing={3}>
-                        
+
                         <div>
                             <Grid
                                 container
@@ -151,7 +153,7 @@ export const AddUpdateMedicine = (props) => {
                                     >
                                         <Card>
                                             <CardHeader
-                                               subheader="Add Medicine"
+                                                subheader="Add Medicine"
                                                 title="Medicines"
                                             />
                                             <Divider />
@@ -189,31 +191,32 @@ export const AddUpdateMedicine = (props) => {
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
-                                                               // error={!!(formik.touched.quantity && formik.errors.quantity)}
+                                                                // error={!!(formik.touched.quantity && formik.errors.quantity)}
                                                                 fullWidth
                                                                 type="number"
-                                                               // helperText={formik.touched.quantity && formik.errors.quantity}
+                                                                // helperText={formik.touched.quantity && formik.errors.quantity}
                                                                 label="Quantity"
                                                                 name="quantity"
                                                                 onBlur={formik.handleBlur}
-                                                              //  onChange={formik.handleChange}
+                                                                //  onChange={formik.handleChange}
                                                                 //onChange={(value) => formik.setFieldValue(JSON.stringify('stock', ["{"+{'quantity':value}+"}"]))}
-                                                               // value={formik.values.stock}
+                                                                // value={formik.values.stock}
                                                                 onChange={(e) => formik.setFieldValue(`stock.${0}.quantity`, e.target.value)}
                                                             />
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
-                                                               // error={!!(formik.touched.expiryDate && formik.errors.expiryDate)}
+                                                                // error={!!(formik.touched.expiryDate && formik.errors.expiryDate)}
                                                                 fullWidth
-                                                               // helperText={formik.touched.expiryDate && formik.errors.expiryDate}
+                                                                // helperText={formik.touched.expiryDate && formik.errors.expiryDate}
                                                                 label="Expiry Date"
                                                                 name="expiryDate"
                                                                 onBlur={formik.handleBlur}
+                                                                type={'date'}
                                                                 //onChange={formik.handleChange}
-                                                               // value={formik.values.stock}
-                                                                
-                                                               // onChange={(e) => formik.setFieldValue(JSON.stringify('stock', ["{"+{'expiryDate':e.target.value}+"}"]))}
+                                                                // value={formik.values.stock}
+                                                                InputLabelProps={{ shrink: true }}
+                                                                // onChange={(e) => formik.setFieldValue(JSON.stringify('stock', ["{"+{'expiryDate':e.target.value}+"}"]))}
                                                                 onChange={(e) => formik.setFieldValue(`stock.${0}.expiryDate`, e.target.value)}
                                                             />
 
@@ -256,7 +259,7 @@ export const AddUpdateMedicine = (props) => {
                                                                 value={formik.values.idCheck}
                                                             > */}
                                                             <TextField
-                                                             sx={{ marginTop: 2 }}
+                                                                sx={{ marginTop: 2 }}
                                                                 fullWidth
                                                                 label="Id Check"
                                                                 name="idCheck"

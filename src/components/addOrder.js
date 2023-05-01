@@ -39,7 +39,7 @@ export const AddOrder = (props) => {
     const storeId = order.orderId > 0 ? order.storeId : user.storeId;
     const createdAt = order.orderId > 0 ? order.createdAt : currentdatetime;
     console.log("data.eee.." + JSON.stringify(order));
-    
+
     const formik = useFormik({
         initialValues: {
             orderId: order.orderId || '',
@@ -55,7 +55,7 @@ export const AddOrder = (props) => {
             storeId: storeId || '0',
             createdAt: createdAt,
             updatedAt: currentdatetime,
-            stocks:[{
+            stocks: [{
                 quantity: '0',
                 expiryDate: '2023-05-20',
             }],
@@ -95,7 +95,7 @@ export const AddOrder = (props) => {
             try {
                 OrderService.create(values)
                     .then(response => {
-                        alert(JSON.stringify(response));
+                       // //alert(JSON.stringify(response));
                         //auth.skip();
                         //router.push('/orders');
                         //setSubmitted(true);
@@ -131,7 +131,7 @@ export const AddOrder = (props) => {
 
                 <Container maxWidth="xl">
                     <Stack spacing={3}>
-                        
+
                         <div>
                             <Grid
                                 container
@@ -151,7 +151,7 @@ export const AddOrder = (props) => {
                                     >
                                         <Card>
                                             <CardHeader
-                                               subheader="Add Order"
+                                                subheader="Add Order"
                                                 title="Orders"
                                             />
                                             <Divider />
@@ -212,6 +212,20 @@ export const AddOrder = (props) => {
                                                                 value={formik.values.expiryDate}
                                                             />
 
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.expiryDate && formik.errors.expiryDate)}
+                                                                fullWidth
+                                                                helperText={formik.touched.expiryDate && formik.errors.expiryDate}
+                                                                label="Expiry Date"
+                                                                name="expiryDate"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.expiryDate}
+                                                                type={'date'}
+                                                                InputLabelProps={{ shrink: true }}    
+                                                            />
+
                                                         </Grid>
                                                         <Grid
                                                             xs={12}
@@ -251,7 +265,7 @@ export const AddOrder = (props) => {
                                                                 value={formik.values.idCheck}
                                                             > */}
                                                             <TextField
-                                                             sx={{ marginTop: 2 }}
+                                                                sx={{ marginTop: 2 }}
                                                                 fullWidth
                                                                 label="Id Check"
                                                                 name="idCheck"

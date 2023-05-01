@@ -21,7 +21,7 @@ export const AddUpdateCustomer = (props) => {
             label: 'Male'
         },
         {
-            value: 'female',
+            value: 'female', 
             label: 'Female'
         }
     ];

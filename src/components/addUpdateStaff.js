@@ -88,7 +88,6 @@ export const AddUpdateStaff = (props) => {
             postCode: staff.postCode || '',
             email: staff.email || '',
             mobileNumber: staff.mobileNumber || '',
-            dateOfBirth: staff.dateOfBirth || '',
             dateOfJoining: staff.dateOfJoining || '',
             storeId: staff.storeId || defaultStoreId,
             userId: userId || '0',
@@ -156,10 +155,6 @@ export const AddUpdateStaff = (props) => {
                 .string()
                 .max(255)
                 .required('Mobile Number is required'),
-            dateOfBirth: Yup
-                .string()
-                .max(255)
-                .required('Date Of Birth is required'),
             dateOfJoining: Yup
                 .string()
                 .max(255)

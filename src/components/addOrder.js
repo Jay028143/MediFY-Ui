@@ -10,9 +10,9 @@ import {
     CardHeader,
     Divider, Container, Stack, TextField, Typography, Unstable_Grid2 as Grid
 } from '@mui/material';
-import MedicineService from 'src/services/Medicineservice';
+import OrderService from 'src/services/Orderservice';
 
-export const AddUpdateMedicine = (props) => {
+export const AddOrder = (props) => {
 
     const idchecks = [
         {
@@ -28,29 +28,29 @@ export const AddUpdateMedicine = (props) => {
 
 
     const {
-        medicine,
-        handleAddMedicine
+        order,
+        handleAddOrder
     } = props;
-    const buttonval = medicine.medicineId > 0 ? 'Update' : 'Save';
+    const buttonval = order.orderId > 0 ? 'Update' : 'Save';
     const now = new Date();
     const currentdatetime = format(now, "yyyy-MM-dd HH:mm:ss");
     const user = JSON.parse(localStorage.getItem('user'));
-    const userId = medicine.medicineId > 0 ? medicine.userId : user.id;
-    const storeId = medicine.medicineId > 0 ? medicine.storeId : user.storeId;
-    const createdAt = medicine.medicineId > 0 ? medicine.createdAt : currentdatetime;
-    console.log("data.eee.." + JSON.stringify(medicine));
+    const userId = order.orderId > 0 ? order.userId : user.id;
+    const storeId = order.orderId > 0 ? order.storeId : user.storeId;
+    const createdAt = order.orderId > 0 ? order.createdAt : currentdatetime;
+    console.log("data.eee.." + JSON.stringify(order));
     
     const formik = useFormik({
         initialValues: {
-            medicineId: medicine.medicineId || '',
-            medicineCode: medicine.medicineCode || '',
-            medicineName: medicine.medicineName || '',
-            medicinePrice: medicine.medicinePrice || '',
-            description: medicine.description || '',
-            idCheck: medicine.idCheck || 'N',
-            availableStock: medicine.availableStock || '',
-            totalStock: medicine.totalStock || '',
-            expiryDate: medicine.expiryDate || '',
+            orderId: order.orderId || '',
+            orderCode: order.orderCode || '',
+            orderName: order.orderName || '',
+            orderPrice: order.orderPrice || '',
+            description: order.description || '',
+            idCheck: order.idCheck || 'N',
+            availableStock: order.availableStock || '',
+            totalStock: order.totalStock || '',
+            expiryDate: order.expiryDate || '',
             userId: userId || '0',
             storeId: storeId || '0',
             createdAt: createdAt,
@@ -66,18 +66,18 @@ export const AddUpdateMedicine = (props) => {
         },
         validationSchema: Yup.object({
 
-            medicineName: Yup
+            orderName: Yup
                 .string()
                 .max(255)
-                .required('Medicine Name is required'),
-            medicineCode: Yup
+                .required('Order Name is required'),
+            orderCode: Yup
                 .string()
                 .max(255)
-                .required('Medicine Code is required'),
-            medicinePrice: Yup
+                .required('Order Code is required'),
+            orderPrice: Yup
                 .string()
                 .max(255)
-                .required('Medicine Price is required'),
+                .required('Order Price is required'),
             description: Yup
                 .string()
                 .max(255)
@@ -93,13 +93,13 @@ export const AddUpdateMedicine = (props) => {
         }),
         onSubmit: async (values, helpers) => {
             try {
-                MedicineService.create(values)
+                OrderService.create(values)
                     .then(response => {
                         alert(JSON.stringify(response));
                         //auth.skip();
-                        //router.push('/medicines');
+                        //router.push('/orders');
                         //setSubmitted(true);
-                        handleAddMedicine(false);
+                        handleAddOrder(false);
                         console.log(response.data);
                     })
                     .catch(e => {
@@ -118,7 +118,7 @@ export const AddUpdateMedicine = (props) => {
         <>
             <Head  >
                 <title>
-                    Add Medicine | MediFY
+                    Add Order | MediFY
                 </title>
             </Head>
             <Box
@@ -151,8 +151,8 @@ export const AddUpdateMedicine = (props) => {
                                     >
                                         <Card>
                                             <CardHeader
-                                               subheader="Add Medicine"
-                                                title="Medicines"
+                                               subheader="Add Order"
+                                                title="Orders"
                                             />
                                             <Divider />
                                             <CardContent sx={{ pt: 0 }}>
@@ -166,14 +166,14 @@ export const AddUpdateMedicine = (props) => {
                                                             md={6}
                                                         >
                                                             <TextField
-                                                                error={!!(formik.touched.medicineName && formik.errors.medicineName)}
+                                                                error={!!(formik.touched.orderName && formik.errors.orderName)}
                                                                 fullWidth
-                                                                helperText={formik.touched.medicineName && formik.errors.medicineName}
-                                                                label="Medicine Name"
-                                                                name="medicineName"
+                                                                helperText={formik.touched.orderName && formik.errors.orderName}
+                                                                label="Order Name"
+                                                                name="orderName"
                                                                 onBlur={formik.handleBlur}
                                                                 onChange={formik.handleChange}
-                                                                value={formik.values.medicineName}
+                                                                value={formik.values.orderName}
                                                             />
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
@@ -219,26 +219,26 @@ export const AddUpdateMedicine = (props) => {
                                                         >
                                                             <TextField
 
-                                                                error={!!(formik.touched.medicineCode && formik.errors.medicineCode)}
+                                                                error={!!(formik.touched.orderCode && formik.errors.orderCode)}
                                                                 fullWidth
-                                                                helperText={formik.touched.medicineCode && formik.errors.medicineCode}
-                                                                label="Medicine Code"
-                                                                name="medicineCode"
+                                                                helperText={formik.touched.orderCode && formik.errors.orderCode}
+                                                                label="Order Code"
+                                                                name="orderCode"
                                                                 onBlur={formik.handleBlur}
                                                                 onChange={formik.handleChange}
-                                                                value={formik.values.medicineCode}
+                                                                value={formik.values.orderCode}
                                                             />
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.medicinePrice && formik.errors.medicinePrice)}
+                                                                error={!!(formik.touched.orderPrice && formik.errors.orderPrice)}
                                                                 fullWidth
-                                                                helperText={formik.touched.medicinePrice && formik.errors.medicinePrice}
-                                                                label="Medicine Price"
-                                                                name="medicinePrice"
+                                                                helperText={formik.touched.orderPrice && formik.errors.orderPrice}
+                                                                label="Order Price"
+                                                                name="orderPrice"
                                                                 onBlur={formik.handleBlur}
                                                                 onChange={formik.handleChange}
                                                                 type="number"
-                                                                value={formik.values.medicinePrice}
+                                                                value={formik.values.orderPrice}
                                                             />
                                                             {/* <TextField
                                                                 sx={{ marginTop: 2 }}
@@ -314,7 +314,7 @@ export const AddUpdateMedicine = (props) => {
     );
 };
 
-AddUpdateMedicine.prototype = {
-    medicine: PropTypes.array,
-    handleAddMedicine: PropTypes.func
+AddOrder.prototype = {
+    order: PropTypes.array,
+    handleAddOrder: PropTypes.func
 }

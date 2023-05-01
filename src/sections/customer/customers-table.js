@@ -49,9 +49,7 @@ export const CustomersTable = (props) => {
                   Customer Name
                 </TableCell>
                 
-                <TableCell>
-                 NHS Number
-                </TableCell>
+                
                 <TableCell>
                   Date Of Birth
                 </TableCell>

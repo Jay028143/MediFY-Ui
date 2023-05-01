@@ -8,6 +8,10 @@ const get = id => {
   return http.get(`/order/${id}`);
 };
 
+const getByStoreId = id => {
+  return http.get(`/order/getOrdersByStoreId/${id}`);
+};
+
 const create = data => {
   return http.post("/order", data);
 };
@@ -31,7 +35,8 @@ const OrderService = {
   create,
   update,
   remove,
-  removeAll
+  removeAll,
+  getByStoreId
 };
 
 export default OrderService;

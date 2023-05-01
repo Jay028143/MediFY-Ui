@@ -20,7 +20,7 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 //import { json } from 'stream/consumers';
 
-export const StaffsTable = (props) => {
+export const OrdersTable = (props) => {
   //let navigate = useNavigate();
   const {
     count = 0,
@@ -31,8 +31,8 @@ export const StaffsTable = (props) => {
     onRowsPerPageChange,
     onSelectAll,
     onSelectOne,
-    deleteStaff,
-    EditStaff,
+    deleteOrder,
+    EditOrder,
     page = 0,
     rowsPerPage = 0,
     selected = []
@@ -49,96 +49,56 @@ export const StaffsTable = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  Staff Name
+                  OrderNo
                 </TableCell>
                 <TableCell>
-                  User Name
-                </TableCell>
-                
-                <TableCell>
-                 Gender
+                  CustomerName
                 </TableCell>
                 <TableCell>
-                 NI Number
+                  OrderDate
                 </TableCell>
                 <TableCell>
-                  Location
+                 Total Price
                 </TableCell>
                 <TableCell>
-                  State
-                </TableCell>
-                <TableCell>
-                  Country
-                </TableCell>
-                <TableCell>
-                  Post Code
-                </TableCell>
-                <TableCell>
-                  Mobile Number
-                </TableCell>
-                <TableCell>
-                  Date Of Joining
-                </TableCell>
-                <TableCell>
-                  Edit
-                </TableCell>
-                <TableCell>
-                  Delete
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((staff) => {
-                const isSelected = selected.includes(staff.userId);
-               //const createdAt = format(staff.createdAt, 'dd/MM/yyyy');
+              {items.map((order) => {
+               // const isSelected = selected.includes(order.orderId);
+               //const createdAt = format(order.createdAt, 'dd/MM/yyyy');
 
                 return (
                   <TableRow
                     hover
-                    key={staff.userId}
-                    selected={isSelected}
+                    key={order.orderId}
+                    //selected={isSelected}
                   >
+                    <TableCell>
+                      {order.orderId}
+                    </TableCell>
                     <TableCell>
                       <Stack
                         alignItems="center"
                         direction="row"
                         spacing={2}
                       >
-                        <Avatar src={staff.avatar}>
-                          {getInitials(staff.firstName)}
+                        <Avatar src={order.avatar}>
+                          {getInitials("P")}
                         </Avatar>
                         <Typography variant="subtitle2">
-                          {staff.firstName} {staff.lastName}
+                          {order.customerName} 
                         </Typography>
                       </Stack>
                     </TableCell>
+                    
                     <TableCell>
-                      {staff.userName}
+                      {order.createdAt}
                     </TableCell>
                     
                     <TableCell>
-                      {staff.gender}
-                    </TableCell>
-                    <TableCell>
-                      {staff.niNumber}
-                    </TableCell>
-                    <TableCell>
-                    {staff.houseNo} , {staff.streetName} ,{staff.city}
-                    </TableCell>
-                    <TableCell>
-                      {staff.state}
-                    </TableCell>
-                    <TableCell>
-                      {staff.country}
-                    </TableCell>
-                    <TableCell>
-                      {staff.postCode}
-                    </TableCell>
-                    <TableCell>
-                      {staff.mobileNumber}
-                    </TableCell>
-                    <TableCell>
-                      {staff.dateOfJoining}
+                      {order.totalPrice}
                     </TableCell>
                     <TableCell>
                       <Button
@@ -147,25 +107,11 @@ export const StaffsTable = (props) => {
                         sx={{ mt: 3 }}
                         type="submit"
                         variant="contained"
-                        onClick={() =>EditStaff(staff)}
+                        onClick={() =>EditOrder(order)}
                       >
-                        Edit
+                        Show Detail
                       </Button>
                     </TableCell>
-                    <TableCell>
-                      <Button
-                        fullWidth
-                        size="small"
-                        sx={{ mt: 3 }}
-                        type="submit"
-                        variant="contained"
-                        onClick={() => deleteStaff(staff.userId)}
-                      >
-                        Delete
-                      </Button>
-                    </TableCell>
-
-
                   </TableRow>
                 );
               })}
@@ -186,7 +132,7 @@ export const StaffsTable = (props) => {
   );
 };
 
-StaffsTable.propTypes = {
+OrdersTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,
@@ -198,7 +144,7 @@ StaffsTable.propTypes = {
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
   selected: PropTypes.array,
-  deleteStaff:PropTypes.func,
-  EditStaff:PropTypes.func
+  deleteOrder:PropTypes.func,
+  EditOrder:PropTypes.func
   
 };

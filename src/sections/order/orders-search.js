@@ -4,23 +4,25 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { alpha } from '@mui/material/styles';
+import { usePopover } from 'src/hooks/use-popover';
+import { AccountPopover } from 'src/layouts/dashboard/account-popover';
 const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
 export const OrdersSearch = (props) => {
-
+  const accountPopover = usePopover();
   const {
     medicines,
 
   } = props;
   console.log("daaaaaaaaaaa." + JSON.stringify(medicines));
-  const [idcheck, setIdcheck] = useState(false);
+  const [idcheck, setIdcheck] = useState(true);
 
-  const handleIdCheck = (medicine) => {
+  const handleIdCheck = (e) => {
     
-      if(medicine.idcheck=="Y")
-      {
+    alert("called.."+e.target.value)
+      
         setIdcheck(true);
-      }
+      
   };
   return (<>
     <Card sx={{ p: 2, width: 300 }}>
@@ -37,7 +39,7 @@ export const OrdersSearch = (props) => {
           label="Medicine"
           select
           SelectProps={{ native: true }}
-
+          onChange={(e) =>  handleIdCheck(e) }
         //onChange={handleStore}
         //onClick={retrieveStores}
         >
@@ -49,9 +51,8 @@ export const OrdersSearch = (props) => {
           {medicines.map((option) => (
 
             <option
-              onChange={() =>  handleIdCheck(option) }
               key={option.medicineId}
-              value={option.medicineId}
+              value={option}
             >
               {option.medicineName}
             </option>
@@ -74,13 +75,13 @@ export const OrdersSearch = (props) => {
       </Stack>
      {idcheck? <Stack>
         <Popover
-          anchorEl={anchorEl}
+          anchorEl={accountPopover.anchorRef.current}
           anchorOrigin={{
             horizontal: 'left',
             vertical: 'bottom'
           }}
-          onClose={onClose}
-          open={open}
+          onClose={accountPopover.handleClose}
+          open={accountPopover.open}
           PaperProps={{ sx: { width: 200 } }}
         >
           <Box

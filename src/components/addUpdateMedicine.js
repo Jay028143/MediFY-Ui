@@ -50,14 +50,14 @@ export const AddUpdateMedicine = (props) => {
             idCheck: medicine.idCheck || 'N',
             availableStock: medicine.availableStock || '',
             totalStock: medicine.totalStock || '',
-            expiryDate: medicine.expiryDate || '',
+            //expiryDate: medicine.expiryDate || '',
             userId: userId || '0',
             storeId: storeId || '0',
             createdAt: createdAt,
             updatedAt: currentdatetime,
-            stocks:[{
-                quantity: '0',
-                expiryDate: '2023-05-20',
+            stock:[{
+                quantity: '',
+                expiryDate: '',
             }],
             submit: null
         },
@@ -82,14 +82,14 @@ export const AddUpdateMedicine = (props) => {
                 .string()
                 .max(255)
                 .required('Description is required'),
-            expiryDate: Yup
-                .string()
-                .max(255)
-                .required('Expiry Date is required'),
-            quantity: Yup
-                .string()
-                .max(255)
-                .required('Quantity is required'),
+            // expiryDate: Yup
+            //     .string()
+            //     .max(255)
+            //     .required('Expiry Date is required'),
+            // quantity: Yup
+            //     .string()
+            //     .max(255)
+            //     .required('Quantity is required'),
         }),
         onSubmit: async (values, helpers) => {
             try {
@@ -189,27 +189,32 @@ export const AddUpdateMedicine = (props) => {
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.quantity && formik.errors.quantity)}
+                                                               // error={!!(formik.touched.quantity && formik.errors.quantity)}
                                                                 fullWidth
                                                                 type="number"
-                                                                helperText={formik.touched.quantity && formik.errors.quantity}
+                                                               // helperText={formik.touched.quantity && formik.errors.quantity}
                                                                 label="Quantity"
                                                                 name="quantity"
                                                                 onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
-                                                                value={formik.values.quantity}
+                                                              //  onChange={formik.handleChange}
+                                                                //onChange={(value) => formik.setFieldValue(JSON.stringify('stock', ["{"+{'quantity':value}+"}"]))}
+                                                               // value={formik.values.stock}
+                                                                onChange={(e) => formik.setFieldValue(`stock.${0}.quantity`, e.target.value)}
                                                             />
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.expiryDate && formik.errors.expiryDate)}
+                                                               // error={!!(formik.touched.expiryDate && formik.errors.expiryDate)}
                                                                 fullWidth
-                                                                helperText={formik.touched.expiryDate && formik.errors.expiryDate}
+                                                               // helperText={formik.touched.expiryDate && formik.errors.expiryDate}
                                                                 label="Expiry Date"
                                                                 name="expiryDate"
                                                                 onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
-                                                                value={formik.values.expiryDate}
+                                                                //onChange={formik.handleChange}
+                                                               // value={formik.values.stock}
+                                                                
+                                                               // onChange={(e) => formik.setFieldValue(JSON.stringify('stock', ["{"+{'expiryDate':e.target.value}+"}"]))}
+                                                                onChange={(e) => formik.setFieldValue(`stock.${0}.expiryDate`, e.target.value)}
                                                             />
 
                                                         </Grid>

@@ -11,8 +11,11 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { OrdersSearch } from 'src/sections/order/orders-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import UserService from 'src/services/UserService';
-import { AddUpdateOrder } from 'src/components/addUpdateOrder';
+import { AddOrder } from 'src/components/addOrder';
 import MedicineService from 'src/services/Medicineservice';
+import OrderService from 'src/services/Orderservice';
+import { OrdersTable } from 'src/sections/order/orders-table';
+
 //const now = new Date();
 const data = [
   {
@@ -71,23 +74,26 @@ const Page = () => {
   //const[roledata,setRoles]=useState([]);
 
   const [addorder, setAddorder] = useState(false);
-  const userRole=localStorage.getItem('userRole');
-  const user=JSON.parse(localStorage.getItem('user'));
+
+  // useEffect(() => {
+  //   retrieveMedicine();
+  // }, []);
+ 
   useEffect(() => {
-    retrieveMedicine();
+    retrieveOrders();
   }, []);
  
 
   const deleteOrder = (orderId) => {
   
-    UserService.remove(orderId)
-      .then(response => {
-        console.log(response.data);
-        retrieveOrders();
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    // UserService.remove(orderId)
+    //   .then(response => {
+    //     console.log(response.data);
+    //     retrieveOrders();
+    //   })
+    //   .catch(e => {
+    //     console.log(e);
+    //   });
   };
   
   
@@ -100,20 +106,12 @@ const Page = () => {
   };
 
   const retrieveOrders = () => {
-   
+   alert("called..");
     const defaultStoreId = localStorage.getItem('defaultStoreId');
-    const user = JSON.parse(localStorage.getItem('user'));
-      UserService.getByStoreId(defaultStoreId)
+     OrderService.getByStoreId(defaultStoreId)
       .then(response => {
-        const temp=[];
-        const order=response.data;
-        order.forEach((res, index) => {
-          if (res.userId !== user.id) {
-              temp.push(res)
-          }
-      })
-        setOrders(temp);
-        console.log(JSON.stringify(temp));
+        alert(JSON.stringify(response.data));
+        setOrders(response.data);
         console.log(JSON.stringify(response.data));
         //alert(JSON.stringify(response.data));
       })
@@ -194,8 +192,8 @@ const Page = () => {
               </Stack>
               
             </Stack>
-            <OrdersSearch medicines={medicinedata}/>
-            {/* <OrdersTable
+            {/* <OrdersSearch medicines={medicinedata}/> */}
+            <OrdersTable
               count={data.length}
               items={orderdata}
               onDeselectAll={ordersSelection.handleDeselectAll}
@@ -209,11 +207,11 @@ const Page = () => {
               selected={ordersSelection.selected}
               deleteOrder={deleteOrder}
               EditOrder={updateOrder}
-            /> */}
+            />
           </Stack>
         </Container>
       </Box>
-    </>:<><AddUpdateOrder order={orderdata}
+    </>:<><AddOrder order={orderdata}
      handleAddOrder={handleAddOrder}
     
      /></>}</>

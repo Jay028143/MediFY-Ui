@@ -15,7 +15,8 @@ import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import LoginService from 'src/services/LoginService';
 
-//import {DatePicker} from '@mui/x-date-pickers/DatePicker'; 
+import 'react-datepicker/dist/react-datepicker.css';
+
 
 const Page = () => {
 
@@ -383,21 +384,27 @@ const Page = () => {
                                 type="password"
                                 value={formik.values.password}
                               />
-                              <TextField
-                              sx={{ marginTop: 2 }}
-                              error={!!(formik.touched.dateOfJoining && formik.errors.dateOfJoining)}
-                              fullWidth
-                              helperText={formik.touched.dateOfJoining && formik.errors.dateOfJoining}
-                              label="Date Of Joining"
-                              name="dateOfJoining"
-                              onBlur={formik.handleBlur}
-                              onChange={formik.handleChange}
-                              value={formik.values.dateOfJoining}
-                              />
+                             
+                             
+                               <TextField
+                                sx={{ marginTop: 2 }}
 
+                                fullWidth
+                                //label="Date Of Joining"
+                                type={'date'}
+                                placeholder=''
+                                label="Date Of Joining"
+                                name="dateOfJoining"
+                                value={formik.values.dateOfJoining}
+                                onBlur={formik.handleBlur}
+                                onChange={formik.handleChange}
 
-                              {/* role */}
+                             InputLabelProps={{ shrink: true }}
 
+                              >
+                             
+                             
+                              </TextField>
 
                               <TextField
                                 sx={{ marginTop: 2 }}
@@ -435,16 +442,11 @@ const Page = () => {
                                 value={formik.values.postCode}
                               />
 
-                            
-                            
+
+
                             </Grid>
                           </Grid>
-                          {/* <DatePicker label="Date Of Joining"
-          name="dateOfJoining"  
-          // onChange={formik.handleChange}
-          // value={formik.values.dateOfJoining}
-          />
-         */}
+
 
                         </Box>
                       </CardContent>

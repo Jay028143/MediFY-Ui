@@ -354,7 +354,7 @@ console.log("date.."+now);
                 </Button>
               </div>
             </Stack>
-            <MedicinesSearch />
+            {/* <MedicinesSearch /> */}
             <MedicinesTable
               count={data.length}
               items={medicinedata}

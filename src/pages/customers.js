@@ -233,7 +233,7 @@ console.log("date.."+now);
       CustomerService.getByStoreId(defaultStoreId)
       .then(response => {
        // //alert("response.data"+JSON.stringify(response.data));
-        setCustomers([response.data]);
+        setCustomers(response.data);
         console.log(response.data);
        // //alert(JSON.stringify(response.data));
       })
@@ -336,7 +336,7 @@ console.log("date.."+now);
                 </Button>
               </div>
             </Stack>
-            <CustomersSearch />
+            {/* <CustomersSearch /> */}
             <CustomersTable
               count={data.length}
               items={customerdata}

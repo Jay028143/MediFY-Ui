@@ -157,10 +157,7 @@ const Page = () => {
   const handleAddOrder=(isOrder)=>{
     setOrders([]);
     setAddorder(isOrder);
-    if(!isOrder)
-    {
-      retrieveOrders();
-    }
+    retrieveMedicine();
   }
 
   return (
@@ -190,7 +187,21 @@ const Page = () => {
                 </Typography>
               
               </Stack>
-              
+              <div>
+                <Button
+                  startIcon={(
+                    <SvgIcon fontSize="small">
+                      <PlusIcon />
+                    </SvgIcon>
+                  )}
+                  variant="contained"
+                  onClick={() =>handleAddOrder(true)}
+                  
+                  underline="hover"
+                >
+                  Add
+                </Button>
+              </div>
             </Stack>
             {/* <OrdersSearch medicines={medicinedata}/> */}
             <OrdersTable
@@ -213,6 +224,7 @@ const Page = () => {
       </Box>
     </>:<><AddOrder order={orderdata}
      handleAddOrder={handleAddOrder}
+     medicinedata={medicinedata}
     
      /></>}</>
   );

@@ -11,25 +11,32 @@ import {
     Divider, Container, Stack, TextField, Typography, Unstable_Grid2 as Grid
 } from '@mui/material';
 import OrderService from 'src/services/Orderservice';
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import * as React from 'react';
 export const AddOrder = (props) => {
 
-    const idchecks = [
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = (idCheck) => {
+        //alert("id check..."+idCheck)
+        if(idCheck=='Y')
         {
-            value: 'Y',
-            label: 'Yes'
-        },
-        {
-            value: 'N',
-            label: 'No'
+
         }
+        setOpen(true);
+    };
 
-    ];
-
-
+    const handleClose = () => {
+        setOpen(false);
+    };
     const {
         order,
-        handleAddOrder
+        handleAddOrder,
+        medicinedata
     } = props;
     const buttonval = order.orderId > 0 ? 'Update' : 'Save';
     const now = new Date();
@@ -55,6 +62,7 @@ export const AddOrder = (props) => {
             storeId: storeId || '0',
             createdAt: createdAt,
             updatedAt: currentdatetime,
+            medicineId: '',
             stocks: [{
                 quantity: '0',
                 expiryDate: '2023-05-20',
@@ -95,7 +103,7 @@ export const AddOrder = (props) => {
             try {
                 OrderService.create(values)
                     .then(response => {
-                       // //alert(JSON.stringify(response));
+                        // //alert(JSON.stringify(response));
                         //auth.skip();
                         //router.push('/orders');
                         //setSubmitted(true);
@@ -165,28 +173,60 @@ export const AddOrder = (props) => {
                                                             xs={12}
                                                             md={6}
                                                         >
-                                                            <TextField
-                                                                error={!!(formik.touched.orderName && formik.errors.orderName)}
-                                                                fullWidth
-                                                                helperText={formik.touched.orderName && formik.errors.orderName}
-                                                                label="Order Name"
-                                                                name="orderName"
-                                                                onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
-                                                                value={formik.values.orderName}
-                                                            />
+
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.description && formik.errors.description)}
                                                                 fullWidth
-                                                                helperText={formik.touched.description && formik.errors.description}
-                                                                label="Description"
-                                                                name="description"
-                                                                onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
-                                                                value={formik.values.description}
-                                                            />
+                                                                label="Medicine"
+                                                                name="medicineId"
+                                                                onChange={(e)=>{handleClickOpen(e.target.validationMessage)}}
+                                                                required
+                                                                select
+                                                                SelectProps={{ native: true }}
+                                                                value={formik.values.medicineId}
+                                                                InputLabelProps={{ shrink: true }}
+                                                            >
+                                                                {medicinedata.map((medicine) => (
+                                                                    <option
+                                                                        key={medicine.medicineId}
+                                                                        value={medicine.idCheck}
+                                                                        //onChange={handleClickOpen(medicine.idCheck)}
+                                                                    >
+                                                                        {medicine.medicineName}
+                                                                    </option>
+                                                                ))}
 
+                                                            </TextField>
+
+                                                            <Dialog open={true} onClose={handleClose}>
+                                                                <DialogTitle>Subscribe</DialogTitle>
+                                                                <DialogContent>
+                                                                    <DialogContentText>
+                                                                        To subscribe to this website, please enter your email address here. We
+                                                                        will send updates occasionally.
+                                                                    </DialogContentText>
+                                                                    <TextField
+                                                                        autoFocus
+                                                                        margin="dense"
+                                                                        id="name"
+                                                                        label="Email Address"
+                                                                        type="email"
+                                                                        fullWidth
+                                                                        variant="standard"
+                                                                    />
+                                                                </DialogContent>
+                                                                <DialogActions>
+                                                                    <Button onClick={handleClose}>Cancel</Button>
+                                                                    <Button onClick={handleClose}>Subscribe</Button>
+                                                                </DialogActions>
+                                                            </Dialog>
+
+
+                                                        </Grid>
+                                                        <Grid
+                                                            xs={12}
+                                                            md={6}
+                                                        >
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
                                                                 error={!!(formik.touched.quantity && formik.errors.quantity)}
@@ -200,91 +240,8 @@ export const AddOrder = (props) => {
                                                                 value={formik.values.quantity}
                                                             />
 
-                                                            <TextField
-                                                                sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.expiryDate && formik.errors.expiryDate)}
-                                                                fullWidth
-                                                                helperText={formik.touched.expiryDate && formik.errors.expiryDate}
-                                                                label="Expiry Date"
-                                                                name="expiryDate"
-                                                                onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
-                                                                value={formik.values.expiryDate}
-                                                            />
 
-                                                            <TextField
-                                                                sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.expiryDate && formik.errors.expiryDate)}
-                                                                fullWidth
-                                                                helperText={formik.touched.expiryDate && formik.errors.expiryDate}
-                                                                label="Expiry Date"
-                                                                name="expiryDate"
-                                                                onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
-                                                                value={formik.values.expiryDate}
-                                                                type={'date'}
-                                                                InputLabelProps={{ shrink: true }}    
-                                                            />
 
-                                                        </Grid>
-                                                        <Grid
-                                                            xs={12}
-                                                            md={6}
-                                                        >
-                                                            <TextField
-
-                                                                error={!!(formik.touched.orderCode && formik.errors.orderCode)}
-                                                                fullWidth
-                                                                helperText={formik.touched.orderCode && formik.errors.orderCode}
-                                                                label="Order Code"
-                                                                name="orderCode"
-                                                                onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
-                                                                value={formik.values.orderCode}
-                                                            />
-                                                            <TextField
-                                                                sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.orderPrice && formik.errors.orderPrice)}
-                                                                fullWidth
-                                                                helperText={formik.touched.orderPrice && formik.errors.orderPrice}
-                                                                label="Order Price"
-                                                                name="orderPrice"
-                                                                onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
-                                                                type="number"
-                                                                value={formik.values.orderPrice}
-                                                            />
-                                                            {/* <TextField
-                                                                sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.idCheck && formik.errors.idCheck)}
-                                                                fullWidth
-                                                                helperText={formik.touched.idCheck && formik.errors.idCheck}
-                                                                label="Id Check"
-                                                                name="idCheck"
-                                                                onChange={handleIdChange}
-                                                                value={formik.values.idCheck}
-                                                            > */}
-                                                            <TextField
-                                                                sx={{ marginTop: 2 }}
-                                                                fullWidth
-                                                                label="Id Check"
-                                                                name="idCheck"
-                                                                onChange={formik.handleChange}
-                                                                required
-                                                                select
-                                                                SelectProps={{ native: true }}
-                                                                value={formik.values.idCheck}
-                                                            >
-                                                                {idchecks.map((option) => (
-                                                                    <option
-                                                                        key={option.value}
-                                                                        value={option.value}
-                                                                    >
-                                                                        {option.label}
-                                                                    </option>
-                                                                ))}
-
-                                                            </TextField>
                                                         </Grid>
                                                     </Grid>
                                                     {/* <DatePicker label="Date Of Joining"
@@ -330,5 +287,6 @@ export const AddOrder = (props) => {
 
 AddOrder.prototype = {
     order: PropTypes.array,
+    medicinedata: PropTypes.array,
     handleAddOrder: PropTypes.func
 }

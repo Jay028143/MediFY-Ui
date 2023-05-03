@@ -48,6 +48,7 @@ export const AddUpdateMedicine = (props) => {
             medicineCode: medicine.medicineCode || '',
             medicineName: medicine.medicineName || '',
             medicinePrice: medicine.medicinePrice || '',
+            minAge:medicine.minAge || 0,
             description: medicine.description || '',
             idCheck: medicine.idCheck || 'N',
             availableStock: medicine.availableStock || '',
@@ -279,6 +280,19 @@ export const AddUpdateMedicine = (props) => {
                                                                 ))}
 
                                                             </TextField>
+
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.minAge && formik.errors.minAge)}
+                                                                fullWidth
+                                                                helperText={formik.touched.minAge && formik.errors.minAge}
+                                                                label="Minimum Age"
+                                                                name="minAge"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                type="number"
+                                                                value={formik.values.minAge}
+                                                            />
                                                         </Grid>
                                                     </Grid>
                                                     {/* <DatePicker label="Date Of Joining"

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState ,useEffect} from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import Head from 'next/head';
 import { subDays, subHours } from 'date-fns';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
@@ -22,28 +22,28 @@ const data = [
     userId: '1',
     address: "stone",
     firstName: 'Jay',
-    lastName:'Patel',
-    userName:'JayPatel',
-    email:'Jp@gmail.com',
-    niNumber:'78456122',
+    lastName: 'Patel',
+    userName: 'JayPatel',
+    email: 'Jp@gmail.com',
+    niNumber: '78456122',
     postCode: 'AAAA',
     mobileNumber: '123456789',
-    dateOfJoining:'2023-02-15'
+    dateOfJoining: '2023-02-15'
   },
   {
     userId: '2',
     address: "stoke",
     firstName: 'Hardik',
-    lastName:'Patel',
-    userName:'HardikPatel',
-    email:'Hp@gmail.com',
-    niNumber:'57241545',
+    lastName: 'Patel',
+    userName: 'HardikPatel',
+    email: 'Hp@gmail.com',
+    niNumber: '57241545',
     postCode: 'BBBB',
     mobileNumber: '565458',
-    dateOfJoining:'2023-02-20'
+    dateOfJoining: '2023-02-20'
   }];
-  
-  
+
+
 
 const useOrders = (page, rowsPerPage) => {
   return useMemo(
@@ -78,14 +78,14 @@ const Page = () => {
   // useEffect(() => {
   //   retrieveMedicine();
   // }, []);
- 
+
   useEffect(() => {
     retrieveOrders();
   }, []);
- 
+
 
   const deleteOrder = (orderId) => {
-  
+
     // UserService.remove(orderId)
     //   .then(response => {
     //     console.log(response.data);
@@ -95,20 +95,20 @@ const Page = () => {
     //     console.log(e);
     //   });
   };
-  
-  
 
-  const updateOrder = (order)=> {
-    console.log("data..."+JSON.stringify(order));
-      setOrders(order);
-      setAddorder(true);
-    console.log("setOrders..."+JSON.stringify(orderdata));
+
+
+  const updateOrder = (order) => {
+    console.log("data..." + JSON.stringify(order));
+    setOrders(order);
+    setAddorder(true);
+    console.log("setOrders..." + JSON.stringify(orderdata));
   };
 
   const retrieveOrders = () => {
-   //alert("called..");
+    //alert("called..");
     const defaultStoreId = localStorage.getItem('defaultStoreId');
-     OrderService.getByStoreId(defaultStoreId)
+    OrderService.getByStoreId(defaultStoreId)
       .then(response => {
         //alert(JSON.stringify(response.data));
         setOrders(response.data);
@@ -118,27 +118,27 @@ const Page = () => {
       .catch(e => {
         console.log(e);
       });
-    
-   
-  }; 
-  
+
+
+  };
+
   const retrieveMedicine = () => {
-   
+
     const defaultStoreId = localStorage.getItem('defaultStoreId');
     MedicineService.getByStoreId(defaultStoreId)
       .then(response => {
-        console.log("data.."+JSON.stringify(response.data));
+        console.log("data.." + JSON.stringify(response.data));
         setMedicines(response.data);
 
       })
       .catch(e => {
         console.log(e);
       });
-    
-   
-  };  
 
- 
+
+  };
+
+
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -154,27 +154,27 @@ const Page = () => {
     []
   );
 
-  const handleAddOrder=(isOrder)=>{
+  const handleAddOrder = (isOrder) => {
     setOrders([]);
     setAddorder(isOrder);
     retrieveMedicine();
   }
 
   return (
-    <>{!addorder?<>
+    <>{!addorder ? <>
       <Head>
         <title>
           Orders | MediFY
         </title>
       </Head>
-       <Box
+      <Box
         component="main"
         sx={{
           flexGrow: 1,
           py: 8
         }}
       >
-       <Container maxWidth="xl">
+        <Container maxWidth="xl">
           <Stack spacing={3}>
             <Stack
               direction="row"
@@ -185,7 +185,7 @@ const Page = () => {
                 <Typography variant="h4">
                   Orders
                 </Typography>
-              
+
               </Stack>
               <div>
                 <Button
@@ -195,8 +195,8 @@ const Page = () => {
                     </SvgIcon>
                   )}
                   variant="contained"
-                  onClick={() =>handleAddOrder(true)}
-                  
+                  onClick={() => handleAddOrder(true)}
+
                   underline="hover"
                 >
                   Add
@@ -222,11 +222,11 @@ const Page = () => {
           </Stack>
         </Container>
       </Box>
-    </>:<><AddOrder order={orderdata}
-     handleAddOrder={handleAddOrder}
-     medicinedata={medicinedata}
-    
-     /></>}</>
+    </> : <><AddOrder order={orderdata}
+      handleAddOrder={handleAddOrder}
+      medicinedata={medicinedata}
+
+    /></>}</>
   );
 };
 

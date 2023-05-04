@@ -20,26 +20,22 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 //import { json } from 'stream/consumers';
 
-export const OrdersTable = (props) => {
+export const OrdersDetailTable = (props) => {
   //let navigate = useNavigate();
   const {
     count = 0,
-    items = [],
-    onDeselectAll,
-    onDeselectOne,
+    OrderCart = [],
+    
     onPageChange = () => { },
     onRowsPerPageChange,
-    onSelectAll,
-    onSelectOne,
-    deleteOrder,
-    EditOrder,
+    handleRemove,
     page = 0,
     rowsPerPage = 0,
     selected = []
   } = props;
 
-  const selectedSome = (selected.length > 0) && (selected.length < items.length);
-  const selectedAll = (items.length > 0) && (selected.length === items.length);
+  const selectedSome = (selected.length > 0) && (selected.length < OrderCart.length);
+  const selectedAll = (OrderCart.length > 0) && (selected.length === OrderCart.length);
 
   return (
     <Card>
@@ -49,69 +45,73 @@ export const OrdersTable = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  OrderNo
+                  MedicineName
                 </TableCell>
                 <TableCell>
-                  CustomerName
+                  Unit Price
                 </TableCell>
                 <TableCell>
-                  OrderDate
+                  Quantity
                 </TableCell>
                 <TableCell>
-                 Total Price
+                 Total
                 </TableCell>
                 <TableCell>
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((order) => {
-               // const isSelected = selected.includes(order.orderId);
-               //const createdAt = format(order.createdAt, 'dd/MM/yyyy');
+              {OrderCart.map((ordersDetail) => {
+               // const isSelected = selected.includes(ordersDetail.orderId);
+               //const createdAt = format(ordersDetail.createdAt, 'dd/MM/yyyy');
 
                 return (
                   <TableRow
                     hover
-                    key={order.orderId}
+                    key={ordersDetail.medicineId}
                     //selected={isSelected}
                   >
-                    <TableCell>
-                      {order.orderId}
-                    </TableCell>
+                   
                     <TableCell>
                       <Stack
                         alignItems="center"
                         direction="row"
                         spacing={2}
                       >
-                        <Avatar src={order.avatar}>
-                          {getInitials(order.customerName)}
+                        <Avatar src={ordersDetail.avatar}>
+                          {getInitials(ordersDetail.medicineName)}
                         </Avatar>
                         <Typography variant="subtitle2">
-                          {order.customerName} 
+                          {ordersDetail.medicineName} 
                         </Typography>
                       </Stack>
                     </TableCell>
                     
                     <TableCell>
-                      {order.createdAt}
+                      {ordersDetail.medicinePrice}
                     </TableCell>
                     
                     <TableCell>
-                      {order.totalPrice}
+                      {ordersDetail.orderQuantity}
                     </TableCell>
+
                     <TableCell>
-                      <Button
+                      {(ordersDetail.orderQuantity*ordersDetail.medicinePrice)}
+                    </TableCell>
+
+                    <TableCell>
+                    <Button
                         fullWidth
-                        size="small"
+                        size="large"
                         sx={{ mt: 3 }}
                         type="submit"
                         variant="contained"
-                        onClick={() =>EditOrder(order)}
+                        onClick={() =>handleRemove(ordersDetail.medicineId)}
                       >
-                        Show Detail
+                        Remove
                       </Button>
                     </TableCell>
+
                   </TableRow>
                 );
               })}
@@ -132,10 +132,10 @@ export const OrdersTable = (props) => {
   );
 };
 
-OrdersTable.propTypes = {
+OrdersDetailTable.propTypes = {
   count: PropTypes.number,
-  items: PropTypes.array,
-  onDeselectAll: PropTypes.func,
+  OrderCart: PropTypes.array,
+  handleRemove: PropTypes.func,
   onDeselectOne: PropTypes.func,
   onPageChange: PropTypes.func,
   onRowsPerPageChange: PropTypes.func,

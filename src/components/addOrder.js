@@ -18,6 +18,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
 import CustomerService from 'src/services/Customerservice';
+import { OrdersDetailTable } from 'src/sections/order/orders-detail-table';
 export const AddOrder = (props) => {
 
     const [open, setOpen] = useState(false);
@@ -30,15 +31,37 @@ export const AddOrder = (props) => {
     const [customerName, setCustomerName] = useState('');
     const [customerId, setCustomerId] = useState(-1);
     const [isIlligible, setIlligible] = useState(false);
-    const handleClickOpen = (medi) => {
-        const medicine = medi.split(",");
-        
-        if (medicine[0] == 'Y') {
-            setMinAge(medicine[1]);
+    const [medicinedetail, setMedicineDetail] = useState();
+    const [medicinecart, setMedicineCart] = useState([]);
+    const handleClickOpen = (medicinedata) => {
+       // alert("medicine d.."+(medicinedata));
+        const medicine=JSON.parse(medicinedata);
+         //   alert("medicine.."+medicine.idCheck);
+        if (medicine.idCheck == 'Y') {
+            setMinAge(medicine.minAge);
+            setMedicineDetail(medicine);
             setOpen(true);
+        }
+        else{
+            setMedicineDetail(medicine);
+            setIlligible(true);
         }
 
     };
+
+    
+
+    const handleRemove = (id) => {
+        alert("id.."+id)
+       
+        medicinecart.map((medicine, index) => {
+            if (medicine.medicineId==id) {
+            medicine.splice(index, 1) // remove element
+        };
+        setMedicineCart(medicinecart);
+        })
+    };
+
 
     const handleClose = () => {
         setOpen(false);
@@ -49,6 +72,11 @@ export const AddOrder = (props) => {
         setOpen(false);
 
     };
+    const handleAddQuantity = (e) => {
+        medicinedetail.orderQuantity=e.target.value;
+    };
+
+    handleAddQuantity
 
     const handleClickRegister = (isRegister) => {
         setCustomerName('');
@@ -71,7 +99,7 @@ export const AddOrder = (props) => {
         if (searchBydateOfBirth != '') {
             CustomerService.getCustomerByDateOfBirth(searchBydateOfBirth)
                 .then(response => {
-                    alert("response.data" + JSON.stringify(response.data));
+                   // alert("response.data" + JSON.stringify(response.data));
                     setCustomers(response.data);
                     console.log(response.data);
                     // //alert(JSON.stringify(response.data));
@@ -89,7 +117,10 @@ export const AddOrder = (props) => {
     };
 
       const handleAdd = () => {
-       
+            medicinecart.push(medicinedetail);
+            //alert("Medicine data..."+JSON.stringify(medicinecart));
+            setMedicineDetail();
+            setIlligible(false);
     };
 
 
@@ -99,7 +130,7 @@ export const AddOrder = (props) => {
         const age_dt = new Date(month_diff);
         const year = age_dt.getUTCFullYear();
         const age = Math.abs(year - 1970);
-        alert("date Of birth.." + age);
+        //alert("date Of birth.." + age);
         if (age < minAge) {
             
             setMessage(" You are not Illigible for this Medication.");
@@ -278,7 +309,7 @@ export const AddOrder = (props) => {
 
                                                         </TextField> 
 
-{isRegisterd ? <><TextField
+                                                       {isRegisterd ? <><TextField
                                                             autoFocus
                                                             sx={{ marginTop: 2 }}
                                                             id="serachcustomer"
@@ -395,7 +426,7 @@ export const AddOrder = (props) => {
                                                             {medicinedata.map((medicine) => (
                                                                 <option
                                                                     key={medicine.idCheck + "," + medicine.minAge}
-                                                                    value={medicine.idCheck + "," + medicine.minAge}
+                                                                    value={JSON.stringify(medicine)}
                                                                 // onClick={handleClickOpen(medicine)}
                                                                 >
                                                                     {medicine.medicineName}
@@ -478,13 +509,20 @@ export const AddOrder = (props) => {
                                                                 label="Quantity"
                                                                 name="quantity"
                                                             //onBlur={formik.handleBlur}
-                                                            // onChange={formik.handleChange}
+                                                             onChange={handleAddQuantity}
                                                             // value={formik.values.quantity}
                                                             />
                                                       :<></>}
                                                        
                                                     </Grid>
                                                    </Grid></Box></CardContent>
+
+                                                   {medicinecart.length>0?
+                                                   <OrdersDetailTable
+                                                   OrderCart={medicinecart}
+                                                   handleRemove={handleRemove}
+                                
+                                                   />:<></>}
                                     </Card>
 
                                 </Grid>

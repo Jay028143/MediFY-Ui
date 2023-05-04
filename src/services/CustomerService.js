@@ -8,6 +8,11 @@ const get = id => {
   return http.get(`/customer/${id}`);
 };
 
+const getCustomerByDateOfBirth = dob => {
+  const defaultStoreId = localStorage.getItem('defaultStoreId');
+  return http.get(`/customer/getCustomerByDateOfBirth/${defaultStoreId}/${dob}`);
+};
+
 const getByStoreId = id => {
   return http.get(`/customer/getCustomerByStoreId/${id}`);
 };
@@ -36,7 +41,8 @@ const CustomerService = {
   update,
   remove,
   removeAll,
-  getByStoreId
+  getByStoreId,
+  getCustomerByDateOfBirth
 };
 
 export default CustomerService;

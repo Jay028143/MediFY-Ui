@@ -17,24 +17,25 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
+import CustomerService from 'src/services/Customerservice';
 export const AddOrder = (props) => {
 
     const [open, setOpen] = useState(false);
     const [agePopup, setagePopup] = useState(false);
     const [minAge, setMinAge] = useState(0);
     const [message, setMessage] = useState(0);
-    const [isQuantity, setIsQuantity] = useState(false);
     const [isRegisterd, setisRegisterd] = useState(false);
-
+    const [searchBydateOfBirth, setDateOfBirth] = useState('');
+    const [customers, setCustomers] = useState([]);
+    const [customerName, setCustomerName] = useState('');
+    const [customerId, setCustomerId] = useState(-1);
+    const [isIlligible, setIlligible] = useState(false);
     const handleClickOpen = (medi) => {
         const medicine = medi.split(",");
-        setIsQuantity(false);
+        
         if (medicine[0] == 'Y') {
             setMinAge(medicine[1]);
             setOpen(true);
-        }
-        else {
-            setIsQuantity(true);
         }
 
     };
@@ -50,6 +51,8 @@ export const AddOrder = (props) => {
     };
 
     const handleClickRegister = (isRegister) => {
+        setCustomerName('');
+        setCustomerId(-1);
         if (isRegister == 'Y') {
             setisRegisterd(true);
         }
@@ -59,12 +62,36 @@ export const AddOrder = (props) => {
 
     };
 
-    const searchCustomer = (date) => {
-        
+    const setDate = (date) => {
+        setDateOfBirth(date);
 
     };
 
-    
+    const searchCustomer = () => {
+        if (searchBydateOfBirth != '') {
+            CustomerService.getCustomerByDateOfBirth(searchBydateOfBirth)
+                .then(response => {
+                    alert("response.data" + JSON.stringify(response.data));
+                    setCustomers(response.data);
+                    console.log(response.data);
+                    // //alert(JSON.stringify(response.data));
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+        }
+
+    };
+
+    const handleCustomerName = (id, name) => {
+        setCustomerName(name);
+        setCustomerId(id);
+    };
+
+      const handleAdd = () => {
+       
+    };
+
 
     const checkillegible = (dateOfBirth) => {
         const dob = new Date(dateOfBirth);
@@ -74,13 +101,17 @@ export const AddOrder = (props) => {
         const age = Math.abs(year - 1970);
         alert("date Of birth.." + age);
         if (age < minAge) {
-            setagePopup(true)
-            setMessage(" You are not Illigible for this Medication.")
+            
+            setMessage(" You are not Illigible for this Medication.");
+            setIlligible(false);
+            setagePopup(true);
+     
         }
         else {
-            setagePopup(true)
-            setIsQuantity(true);
-            setMessage(" You are Illigible for this Medication.")
+           
+            setMessage(" You are Illigible for this Medication.");
+            setIlligible(true);
+            setagePopup(true);
         }
 
     }
@@ -222,8 +253,129 @@ export const AddOrder = (props) => {
                                                         xs={12}
                                                         md={6}
                                                     >
-
                                                         <TextField
+                                                            sx={{ marginTop: 2 }}
+                                                            fullWidth
+                                                            label="Is Customer Registered? "
+                                                            name="iscustomerRegisterd"
+                                                            onChange={(e) => { handleClickRegister(e.target.value) }}
+                                                            required
+                                                            select
+                                                            SelectProps={{ native: true }}
+                                                            // value={}
+                                                            InputLabelProps={{ shrink: true }}
+                                                        >
+                                                            <option value='N'
+                                                                key='N'
+                                                                selected>
+                                                                No
+                                                            </option>
+                                                            <option value='Y'
+                                                                key='Y'
+                                                            >
+                                                                Yes
+                                                            </option>
+
+                                                        </TextField> 
+
+{isRegisterd ? <><TextField
+                                                            autoFocus
+                                                            sx={{ marginTop: 2 }}
+                                                            id="serachcustomer"
+                                                            label="Search Customer"
+                                                            onChange={(e) => setDate(e.target.value)}
+                                                            fullWidth
+
+                                                            type={'date'}
+                                                            InputLabelProps={{ shrink: true }}
+                                                        />
+
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                fullWidth
+                                                                label="Customer"
+                                                                name="customer"
+                                                                onChange={(e) => { handleCustomerName(e.target.key, e.target.value) }}
+                                                                required
+                                                                select
+                                                                SelectProps={{ native: true }}
+                                                                // value={}
+                                                                InputLabelProps={{ shrink: true }}
+                                                            >
+                                                                <option value='-1'
+                                                                    key='-1'
+                                                                    selected>
+                                                                    Select Customer
+                                                                </option>
+                                                                {customers.map((customer) => (
+                                                                    <option
+                                                                        key={customer.customerId}
+                                                                        value={customer.customerName}
+
+
+                                                                    >
+                                                                        {customer.firstName} {customer.lastName}
+                                                                    </option>
+                                                                ))}</TextField>
+
+                                                            
+
+
+                                                        </> : <><TextField
+                                                            autoFocus
+                                                            sx={{ marginTop: 2 }}
+                                                            id="customerName"
+                                                            label="Customer Name"
+                                                            onChange={(e) => handleCustomerName(-1, e.target.value)}
+                                                            fullWidth
+                                                            value={customerName}
+
+                                                        />
+
+                                                            
+                                                        </>}
+
+
+
+                                                    </Grid>
+                                                    <Grid
+                                                        xs={12}
+                                                        md={6}
+                                                    >
+                                                         { isRegisterd ?<>
+                                                            <Button
+                                                            
+                                                                size="large"
+                                                                sx={{ mt: 11 }}
+                                                                type="submit"
+                                                                variant="contained"
+                                                                onClick={searchCustomer}
+                                                            >
+                                                                Search
+                                                            </Button></>:<></>}
+
+
+                                                    </Grid>
+                                                </Grid>
+
+
+
+                                            </Box>
+                                        </CardContent>
+                                        <Divider />
+
+                                        <CardContent sx={{ pt: 0 }}>
+                                            <Box sx={{ m: -1.5 }}>
+                                                <Grid
+                                                    container
+                                                    spacing={3}
+                                                >
+                                                    <Grid
+                                                        xs={12}
+                                                        md={6}
+                                                    >
+
+<TextField
                                                             sx={{ marginTop: 2 }}
                                                             fullWidth
                                                             label="Medicine"
@@ -251,10 +403,19 @@ export const AddOrder = (props) => {
                                                             ))}
 
                                                         </TextField>
-                                                       
-
 
                                                       
+                                                        {isIlligible?<Button
+                                                            
+                                                            size="large"
+                                                            sx={{ mt: 2 }}
+                                                            type="submit"
+                                                            variant="contained"
+                                                            onClick={handleAdd}
+                                                        >
+                                                            Add
+                                                        </Button>:<></> }
+                                                        
 
 
                                                         <Dialog open={open} onClose={handleClose}>
@@ -307,100 +468,23 @@ export const AddOrder = (props) => {
                                                         xs={12}
                                                         md={6}
                                                     >
-                                                        {isQuantity ? <><TextField
-                                                            sx={{ marginTop: 2 }}
-                                                            // error={!!(formik.touched.quantity && formik.errors.quantity)}
-                                                            fullWidth
-                                                            type="number"
-                                                            //  helperText={formik.touched.quantity && formik.errors.quantity}
-                                                            label="Quantity"
-                                                            name="quantity"
-                                                        //onBlur={formik.handleBlur}
-                                                        // onChange={formik.handleChange}
-                                                        // value={formik.values.quantity}
-                                                        />
-
-
-
-
-
-                                                        </>
-
-                                                            : <></>
-
-
-
-                                                        }
-
-
-
+                                                        
+                                                      {isIlligible?  < TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                // error={!!(formik.touched.quantity && formik.errors.quantity)}
+                                                                fullWidth
+                                                                type="number"
+                                                                //  helperText={formik.touched.quantity && formik.errors.quantity}
+                                                                label="Quantity"
+                                                                name="quantity"
+                                                            //onBlur={formik.handleBlur}
+                                                            // onChange={formik.handleChange}
+                                                            // value={formik.values.quantity}
+                                                            />
+                                                      :<></>}
+                                                       
                                                     </Grid>
-                                                </Grid>
-
-
-
-                                            </Box>
-                                        </CardContent>
-                                        <Divider />
-
-                                        <CardContent sx={{ pt: 0 }}>
-                                            <Box sx={{ m: -1.5 }}>
-                                                <Grid
-                                                    container
-                                                    spacing={3}
-                                                >
-                                                    <Grid
-                                                        xs={12}
-                                                        md={6}
-                                                    >
-
-{isQuantity ? <TextField
-                                                            sx={{ marginTop: 2 }}
-                                                            fullWidth
-                                                            label="Is Customer Registered? "
-                                                            name="iscustomerRegisterd"
-                                                            onChange={(e) => { handleClickRegister(e.target.value) }}
-                                                            required
-                                                            select
-                                                            SelectProps={{ native: true }}
-                                                            // value={}
-                                                            InputLabelProps={{ shrink: true }}
-                                                        >
-                                                            <option value='N'
-                                                                key='N'
-                                                                selected>
-                                                                No
-                                                            </option>
-                                                            <option value='Y'
-                                                                key='Y'
-                                                            >
-                                                                Yes
-                                                            </option>
-
-                                                        </TextField> : <></>}
-                                                          {isQuantity ? isRegisterd ? <> <Divider /><TextField
-                                                            autoFocus
-                                                            sx={{ marginTop: 2 }}
-                                                            id="serachcustomer"
-                                                            label="Search Customer"
-                                                            onChange={(e) => searchCustomer(e.target.value)}
-                                                            fullWidth
-
-                                                            type={'date'}
-                                                            InputLabelProps={{ shrink: true }}
-                                                        /></> : <TextField
-                                                            autoFocus
-                                                            sx={{ marginTop: 2 }}
-                                                            id="customerName"
-                                                            label="Customer Name"
-                                                            onChange={(e) => checkillegible(e.target.value)}
-                                                            fullWidth
-
-
-                                                        /> : <></>}
-                                                        
-                                                        
-                                                        </Grid></Grid></Box></CardContent>
+                                                   </Grid></Box></CardContent>
                                     </Card>
 
                                 </Grid>

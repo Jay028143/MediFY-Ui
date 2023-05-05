@@ -40,7 +40,8 @@ export const StoresTable = (props) => {
   
   const selectedSome = (selected.length > 0) && (selected.length < items.length);
   const selectedAll = (items.length > 0) && (selected.length === items.length);
-  const user=JSON.parse(localStorage.getItem('user'));
+
+  const userRole=localStorage.getItem('userRole');
   return (
     <Card>
       <Scrollbar>
@@ -69,7 +70,7 @@ export const StoresTable = (props) => {
                 <TableCell>
                   Edit
                 </TableCell>
-                {user.roles=="ADMIN"?<TableCell>
+                {userRole=="ADMIN"?<TableCell>
                   Delete
                 </TableCell>:<></>}
               </TableRow>
@@ -125,7 +126,7 @@ export const StoresTable = (props) => {
                         Edit
                       </Button>
                     </TableCell>
-                    {user.roles=="ADMIN"?<TableCell>
+                    {userRole=="ADMIN"?<TableCell>
                       <Button
                         fullWidth
                         size="small"

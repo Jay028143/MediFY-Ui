@@ -1,8 +1,20 @@
 import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import PropTypes from 'prop-types';
+import ChartBarIcon from '@heroicons/react/24/solid/ChartBarIcon';
+import CogIcon from '@heroicons/react/24/solid/CogIcon';
+import LockClosedIcon from '@heroicons/react/24/solid/LockClosedIcon';
+import ShoppingBagIcon from '@heroicons/react/24/solid/ShoppingBagIcon';
+import UserIcon from '@heroicons/react/24/solid/UserIcon';
+import UserPlusIcon from '@heroicons/react/24/solid/UserPlusIcon';
+import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
+import UserGroupIcon from '@heroicons/react/24/solid/UserGroupIcon';
+import XCircleIcon from '@heroicons/react/24/solid/XCircleIcon';
 import ArrowTopRightOnSquareIcon from '@heroicons/react/24/solid/ArrowTopRightOnSquareIcon';
 import ChevronUpDownIcon from '@heroicons/react/24/solid/ChevronUpDownIcon';
+import BuildingStorefrontIcon from '@heroicons/react/24/solid/BuildingStorefrontIcon';
+import PlusCircleIcon from '@heroicons/react/24/solid/PlusCircleIcon';
+
 import {
   Box,
   Button,
@@ -15,16 +27,124 @@ import {
 } from '@mui/material';
 import { Logo } from 'src/components/logo';
 import { Scrollbar } from 'src/components/scrollbar';
-import { items } from './config';
+//import { items } from './config';
 import { SideNavItem } from './side-nav-item';
+import { useState, useEffect } from 'react';
+
 
 export const SideNav = (props) => {
   const { open, onClose } = props;
   const pathname = usePathname();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
-   const userRole=localStorage.getItem('userRole');
+  const [items, setItems] = useState([]);
 
-      
+  const handleSidePanel = () => {
+
+    const userRole = localStorage.getItem('userRole');
+
+    const item = [
+      {
+        title: 'Overview',
+        path: '/',
+        icon: (
+          <SvgIcon fontSize="small">
+            <ChartBarIcon />
+          </SvgIcon>
+        )
+      }];
+
+    if (userRole == 'ADMIN') {
+      item.push({
+        title: 'Staff',
+        path: '/staffs',
+        icon: (
+          <SvgIcon fontSize="small">
+            <UserGroupIcon />
+          </SvgIcon>
+        )
+      },
+        {
+          title: 'Stores',
+          path: '/stores',
+          icon: (
+            <SvgIcon fontSize="small">
+              <BuildingStorefrontIcon />
+            </SvgIcon>
+          )
+        });
+
+    }
+    else if (userRole == 'MANAGER') {
+      item.push({
+        title: 'Staff',
+        path: '/staffs',
+        icon: (
+          <SvgIcon fontSize="small">
+            <UserGroupIcon />
+          </SvgIcon>
+        )
+      },
+      );
+    }
+
+    item.push({
+      title: 'Customers',
+      path: '/customers',
+      icon: (
+        <SvgIcon fontSize="small">
+          <UsersIcon />
+        </SvgIcon>
+      )
+    },
+      {
+        title: 'Medicines',
+        path: '/medicines',
+        icon: (
+          <SvgIcon fontSize="small">
+            <PlusCircleIcon />
+          </SvgIcon>
+        )
+      },
+      {
+        title: 'Orders',
+        path: '/orders',
+        icon: (
+          <SvgIcon fontSize="small">
+            <ShoppingBagIcon />
+          </SvgIcon>
+        )
+      },
+      {
+        title: 'Account',
+        path: '/account',
+        icon: (
+          <SvgIcon fontSize="small">
+            <UserIcon />
+          </SvgIcon>
+        )
+      },
+      {
+        title: 'Settings',
+        path: '/settings',
+        icon: (
+          <SvgIcon fontSize="small">
+            <CogIcon />
+          </SvgIcon>
+        )
+      })
+
+
+
+
+    setItems(item);
+
+  }
+
+
+  useEffect(() => {
+    handleSidePanel();
+  }, []);
+
   const content = (
     <Scrollbar
       sx={{
@@ -110,7 +230,7 @@ export const SideNav = (props) => {
           >
             {items.map((item) => {
               const active = item.path ? (pathname === item.path) : false;
-              
+
 
               return (
                 <SideNavItem

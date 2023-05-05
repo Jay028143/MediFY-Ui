@@ -37,7 +37,7 @@ export const CustomersTable = (props) => {
 
   const selectedSome = (selected.length > 0) && (selected.length < items.length);
   const selectedAll = (items.length > 0) && (selected.length === items.length);
-
+  const userRole=localStorage.getItem('userRole');
   return (
     <Card>
       <Scrollbar>
@@ -68,12 +68,14 @@ export const CustomersTable = (props) => {
                 <TableCell>
                  Mobile Number
                 </TableCell>
+                
+                {userRole=="ADMIN" || userRole=="MANAGER" ?<>
                 <TableCell>
                   Edit
                 </TableCell>
                 <TableCell>
                   Delete
-                </TableCell>
+                </TableCell></>:<></>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -121,7 +123,7 @@ export const CustomersTable = (props) => {
                     <TableCell>
                       {customer.mobileNumber}
                     </TableCell>
-                    <TableCell>
+                    {userRole=="ADMIN" || userRole=="MANAGER" ? <> <TableCell>
                       <Button
                         fullWidth
                         size="small"
@@ -144,7 +146,7 @@ export const CustomersTable = (props) => {
                       >
                         Delete
                       </Button>
-                    </TableCell>
+                    </TableCell></>:<></>}
                   </TableRow>
                 );
               })}

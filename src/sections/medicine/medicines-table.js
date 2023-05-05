@@ -40,7 +40,7 @@ export const MedicinesTable = (props) => {
 
   const selectedSome = (selected.length > 0) && (selected.length < items.length);
   const selectedAll = (items.length > 0) && (selected.length === items.length);
-
+  const userRole=localStorage.getItem('userRole');
   return (
     <Card>
       <Scrollbar>
@@ -70,12 +70,13 @@ export const MedicinesTable = (props) => {
                 <TableCell>
                   Expiry Date
                 </TableCell>
+                {userRole=="ADMIN" || userRole=="MANAGER" ?<>
                 <TableCell>
-                   Edit
+                  Edit
                 </TableCell>
                 <TableCell>
                   Delete
-                </TableCell>
+                </TableCell></>:<></>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -122,7 +123,7 @@ export const MedicinesTable = (props) => {
                     <TableCell>
                       {medicine.expiryDate}
                     </TableCell>
-                    <TableCell>
+                    {userRole=="ADMIN" || userRole=="MANAGER" ? <> <TableCell>
                       <Button
                         fullWidth
                         size="small"
@@ -145,7 +146,7 @@ export const MedicinesTable = (props) => {
                       >
                         Delete
                       </Button>
-                    </TableCell>
+                    </TableCell></>:<></>}
 
 
                   </TableRow>

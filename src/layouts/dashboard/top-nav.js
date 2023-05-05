@@ -11,7 +11,7 @@ import {
   Box,
   IconButton,
   Stack, CardContent,
-  SvgIcon,
+  SvgIcon,CardActions,
   Tooltip, Card, CardHeader, Container,
   useMediaQuery, TextField, Unstable_Grid2 as Grid, Typography, Divider
 } from '@mui/material';
@@ -32,10 +32,13 @@ export const TopNav = (props) => {
   const user = JSON.parse(localStorage.getItem('user'));
   const [storedata, setStores] = useState([]);
 
-  const handleStore = (e) => {
+  const handleStore = (storedata) => {
    // retrieveStores();
-    //console.log("default..." + e.target.value);
-    localStorage.setItem('defaultStoreId', e.target.value);
+  
+    const store = JSON.parse(storedata);
+    localStorage.setItem('defaultStoreId', store.storeId);
+    localStorage.setItem('defaultStoreName',store.storeName);
+         
     auth.skip();
     router.push('/');
 
@@ -47,7 +50,14 @@ export const TopNav = (props) => {
       StoreService.getStoreByUserId(userdetail.id)
         .then(response => {
           setStores(response.data);
-          console.log(response.data);
+         
+          if(response.data.length<2)
+          {
+            //alert(response.data[0].storeId);
+            localStorage.setItem('defaultStoreId', response.data[0].storeId);
+            localStorage.setItem('defaultStoreName', response.data[0].storeName);
+         
+          }
           // //alert(JSON.stringify(response.data));
         })
         .catch(e => {
@@ -58,6 +68,9 @@ export const TopNav = (props) => {
       StoreService.get(userdetail.storeId)
         .then(response => {
           // //alert("response.data"+JSON.stringify(response.data));
+          localStorage.setItem('defaultStoreId', response.data.storeId);
+          localStorage.setItem('defaultStoreName', response.data.storeName);
+         
           setStores([response.data]);
           console.log(response.data);
           // //alert(JSON.stringify(response.data));
@@ -115,38 +128,7 @@ export const TopNav = (props) => {
               </IconButton>
             )}
           </Stack>
-          <Stack
-            alignItems="left"
-           // direction="row"
-            spacing={2}
-          >
-          <TextField
-                  
-                
-                  name="storeId"
-                  placeholder='Select Store'
-                  label="Default Store"
-                  select
-                  SelectProps={{ native: true }}
-                  onChange={handleStore}
-                  onClick={retrieveStores}
-                >
-                  <option value='-1'
-                    key='-1'
-                    selected>
-                    Select Store
-                  </option>
-                  {storedata.map((option) => (
-
-                    <option
-                      key={option.storeId}
-                      value={option.storeId}
-                    >
-                      {option.storeName}
-                    </option>
-                  ))}
-                </TextField>
-         </Stack>
+         
           <Stack
             alignItems="center"
             direction="row"
@@ -165,6 +147,61 @@ export const TopNav = (props) => {
             >{getInitials(user.username)}</Avatar>
           </Stack>
         </Stack>
+        <CardActions sx={{ justifyContent: 'flex-start',ml:14 }}>
+        <Stack
+           
+           
+            spacing={2}
+          >
+          {storedata.length<2?<TextField
+                  
+                
+                  name="storeId"
+                  placeholder='Select Store'
+                  label="Default Store"
+                  select
+                  SelectProps={{ native: true }}
+                  onChange={(e)=>handleStore(e.target.value)}
+                  onClick={retrieveStores}
+                  InputLabelProps={{ shrink: true }}
+                >
+                  { storedata.map((option) => (
+                    <option
+                      key={option.storeId}
+                      value={JSON.stringify(option)}  
+                      selected
+                    >
+                      {option.storeName}
+                    </option>
+                  ))}
+                </TextField>:<TextField
+                  
+                  InputLabelProps={{ shrink: true }}
+                  name="storeId"
+                  placeholder='Select Store'
+                  label="Default Store"
+                  select
+                  SelectProps={{ native: true }}
+                  onChange={(e)=>handleStore(e.target.value)}
+                  onClick={retrieveStores}
+                >
+                  <option value='-1'
+                    key='-1'
+                    selected
+                    >
+                    Select Store
+                  </option>
+                  { storedata.map((option) => (
+                    <option
+                      key={option.storeId}
+                      value={JSON.stringify(option)}  
+                    >
+                      {option.storeName}
+                    </option>
+                  ))}
+                </TextField>}
+         </Stack>
+         </CardActions>
         {/* <Stack>
             <CardContent sx={{ pt: 0 }}>
 

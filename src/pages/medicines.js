@@ -233,32 +233,16 @@ console.log("date.."+now);
   };
 
   const retrieveMedicines = () => {
-    const userRole=localStorage.getItem('userRole');
-    const user=JSON.parse(localStorage.getItem('user'));
-    if(userRole=="ADMIN"){
-      MedicineService.getAll()
+    const defaultStoreId = localStorage.getItem('defaultStoreId');
+    MedicineService.getByStoreId(defaultStoreId)
       .then(response => {
+        console.log("data.." + JSON.stringify(response.data));
         setMedicines(response.data);
-        console.log(response.data);
-       // //alert(JSON.stringify(response.data));
+
       })
       .catch(e => {
         console.log(e);
       });
-    }
-    else
-    {
-      MedicineService.get(user.storeId)
-      .then(response => {
-       // //alert("response.data"+JSON.stringify(response.data));
-        setMedicines([response.data]);
-        console.log(response.data);
-       // //alert(JSON.stringify(response.data));
-      })
-      .catch(e => {
-        console.log(e);
-      });
-    }
   };    
 
  

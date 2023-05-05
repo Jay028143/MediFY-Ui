@@ -37,7 +37,7 @@ export const OrdersTable = (props) => {
     rowsPerPage = 0,
     selected = []
   } = props;
-
+  const userRole=localStorage.getItem('userRole');
   const selectedSome = (selected.length > 0) && (selected.length < items.length);
   const selectedAll = (items.length > 0) && (selected.length === items.length);
 
@@ -61,7 +61,16 @@ export const OrdersTable = (props) => {
                  Total Price
                 </TableCell>
                 <TableCell>
+                  Show Full Detail
                 </TableCell>
+                {userRole=="ADMIN" || userRole=="MANAGER" ?<>
+                <TableCell>
+                  Edit
+                </TableCell>
+                <TableCell>
+                  Delete
+                </TableCell></>:<></>}
+
               </TableRow>
             </TableHead>
             <TableBody>
@@ -112,6 +121,30 @@ export const OrdersTable = (props) => {
                         Show Detail
                       </Button>
                     </TableCell>
+                    {userRole=="ADMIN" || userRole=="MANAGER" ? <> <TableCell>
+                      <Button
+                        fullWidth
+                        size="small"
+                        sx={{ mt: 3 }}
+                        type="submit"
+                        variant="contained"
+                        onClick={() =>EditOrder(customer)}
+                      >
+                        Edit
+                      </Button>
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        fullWidth
+                        size="small"
+                        sx={{ mt: 3 }}
+                        type="submit"
+                        variant="contained"
+                        onClick={() => deleteOrder(customer.customerId)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell></>:<></>}
                   </TableRow>
                 );
               })}

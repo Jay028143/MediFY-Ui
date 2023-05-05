@@ -22,7 +22,9 @@ export const SideNav = (props) => {
   const { open, onClose } = props;
   const pathname = usePathname();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+   const userRole=localStorage.getItem('userRole');
 
+      
   const content = (
     <Scrollbar
       sx={{
@@ -108,6 +110,7 @@ export const SideNav = (props) => {
           >
             {items.map((item) => {
               const active = item.path ? (pathname === item.path) : false;
+              
 
               return (
                 <SideNavItem

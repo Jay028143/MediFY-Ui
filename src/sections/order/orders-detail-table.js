@@ -29,6 +29,7 @@ export const OrdersDetailTable = (props) => {
     onPageChange = () => { },
     onRowsPerPageChange,
     handleRemove,
+    handleOrderSubmit,
     page = 0,
     rowsPerPage = 0,
     selected = []
@@ -125,7 +126,7 @@ export const OrdersDetailTable = (props) => {
             sx={{ mt: 3,justifyContent:'center' }}
             type="submit"
             variant="contained"
-            // onClick={() =>}
+             onClick={() =>handleOrderSubmit()}
           >
             Submit
           </Button>
@@ -140,6 +141,7 @@ export const OrdersDetailTable = (props) => {
 OrdersDetailTable.propTypes = {
   count: PropTypes.number,
   OrderCart: PropTypes.array,
+  handleOrderSubmit:PropTypes.func,
   handleRemove: PropTypes.func,
   onDeselectOne: PropTypes.func,
   onPageChange: PropTypes.func,

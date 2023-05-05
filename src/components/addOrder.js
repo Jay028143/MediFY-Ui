@@ -17,10 +17,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import CustomerService from 'src/services/Customerservice';
 import { OrdersDetailTable } from 'src/sections/order/orders-detail-table';
 export const AddOrder = (props) => {
-
+    const router = useRouter();
     const [open, setOpen] = useState(false);
     const [agePopup, setagePopup] = useState(false);
     const [minAge, setMinAge] = useState(0);
@@ -33,27 +34,93 @@ export const AddOrder = (props) => {
     const [isIlligible, setIlligible] = useState(false);
     const [medicinedetail, setMedicineDetail] = useState();
     const [medicinecart, setMedicineCart] = useState([]);
+    const [orderDetail,setOrderDetail]=useState([]);
     const handleClickOpen = (medicinedata) => {
-       // alert("medicine d.."+(medicinedata));
-        const medicine=JSON.parse(medicinedata);
-         //   alert("medicine.."+medicine.idCheck);
+        // alert("medicine d.."+(medicinedata));
+        const medicine = JSON.parse(medicinedata);
+        //   alert("medicine.."+medicine.idCheck);
         if (medicine.idCheck == 'Y') {
             setMinAge(medicine.minAge);
             setMedicineDetail(medicine);
             setOpen(true);
         }
-        else{
+        else {
             setMedicineDetail(medicine);
             setIlligible(true);
         }
 
     };
 
-    
+    const handleOrderSubmit = () => {
+        //alert("called..");
+        const currentdatetime = format(now, "yyyy-MM-dd HH:mm:ss");
+        const defaultStoreId = localStorage.getItem('defaultStoreId');
+        const user = JSON.parse(localStorage.getItem('user'));
+        
+      
+        medicinecart.map((cart) => {
 
+            const order= {
+                "medicineId":cart.medicineId,
+                "medicineName":cart.medicineName,
+                "quantity": cart.orderQuantity,
+                "unitPrice":cart.medicinePrice
+            };
+           // total=(order.orderQuantity * order.medicinePrice);
+            orderDetail.push(order);
+
+        });
+
+        const total = medicinecart.reduce((total, order)=> total+(order.orderQuantity * order.medicinePrice), 0);
+
+
+
+        const submit= {
+            "customerId":customerId,
+            "customerName":customerName,
+            "userId":user.id,
+            "storeId": defaultStoreId,
+            "totalPrice":total,
+            "createdAt": currentdatetime,
+            "updatedAt": currentdatetime,
+            "orderDetail":orderDetail
+            // [{
+            //         "medicineId":1,
+            //         "quantity": 20,
+            //         "unitPrice":25},
+            //         {
+            //          "medicineId":2,
+            //         "quantity": 20,
+            //         "unitPrice":55}
+            //         ]
+
+        }
+
+        try {
+            OrderService.create(submit)
+                .then(response => {
+                    alert(JSON.stringify(response));
+                    auth.skip();
+                    router.push('/orders');
+                    //setSubmitted(true);
+                   // handleAddCustomer(false);
+                    console.log(response.data);
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+
+        } catch (err) {
+            helpers.setStatus({ success: false });
+            helpers.setErrors({ submit: err.message });
+            helpers.setSubmitting(false);
+        }
+
+
+    }
     const handleRemove = (id) => {
         //alert("id.."+id)
-        console.log("medicinecart.."+JSON.stringify(medicinecart))
+        console.log("medicinecart.." + JSON.stringify(medicinecart))
         const filteredArray = medicinecart.filter((res) => res.medicineId !== id);
         setMedicineCart(filteredArray);
     };
@@ -69,7 +136,7 @@ export const AddOrder = (props) => {
 
     };
     const handleAddQuantity = (e) => {
-        medicinedetail.orderQuantity=e.target.value;
+        medicinedetail.orderQuantity = e.target.value;
     };
 
     handleAddQuantity
@@ -95,7 +162,7 @@ export const AddOrder = (props) => {
         if (searchBydateOfBirth != '') {
             CustomerService.getCustomerByDateOfBirth(searchBydateOfBirth)
                 .then(response => {
-                   // alert("response.data" + JSON.stringify(response.data));
+                    // alert("response.data" + JSON.stringify(response.data));
                     setCustomers(response.data);
                     console.log(response.data);
                     // //alert(JSON.stringify(response.data));
@@ -112,11 +179,12 @@ export const AddOrder = (props) => {
         setCustomerId(id);
     };
 
-      const handleAdd = () => {
-            medicinecart.push(medicinedetail);
-            //alert("Medicine data..."+JSON.stringify(medicinecart));
-            setMedicineDetail();
-            setIlligible(false);
+    const handleAdd = () => {
+        medicinecart.push(medicinedetail);
+        
+        //alert("Medicine data..."+JSON.stringify(medicinecart));
+        setMedicineDetail();
+        setIlligible(false);
     };
 
 
@@ -126,16 +194,16 @@ export const AddOrder = (props) => {
         const age_dt = new Date(month_diff);
         const year = age_dt.getUTCFullYear();
         const age = Math.abs(year - 1970);
-       // alert("date Of birth.." + dateOfBirth);
+        // alert("date Of birth.." + dateOfBirth);
         if (age < minAge) {
-            
+
             setMessage(" You are not Illigible for this Medication.");
             setIlligible(false);
             setagePopup(true);
-     
+
         }
         else {
-           
+
             setMessage(" You are Illigible for this Medication.");
             setIlligible(true);
             setagePopup(true);
@@ -303,9 +371,9 @@ export const AddOrder = (props) => {
                                                                 Yes
                                                             </option>
 
-                                                        </TextField> 
+                                                        </TextField>
 
-                                                       {isRegisterd ? <><TextField
+                                                        {isRegisterd ? <><TextField
                                                             autoFocus
                                                             sx={{ marginTop: 2 }}
                                                             id="serachcustomer"
@@ -345,7 +413,7 @@ export const AddOrder = (props) => {
                                                                     </option>
                                                                 ))}</TextField>
 
-                                                            
+
 
 
                                                         </> : <><TextField
@@ -359,7 +427,7 @@ export const AddOrder = (props) => {
 
                                                         />
 
-                                                            
+
                                                         </>}
 
 
@@ -369,9 +437,9 @@ export const AddOrder = (props) => {
                                                         xs={12}
                                                         md={6}
                                                     >
-                                                         { isRegisterd ?<>
+                                                        {isRegisterd ? <>
                                                             <Button
-                                                            
+
                                                                 size="large"
                                                                 sx={{ mt: 11 }}
                                                                 type="submit"
@@ -379,7 +447,7 @@ export const AddOrder = (props) => {
                                                                 onClick={searchCustomer}
                                                             >
                                                                 Search
-                                                            </Button></>:<></>}
+                                                            </Button></> : <></>}
 
 
                                                     </Grid>
@@ -402,7 +470,7 @@ export const AddOrder = (props) => {
                                                         md={6}
                                                     >
 
-<TextField
+                                                        <TextField
                                                             sx={{ marginTop: 2 }}
                                                             fullWidth
                                                             label="Medicine"
@@ -431,9 +499,9 @@ export const AddOrder = (props) => {
 
                                                         </TextField>
 
-                                                      
-                                                        {isIlligible?<Button
-                                                            
+
+                                                        {isIlligible ? <Button
+
                                                             size="large"
                                                             sx={{ mt: 2 }}
                                                             type="submit"
@@ -441,8 +509,8 @@ export const AddOrder = (props) => {
                                                             onClick={handleAdd}
                                                         >
                                                             Add
-                                                        </Button>:<></> }
-                                                        
+                                                        </Button> : <></>}
+
 
 
                                                         <Dialog open={open} onClose={handleClose}>
@@ -495,30 +563,30 @@ export const AddOrder = (props) => {
                                                         xs={12}
                                                         md={6}
                                                     >
-                                                        
-                                                      {isIlligible?  < TextField
-                                                                sx={{ marginTop: 2 }}
-                                                                // error={!!(formik.touched.quantity && formik.errors.quantity)}
-                                                                fullWidth
-                                                                type="number"
-                                                                //  helperText={formik.touched.quantity && formik.errors.quantity}
-                                                                label="Quantity"
-                                                                name="quantity"
-                                                            //onBlur={formik.handleBlur}
-                                                             onChange={handleAddQuantity}
-                                                            // value={formik.values.quantity}
-                                                            />
-                                                      :<></>}
-                                                       
-                                                    </Grid>
-                                                   </Grid></Box></CardContent>
 
-                                                   {medicinecart.length>0?
-                                                   <OrdersDetailTable
-                                                   OrderCart={medicinecart}
-                                                   handleRemove={handleRemove}
-                                
-                                                   />:<></>}
+                                                        {isIlligible ? < TextField
+                                                            sx={{ marginTop: 2 }}
+                                                            // error={!!(formik.touched.quantity && formik.errors.quantity)}
+                                                            fullWidth
+                                                            type="number"
+                                                            //  helperText={formik.touched.quantity && formik.errors.quantity}
+                                                            label="Quantity"
+                                                            name="quantity"
+                                                            //onBlur={formik.handleBlur}
+                                                            onChange={handleAddQuantity}
+                                                        // value={formik.values.quantity}
+                                                        />
+                                                            : <></>}
+
+                                                    </Grid>
+                                                </Grid></Box></CardContent>
+
+                                        {medicinecart.length > 0 ?
+                                            <OrdersDetailTable
+                                                OrderCart={medicinecart}
+                                                handleRemove={handleRemove}
+                                                handleOrderSubmit={handleOrderSubmit}
+                                            /> : <></>}
                                     </Card>
 
                                 </Grid>

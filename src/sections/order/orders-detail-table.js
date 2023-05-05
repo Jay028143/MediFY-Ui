@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
-import {  Button, Link } from '@mui/material';
+import { Button, Link } from '@mui/material';
 //import { useParams, useNavigate } from 'react-router-dom';
 import {
   Avatar,
@@ -14,7 +14,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
+  Typography,CardActions
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
@@ -25,7 +25,7 @@ export const OrdersDetailTable = (props) => {
   const {
     count = 0,
     OrderCart = [],
-    
+
     onPageChange = () => { },
     onRowsPerPageChange,
     handleRemove,
@@ -54,7 +54,7 @@ export const OrdersDetailTable = (props) => {
                   Quantity
                 </TableCell>
                 <TableCell>
-                 Total
+                  Total
                 </TableCell>
                 <TableCell>
                 </TableCell>
@@ -62,16 +62,16 @@ export const OrdersDetailTable = (props) => {
             </TableHead>
             <TableBody>
               {OrderCart.map((ordersDetail) => {
-               // const isSelected = selected.includes(ordersDetail.orderId);
-               //const createdAt = format(ordersDetail.createdAt, 'dd/MM/yyyy');
+                // const isSelected = selected.includes(ordersDetail.orderId);
+                //const createdAt = format(ordersDetail.createdAt, 'dd/MM/yyyy');
 
                 return (
                   <TableRow
                     hover
                     key={ordersDetail.medicineId}
-                    //selected={isSelected}
+                  //selected={isSelected}
                   >
-                   
+
                     <TableCell>
                       <Stack
                         alignItems="center"
@@ -82,31 +82,31 @@ export const OrdersDetailTable = (props) => {
                           {getInitials(ordersDetail.medicineName)}
                         </Avatar>
                         <Typography variant="subtitle2">
-                          {ordersDetail.medicineName} 
+                          {ordersDetail.medicineName}
                         </Typography>
                       </Stack>
                     </TableCell>
-                    
+
                     <TableCell>
                       {ordersDetail.medicinePrice}
                     </TableCell>
-                    
+
                     <TableCell>
                       {ordersDetail.orderQuantity}
                     </TableCell>
 
                     <TableCell>
-                      {(ordersDetail.orderQuantity*ordersDetail.medicinePrice)}
+                      {(ordersDetail.orderQuantity * ordersDetail.medicinePrice)}
                     </TableCell>
 
                     <TableCell>
-                    <Button
+                      <Button
                         fullWidth
                         size="large"
                         sx={{ mt: 3 }}
                         type="submit"
                         variant="contained"
-                        onClick={() =>handleRemove(ordersDetail.medicineId)}
+                        onClick={() => handleRemove(ordersDetail.medicineId)}
                       >
                         Remove
                       </Button>
@@ -117,17 +117,22 @@ export const OrdersDetailTable = (props) => {
               })}
             </TableBody>
           </Table>
+          <CardActions sx={{ justifyContent: 'center' }}>
+          <Button
+            
+            size="large"
+            
+            sx={{ mt: 3,justifyContent:'center' }}
+            type="submit"
+            variant="contained"
+            // onClick={() =>}
+          >
+            Submit
+          </Button>
+          </CardActions>
         </Box>
       </Scrollbar>
-      <TablePagination
-        component="div"
-        count={count}
-        onPageChange={onPageChange}
-        onRowsPerPageChange={onRowsPerPageChange}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
+            
     </Card>
   );
 };
@@ -144,7 +149,7 @@ OrdersDetailTable.propTypes = {
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
   selected: PropTypes.array,
-  deleteOrder:PropTypes.func,
-  EditOrder:PropTypes.func
-  
+  deleteOrder: PropTypes.func,
+  EditOrder: PropTypes.func
+
 };

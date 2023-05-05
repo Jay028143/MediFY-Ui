@@ -52,14 +52,10 @@ export const AddOrder = (props) => {
     
 
     const handleRemove = (id) => {
-        alert("id.."+id)
-       
-        medicinecart.map((medicine, index) => {
-            if (medicine.medicineId==id) {
-            medicine.splice(index, 1) // remove element
-        };
-        setMedicineCart(medicinecart);
-        })
+        //alert("id.."+id)
+        console.log("medicinecart.."+JSON.stringify(medicinecart))
+        const filteredArray = medicinecart.filter((res) => res.medicineId !== id);
+        setMedicineCart(filteredArray);
     };
 
 
@@ -130,7 +126,7 @@ export const AddOrder = (props) => {
         const age_dt = new Date(month_diff);
         const year = age_dt.getUTCFullYear();
         const age = Math.abs(year - 1970);
-        //alert("date Of birth.." + age);
+       // alert("date Of birth.." + dateOfBirth);
         if (age < minAge) {
             
             setMessage(" You are not Illigible for this Medication.");

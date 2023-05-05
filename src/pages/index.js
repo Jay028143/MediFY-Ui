@@ -32,7 +32,7 @@ const Page = () => (
           container
           spacing={3}
         >
-          <Grid
+          {/* <Grid
             xs={12}
             sm={6}
             lg={3}
@@ -43,8 +43,8 @@ const Page = () => (
               sx={{ height: '100%' }}
               value="$24k"
             />
-          </Grid>
-          <Grid
+          </Grid> */}
+          {/* <Grid
             xs={12}
             sm={6}
             lg={3}
@@ -55,8 +55,8 @@ const Page = () => (
               sx={{ height: '100%' }}
               value="1.6k"
             />
-          </Grid>
-          <Grid
+          </Grid> */}
+          {/* <Grid
             xs={12}
             sm={6}
             lg={3}
@@ -65,8 +65,8 @@ const Page = () => (
               sx={{ height: '100%' }}
               value={75.5}
             />
-          </Grid>
-          <Grid
+          </Grid> */}
+          {/* <Grid
             xs={12}
             sm={6}
             lg={3}
@@ -75,8 +75,9 @@ const Page = () => (
               sx={{ height: '100%' }}
               value="$15k"
             />
-          </Grid>
+          </Grid> */}
           <Grid
+            fullWidth
             xs={12}
             lg={8}
           >
@@ -94,7 +95,7 @@ const Page = () => (
               sx={{ height: '100%' }}
             />
           </Grid>
-          <Grid
+          {/* <Grid
             xs={12}
             md={6}
             lg={4}
@@ -104,8 +105,8 @@ const Page = () => (
               labels={['Desktop', 'Tablet', 'Phone']}
               sx={{ height: '100%' }}
             />
-          </Grid>
-          <Grid
+          </Grid> */}
+          {/* <Grid
             xs={12}
             md={6}
             lg={4}
@@ -145,8 +146,8 @@ const Page = () => (
               ]}
               sx={{ height: '100%' }}
             />
-          </Grid>
-          <Grid
+          </Grid> */}
+          {/* <Grid
             xs={12}
             md={12}
             lg={8}
@@ -216,7 +217,7 @@ const Page = () => (
               ]}
               sx={{ height: '100%' }}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </Box>

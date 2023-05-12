@@ -9,7 +9,8 @@ export const AccountPopover = (props) => {
   const router = useRouter();
   const auth = useAuth();
   const user=JSON.parse(localStorage.getItem('user'));
-
+  const userRole = localStorage.getItem('userRole');
+    
   const handleSignOut = useCallback(
     () => {
       onClose?.();
@@ -44,6 +45,7 @@ export const AccountPopover = (props) => {
           variant="body2"
         >
           {user.username}
+           [{userRole}]
         </Typography>
       </Box>
       <Divider />

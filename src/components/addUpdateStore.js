@@ -25,8 +25,6 @@ export const AddUpdateStore = (props) => {
   const user = JSON.parse(localStorage.getItem('user'));
   const createdAt = store.storeId > 0 ? store.createdAt : currentdatetime;
   const adminId = store.storeId > 0 ? store.adminId : user.id;
-  console.log("data.eee.." + JSON.stringify(store));
-  const router = useRouter();
   const formik = useFormik({
     initialValues: {
       storeName: store.storeName || '',
@@ -86,12 +84,7 @@ export const AddUpdateStore = (props) => {
       try {
         StoreService.create(values)
           .then(response => {
-            //alert(JSON.stringify(response));
-            //auth.skip();
-            //router.push('/stores');
-            //setSubmitted(true);
             handleAddStore(false);
-            console.log(response.data);
           })
           .catch(e => {
             console.log(e);
@@ -258,12 +251,7 @@ export const AddUpdateStore = (props) => {
 
                             </Grid>
                           </Grid>
-                          {/* <DatePicker label="Date Of Joining"
-                  name="dateOfJoining"  
-                  // onChange={formik.handleChange}
-                  // value={formik.values.dateOfJoining}
-                  />
-                 */}
+                   
 
                         </Box>
                       </CardContent>

@@ -46,7 +46,6 @@ const Page = () => {
 
        LoginService.login(values)
        .then(response => {
-        ////alert("Json..."+JSON.stringify(response));
           if(response.status==200)
           {
             auth.skip();
@@ -181,14 +180,14 @@ const Page = () => {
                 >
                   Login
                 </Button>
-                <Button
+                {/* <Button
                   fullWidth
                   size="large"
                   sx={{ mt: 3 }}
                   onClick={handleSkip}
                 >
                   Skip authentication
-                </Button>
+                </Button> */}
                 
                 {/* <Alert
                   color="primary"

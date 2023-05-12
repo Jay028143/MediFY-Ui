@@ -131,12 +131,8 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        //  await auth.signUp(values.email, values.name, values.password);
         LoginService.register(values)
           .then(response => {
-            //alert(JSON.stringify(response));
-            //setSubmitted(true);
-            console.log(response.data);
             router.push('/');
           })
           .catch(e => {

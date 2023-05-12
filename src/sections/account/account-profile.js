@@ -8,7 +8,8 @@ import {
   Divider,
   Typography
 } from '@mui/material';
-
+import { getInitials } from 'src/utils/get-initials';
+import PropTypes from 'prop-types';
 const user = {
   avatar: '/assets/avatars/avatar-anika-visser.png',
   city: 'Los Angeles',
@@ -18,8 +19,12 @@ const user = {
   timezone: 'GTM-7'
 };
 
-export const AccountProfile = () => (
-  <Card>
+export const AccountProfile = (props) => {
+  const {
+    staff,
+} = props;
+console.log("staff..."+staff);
+return (<Card>
     <CardContent>
       <Box
         sx={{
@@ -28,33 +33,26 @@ export const AccountProfile = () => (
           flexDirection: 'column'
         }}
       >
-        <Avatar
-          src={user.avatar}
-          sx={{
-            height: 80,
-            mb: 2,
-            width: 80
-          }}
-        />
+        <Avatar>
+         {getInitials(staff.firstName)} </Avatar>
         <Typography
           gutterBottom
           variant="h5"
         >
-          {user.name}
+          {staff.firstName}  {staff.lastName}
         </Typography>
+        
         <Typography
           color="text.secondary"
           variant="body2"
         >
-          {user.city} {user.country}
-        </Typography>
-        <Typography
-          color="text.secondary"
-          variant="body2"
-        >
-          {user.timezone}
+          {/* {staff[0].roles[0]} */}
         </Typography>
       </Box>
     </CardContent>
-  </Card>
-);
+  </Card>)
+};
+
+AccountProfile.prototype = {
+  staff: PropTypes.array,
+}

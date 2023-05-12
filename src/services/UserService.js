@@ -16,6 +16,11 @@ const create = data => {
   return http.post("/user", data);
 };
 
+
+const updatePassword = data => {
+  return http.post("/user/updatePassword", data);
+};
+
 const update = (id, data) => {
   return http.put(`/user/${id}`, data);
 };
@@ -35,7 +40,8 @@ const UserService = {
   update,
   remove,
   removeAll,
-  getByStoreId
+  getByStoreId,
+  updatePassword
 };
 
 export default UserService;

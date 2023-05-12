@@ -40,8 +40,6 @@ export const AddUpdateMedicine = (props) => {
     const storeId = medicine.medicineId > 0 ? medicine.storeId : defaultStoreId;
     const createdAt = medicine.medicineId > 0 ? medicine.createdAt : currentdatetime;
 
-    console.log("data.eee.." + JSON.stringify(medicine));
-
     const formik = useFormik({
         initialValues: {
             medicineId: medicine.medicineId || '',
@@ -53,8 +51,7 @@ export const AddUpdateMedicine = (props) => {
             idCheck: medicine.idCheck || 'N',
             availableStock: medicine.availableStock || '',
             totalStock: medicine.totalStock || '',
-            //expiryDate: medicine.expiryDate || '',
-            userId: userId || '0',
+             userId: userId || '0',
             storeId: storeId || '0',
             createdAt: createdAt,
             updatedAt: currentdatetime,
@@ -98,12 +95,8 @@ export const AddUpdateMedicine = (props) => {
             try {
                 MedicineService.create(values)
                     .then(response => {
-                        ////alert(JSON.stringify(response));
-                        //auth.skip();
-                        //router.push('/medicines');
-                        //setSubmitted(true);
+                        
                         handleAddMedicine(false);
-                        console.log(response.data);
                     })
                     .catch(e => {
                         console.log(e);
@@ -249,16 +242,7 @@ export const AddUpdateMedicine = (props) => {
                                                                 type="number"
                                                                 value={formik.values.medicinePrice}
                                                             />
-                                                            {/* <TextField
-                                                                sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.idCheck && formik.errors.idCheck)}
-                                                                fullWidth
-                                                                helperText={formik.touched.idCheck && formik.errors.idCheck}
-                                                                label="Id Check"
-                                                                name="idCheck"
-                                                                onChange={handleIdChange}
-                                                                value={formik.values.idCheck}
-                                                            > */}
+                                                          
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
                                                                 fullWidth
@@ -295,12 +279,7 @@ export const AddUpdateMedicine = (props) => {
                                                             />
                                                         </Grid>
                                                     </Grid>
-                                                    {/* <DatePicker label="Date Of Joining"
-                  name="dateOfJoining"  
-                  // onChange={formik.handleChange}
-                  // value={formik.values.dateOfJoining}
-                  />
-                 */}
+                             
 
                                                 </Box>
                                             </CardContent>

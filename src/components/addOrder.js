@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import {
     Box, Button, Card,
-    CardActions,
     CardContent,
     CardHeader,
     Divider, Container, Stack, TextField, Typography, Unstable_Grid2 as Grid
@@ -20,10 +19,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import CustomerService from 'src/services/Customerservice';
 import { OrdersDetailTable } from 'src/sections/order/orders-detail-table';
+import MedicineService from 'src/services/Medicineservice';
 export const AddOrder = (props) => {
     const router = useRouter();
     const [open, setOpen] = useState(false);
     const [agePopup, setagePopup] = useState(false);
+    const [availableStorePopup, setAvailableStorePopup] = useState(false);
     const [minAge, setMinAge] = useState(0);
     const [message, setMessage] = useState(0);
     const [isRegisterd, setisRegisterd] = useState(false);
@@ -35,10 +36,27 @@ export const AddOrder = (props) => {
     const [medicinedetail, setMedicineDetail] = useState();
     const [medicinecart, setMedicineCart] = useState([]);
     const [orderDetail,setOrderDetail]=useState([]);
+    const [storeDetail,setStoreDetail]=useState([]);
     const handleClickOpen = (medicinedata) => {
-        // alert("medicine d.."+(medicinedata));
         const medicine = JSON.parse(medicinedata);
-        //   alert("medicine.."+medicine.idCheck);
+        if(medicine.availableStock==1000){
+
+      MedicineService.getMedicineAvailabilityAtStore(medicine.storeId,medicine.medicineCode)
+      .then(response => {
+        if(response.data.length>0)
+        {
+            setStoreDetail(response.data);
+            setAvailableStorePopup(true);
+        }
+
+      })
+      .catch(e => {
+        console.log(e);
+      });
+
+        }
+        else{
+
         if (medicine.idCheck == 'Y') {
             setMinAge(medicine.minAge);
             setMedicineDetail(medicine);
@@ -48,11 +66,11 @@ export const AddOrder = (props) => {
             setMedicineDetail(medicine);
             setIlligible(true);
         }
+    }
 
     };
 
     const handleOrderSubmit = () => {
-        //alert("called..");
         const currentdatetime = format(now, "yyyy-MM-dd HH:mm:ss");
         const defaultStoreId = localStorage.getItem('defaultStoreId');
         const user = JSON.parse(localStorage.getItem('user'));
@@ -84,27 +102,14 @@ export const AddOrder = (props) => {
             "createdAt": currentdatetime,
             "updatedAt": currentdatetime,
             "orderDetail":orderDetail
-            // [{
-            //         "medicineId":1,
-            //         "quantity": 20,
-            //         "unitPrice":25},
-            //         {
-            //          "medicineId":2,
-            //         "quantity": 20,
-            //         "unitPrice":55}
-            //         ]
 
         }
 
         try {
             OrderService.create(submit)
                 .then(response => {
-                    alert(JSON.stringify(response));
                     auth.skip();
                     router.push('/orders');
-                    //setSubmitted(true);
-                   // handleAddCustomer(false);
-                    console.log(response.data);
                 })
                 .catch(e => {
                     console.log(e);
@@ -119,8 +124,6 @@ export const AddOrder = (props) => {
 
     }
     const handleRemove = (id) => {
-        //alert("id.."+id)
-        console.log("medicinecart.." + JSON.stringify(medicinecart))
         const filteredArray = medicinecart.filter((res) => res.medicineId !== id);
         setMedicineCart(filteredArray);
     };
@@ -135,11 +138,15 @@ export const AddOrder = (props) => {
         setOpen(false);
 
     };
+
+    const handleAvailableStoreClose = () => {
+        setAvailableStorePopup(false);
+
+    };
     const handleAddQuantity = (e) => {
         medicinedetail.orderQuantity = e.target.value;
     };
 
-    handleAddQuantity
 
     const handleClickRegister = (isRegister) => {
         setCustomerName('');
@@ -162,10 +169,7 @@ export const AddOrder = (props) => {
         if (searchBydateOfBirth != '') {
             CustomerService.getCustomerByDateOfBirth(searchBydateOfBirth)
                 .then(response => {
-                    // alert("response.data" + JSON.stringify(response.data));
                     setCustomers(response.data);
-                    console.log(response.data);
-                    // //alert(JSON.stringify(response.data));
                 })
                 .catch(e => {
                     console.log(e);
@@ -182,29 +186,29 @@ export const AddOrder = (props) => {
     const handleAdd = () => {
         medicinecart.push(medicinedetail);
         
-        //alert("Medicine data..."+JSON.stringify(medicinecart));
         setMedicineDetail();
         setIlligible(false);
     };
 
 
-    const checkillegible = (dateOfBirth) => {
-        const dob = new Date(dateOfBirth);
+    const checkillegible = () => {
+        const dob = new Date(searchBydateOfBirth);
         const month_diff = Date.now() - dob.getTime();
         const age_dt = new Date(month_diff);
         const year = age_dt.getUTCFullYear();
         const age = Math.abs(year - 1970);
-        // alert("date Of birth.." + dateOfBirth);
         if (age < minAge) {
-
-            setMessage(" You are not Illigible for this Medication.");
+            
+            const msg="Customer do not meet the age requirement of this medication. \n Minimum age for this medication is" +minAge +"years";
+            setMessage(msg);
             setIlligible(false);
             setagePopup(true);
 
         }
         else {
-
-            setMessage(" You are Illigible for this Medication.");
+            const msg="Customer meet the age requirement of this medication. \n Minimum age for this medication is" +minAge +"years";
+            setMessage(msg);
+           
             setIlligible(true);
             setagePopup(true);
         }
@@ -222,84 +226,9 @@ export const AddOrder = (props) => {
     const userId = order.orderId > 0 ? order.userId : user.id;
     const storeId = order.orderId > 0 ? order.storeId : user.storeId;
     const createdAt = order.orderId > 0 ? order.createdAt : currentdatetime;
-    console.log("data.eee.." + JSON.stringify(order));
 
 
 
-    // const formik = useFormik({
-    //     initialValues: {
-    //         orderId: order.orderId || '',
-    //         orderCode: order.orderCode || '',
-    //         orderName: order.orderName || '',
-    //         orderPrice: order.orderPrice || '',
-    //         description: order.description || '',
-    //         idCheck: order.idCheck || 'N',
-    //         availableStock: order.availableStock || '',
-    //         totalStock: order.totalStock || '',
-    //         expiryDate: order.expiryDate || '',
-    //         userId: userId || '0',
-    //         storeId: storeId || '0',
-    //         createdAt: createdAt,
-    //         updatedAt: currentdatetime,
-    //         medicineId: '',
-    //         stocks: [{
-    //             quantity: '0',
-    //             expiryDate: '2023-05-20',
-    //         }],
-    //         submit: null
-    //     },
-    //     response: {
-    //         message: '',
-    //     },
-    //     validationSchema: Yup.object({
-
-    //         orderName: Yup
-    //             .string()
-    //             .max(255)
-    //             .required('Order Name is required'),
-    //         orderCode: Yup
-    //             .string()
-    //             .max(255)
-    //             .required('Order Code is required'),
-    //         orderPrice: Yup
-    //             .string()
-    //             .max(255)
-    //             .required('Order Price is required'),
-    //         description: Yup
-    //             .string()
-    //             .max(255)
-    //             .required('Description is required'),
-    //         expiryDate: Yup
-    //             .string()
-    //             .max(255)
-    //             .required('Expiry Date is required'),
-    //         quantity: Yup
-    //             .string()
-    //             .max(255)
-    //             .required('Quantity is required'),
-    //     }),
-    //     onSubmit: async (values, helpers) => {
-    //         try {
-    //             OrderService.create(values)
-    //                 .then(response => {
-    //                     // //alert(JSON.stringify(response));
-    //                     //auth.skip();
-    //                     //router.push('/orders');
-    //                     //setSubmitted(true);
-    //                     handleAddOrder(false);
-    //                     console.log(response.data);
-    //                 })
-    //                 .catch(e => {
-    //                     console.log(e);
-    //                 });
-
-    //         } catch (err) {
-    //             helpers.setStatus({ success: false });
-    //             helpers.setErrors({ submit: err.message });
-    //             helpers.setSubmitting(false);
-    //         }
-    //     }
-    // });
 
     return (
         <>
@@ -525,15 +454,16 @@ export const AddOrder = (props) => {
                                                                     margin="dense"
                                                                     id="dateOfBirth"
                                                                     label="Date Of Birth"
-                                                                    onChange={(e) => checkillegible(e.target.value)}
+                                                                    onChange={(e) => setDate(e.target.value)}
                                                                     fullWidth
 
                                                                     type={'date'}
                                                                 />
                                                             </DialogContent>
                                                             <DialogActions>
+                                                                <Button onClick={checkillegible}>OK</Button> 
                                                                 <Button onClick={handleClose}>Cancel</Button>
-                                                                {/* <Button onClick={handleClose}>Subscribe</Button> */}
+                                                                
                                                             </DialogActions>
                                                         </Dialog>
 
@@ -554,6 +484,32 @@ export const AddOrder = (props) => {
                                                             <DialogActions>
 
                                                                 <Button onClick={handleAgeClose} autoFocus>
+                                                                    OK
+                                                                </Button>
+                                                            </DialogActions>
+                                                        </Dialog>
+
+                                                        <Dialog
+                                                            open={availableStorePopup}
+                                                            onClose={handleAvailableStoreClose}
+                                                            aria-labelledby="alert-dialog-title"
+                                                            aria-describedby="alert-dialog-description"
+                                                        >
+                                                            <DialogTitle id="ageilligible">
+                                                                {"Check Age Illigibility"}
+                                                            </DialogTitle>
+                                                            <DialogContent>
+                                                                <DialogContentText id="alert-dialog-description">
+                                                                   
+                                                                    Medicine Available at below Store<br/>
+                                                                    <Divider/>
+                                                                   
+
+                                                                </DialogContentText>
+                                                            </DialogContent>
+                                                            <DialogActions>
+
+                                                                <Button onClick={handleAvailableStoreClose} autoFocus>
                                                                     OK
                                                                 </Button>
                                                             </DialogActions>
@@ -581,13 +537,9 @@ export const AddOrder = (props) => {
                                                     </Grid>
                                                 </Grid></Box></CardContent>
 
-                                        {medicinecart.length > 0 ?
-                                            <OrdersDetailTable
-                                                OrderCart={medicinecart}
-                                                handleRemove={handleRemove}
-                                                handleOrderSubmit={handleOrderSubmit}
-                                            /> : <></>}
+                                        
                                     </Card>
+                                   
 
                                 </Grid>
                             </Grid>
@@ -595,6 +547,13 @@ export const AddOrder = (props) => {
                     </Stack>
                 </Container>
             </Box>
+            {medicinecart.length > 0 ?
+                                            <OrdersDetailTable
+                                                OrderCart={medicinecart}
+                                                handleRemove={handleRemove}
+                                                handleOrderSubmit={handleOrderSubmit}
+                                                customerName={[customerName]}
+                                            /> : <></>}
         </>
     );
 };

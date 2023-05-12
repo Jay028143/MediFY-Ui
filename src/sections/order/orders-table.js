@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+
 import {  Button, Link } from '@mui/material';
-//import { useParams, useNavigate } from 'react-router-dom';
 import {
   Avatar,
   Box,
   Card,
-  Checkbox,
   Stack,
   Table,
   TableBody,
@@ -18,19 +16,13 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
-//import { json } from 'stream/consumers';
-
 export const OrdersTable = (props) => {
-  //let navigate = useNavigate();
   const {
     count = 0,
     items = [],
-    onDeselectAll,
-    onDeselectOne,
     onPageChange = () => { },
     onRowsPerPageChange,
-    onSelectAll,
-    onSelectOne,
+   
     deleteOrder,
     EditOrder,
     page = 0,
@@ -38,9 +30,7 @@ export const OrdersTable = (props) => {
     selected = []
   } = props;
   const userRole=localStorage.getItem('userRole');
-  const selectedSome = (selected.length > 0) && (selected.length < items.length);
-  const selectedAll = (items.length > 0) && (selected.length === items.length);
-
+  
   return (
     <Card>
       <Scrollbar>
@@ -74,15 +64,13 @@ export const OrdersTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((order) => {
-               // const isSelected = selected.includes(order.orderId);
-               //const createdAt = format(order.createdAt, 'dd/MM/yyyy');
-
+            {items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order)  => {
+            
                 return (
                   <TableRow
                     hover
                     key={order.orderId}
-                    //selected={isSelected}
+                    
                   >
                     <TableCell>
                       {order.orderId}
@@ -168,16 +156,10 @@ export const OrdersTable = (props) => {
 OrdersTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
-  onDeselectAll: PropTypes.func,
-  onDeselectOne: PropTypes.func,
   onPageChange: PropTypes.func,
   onRowsPerPageChange: PropTypes.func,
-  onSelectAll: PropTypes.func,
-  onSelectOne: PropTypes.func,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
-  selected: PropTypes.array,
   deleteOrder:PropTypes.func,
   EditOrder:PropTypes.func
-  
 };

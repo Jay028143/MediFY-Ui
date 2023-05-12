@@ -43,8 +43,7 @@ export const AddUpdateCustomer = (props) => {
     const defaultStoreId = localStorage.getItem('defaultStoreId');
     const storeId = customer.customerId > 0 ? customer.storeId : defaultStoreId;
     const createdAt = customer.customerId > 0 ? customer.createdAt : currentdatetime;
-
-    console.log("data.eee.." + JSON.stringify(customer));
+    const defaultStoreName = localStorage.getItem('defaultStoreName');
 
     const formik = useFormik({
         initialValues: {
@@ -53,7 +52,7 @@ export const AddUpdateCustomer = (props) => {
             middleName: customer.middleName || '',
             lastName: customer.lastName || '',
             gender: customer.gender || '',
-
+            storeName:defaultStoreName,
             houseNo: customer.houseNo || '',
             streetName: customer.streetName || '',
             state: customer.state || '',
@@ -123,12 +122,7 @@ export const AddUpdateCustomer = (props) => {
             try {
                 CustomerService.create(values)
                     .then(response => {
-                        ////alert(JSON.stringify(response));
-                        //auth.skip();
-                        //router.push('/customers');
-                        //setSubmitted(true);
                         handleAddCustomer(false);
-                        console.log(response.data);
                     })
                     .catch(e => {
                         console.log(e);
@@ -216,12 +210,7 @@ export const AddUpdateCustomer = (props) => {
                                                                 value={formik.values.lastName}
                                                             />
 
-                                                            {/* <DatePicker label="Date Of Birth"
-                  name="dateOfBirth" 
-                  // onChange={formik.handleChange}
-                  // value={formik.values.dateOfBirth}
-                  
-                  /> */}
+                                                         
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
@@ -368,12 +357,7 @@ export const AddUpdateCustomer = (props) => {
                                                             />
                                                         </Grid>
                                                     </Grid>
-                                                    {/* <DatePicker label="Date Of Joining"
-                  name="dateOfJoining"  
-                  // onChange={formik.handleChange}
-                  // value={formik.values.dateOfJoining}
-                  />
-                 */}
+                                            
 
                                                 </Box>
                                             </CardContent>

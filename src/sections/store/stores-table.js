@@ -1,12 +1,9 @@
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
-import {  Button, Link } from '@mui/material';
-//import { useParams, useNavigate } from 'react-router-dom';
+import {  Button } from '@mui/material';
 import {
   Avatar,
   Box,
   Card,
-  Checkbox,
   Stack,
   Table,
   TableBody,
@@ -18,19 +15,13 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
-//import { json } from 'stream/consumers';
 
 export const StoresTable = (props) => {
-  //let navigate = useNavigate();
   const {
     count = 0,
     items = [],
-    onDeselectAll,
-    onDeselectOne,
     onPageChange = () => { },
     onRowsPerPageChange,
-    onSelectAll,
-    onSelectOne,
     deleteStore,
     EditStore,
     page = 0,
@@ -38,8 +29,6 @@ export const StoresTable = (props) => {
     selected = []
   } = props;
   
-  const selectedSome = (selected.length > 0) && (selected.length < items.length);
-  const selectedAll = (items.length > 0) && (selected.length === items.length);
 
   const userRole=localStorage.getItem('userRole');
   return (
@@ -76,7 +65,8 @@ export const StoresTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((store) => {
+            {items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((store)  => {
+            
                 const isSelected = selected.includes(store.storeId);
               
                 return (
@@ -163,15 +153,10 @@ export const StoresTable = (props) => {
 StoresTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
-  onDeselectAll: PropTypes.func,
-  onDeselectOne: PropTypes.func,
   onPageChange: PropTypes.func,
   onRowsPerPageChange: PropTypes.func,
-  onSelectAll: PropTypes.func,
-  onSelectOne: PropTypes.func,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
-  selected: PropTypes.array,
   deleteStore:PropTypes.func,
   EditStore:PropTypes.func,
   

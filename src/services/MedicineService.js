@@ -12,6 +12,10 @@ const get = id => {
   return http.get(`/medicine/${id}`);
 };
 
+const getMedicineAvailabilityAtStore = (id,medicineCode) => {
+  return http.get(`/medicine/getMedicineAvailabilityAtStore/${id}/${medicineCode}`);
+};
+
 const create = data => {
   return http.post("/medicine", data);
 };
@@ -36,7 +40,8 @@ const MedicineService = {
   update,
   remove,
   removeAll,
-  getByStoreId
+  getByStoreId,
+  getMedicineAvailabilityAtStore
 };
 
 export default MedicineService;

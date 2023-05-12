@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
 import {  Button, Link } from '@mui/material';
 import {
   Avatar,
   Box,
   Card,
-  Checkbox,
   Stack,
   Table,
   TableBody,
@@ -22,12 +20,8 @@ export const CustomersTable = (props) => {
   const {
     count = 0,
     items = [],
-    onDeselectAll,
-    onDeselectOne,
     onPageChange = () => {},
     onRowsPerPageChange,
-    onSelectAll,
-    onSelectOne,
     deleteCustomer,
     EditCustomer,
     page = 0,
@@ -35,8 +29,6 @@ export const CustomersTable = (props) => {
     selected = []
   } = props;
 
-  const selectedSome = (selected.length > 0) && (selected.length < items.length);
-  const selectedAll = (items.length > 0) && (selected.length === items.length);
   const userRole=localStorage.getItem('userRole');
   return (
     <Card>
@@ -49,7 +41,9 @@ export const CustomersTable = (props) => {
                   Customer Name
                 </TableCell>
                 
-                
+                <TableCell>
+                  Store
+                </TableCell>
                 <TableCell>
                   Date Of Birth
                 </TableCell>
@@ -79,10 +73,9 @@ export const CustomersTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((customer) => {
+            {items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((customer)  => {
                 const isSelected = selected.includes(customer.customerId);
-                //const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
-
+               
                 return (
                   <TableRow
                     hover
@@ -104,7 +97,9 @@ export const CustomersTable = (props) => {
                         </Typography>
                       </Stack>
                     </TableCell>
-    
+                    <TableCell>
+                      {customer.storeName}
+                    </TableCell>
                     <TableCell>
                       {customer.dateOfBirth}
                     </TableCell>
@@ -170,15 +165,10 @@ export const CustomersTable = (props) => {
 CustomersTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
-  onDeselectAll: PropTypes.func,
-  onDeselectOne: PropTypes.func,
   onPageChange: PropTypes.func,
   onRowsPerPageChange: PropTypes.func,
-  onSelectAll: PropTypes.func,
-  onSelectOne: PropTypes.func,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
-  selected: PropTypes.array,
   deleteCustomer:PropTypes.func,
   EditCustomer:PropTypes.func
 };

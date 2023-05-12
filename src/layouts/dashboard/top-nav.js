@@ -19,6 +19,7 @@ import { alpha } from '@mui/material/styles';
 import { usePopover } from 'src/hooks/use-popover';
 import { AccountPopover } from './account-popover';
 import StoreService from 'src/services/Storeservice';
+import { sizeWidth, width } from '@mui/system';
 
 const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
@@ -53,12 +54,10 @@ export const TopNav = (props) => {
          
           if(response.data.length<2)
           {
-            //alert(response.data[0].storeId);
             localStorage.setItem('defaultStoreId', response.data[0].storeId);
             localStorage.setItem('defaultStoreName', response.data[0].storeName);
          
           }
-          // //alert(JSON.stringify(response.data));
         })
         .catch(e => {
           console.log(e);
@@ -67,13 +66,10 @@ export const TopNav = (props) => {
     else {
       StoreService.get(userdetail.storeId)
         .then(response => {
-          // //alert("response.data"+JSON.stringify(response.data));
           localStorage.setItem('defaultStoreId', response.data.storeId);
           localStorage.setItem('defaultStoreName', response.data.storeName);
          
           setStores([response.data]);
-          console.log(response.data);
-          // //alert(JSON.stringify(response.data));
         })
         .catch(e => {
           console.log(e);
@@ -155,7 +151,7 @@ export const TopNav = (props) => {
           >
           {storedata.length<2?<TextField
                   
-                
+                  sx={{width: { sm: 100, md: 200 }}}
                   name="storeId"
                   placeholder='Select Store'
                   label="Default Store"

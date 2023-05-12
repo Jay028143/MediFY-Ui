@@ -3,7 +3,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
-import { useState } from 'react';
 import {
     Box, Button, Card,
     CardActions,
@@ -53,23 +52,14 @@ export const AddUpdateStaff = (props) => {
     const {
         staff,
         handleAddStaff,
-        stores,
     } = props;
-    // const [selectedrole, setRole] = useState([]);
-    // const [selectedgender, setGender] = useState('');
-    // const handlerole = (e) => {
-    //     console.log("Gender.."+e.target.value);
-    //     setRole([e.target.value]);
-    // }
-
-    // console.log("selected role.."+selectedrole);
+    console.log(staff);
     const buttonval = staff.userId > 0 ? 'Update' : 'Save';
     const now = new Date();
     const currentdatetime = format(now, "yyyy-MM-dd HH:mm:ss");
     const user = JSON.parse(localStorage.getItem('user'));
     const userId = staff.userId > 0 ? staff.userId : user.id;
     const createdAt = staff.userId > 0 ? staff.createdAt : currentdatetime;
-    console.log("data.eee.." + JSON.stringify(staff));
     const defaultStoreId = localStorage.getItem('defaultStoreId');
     const formik = useFormik({
         initialValues: {
@@ -80,7 +70,7 @@ export const AddUpdateStaff = (props) => {
             email: staff.email || '',
             houseNo: staff.houseNo || '',
             username: staff.userName || '',
-            password: staff.password || '',
+            password: staff.password,
             streetName: staff.streetName || '',
             state: staff.state || '',
             country: staff.country || '',
@@ -107,10 +97,7 @@ export const AddUpdateStaff = (props) => {
                 .max(255)
                 .required('User Name is required'),
 
-            password: Yup
-                .string()
-                .max(255)
-                .required('Password is required'),
+
             firstName: Yup
                 .string()
                 .max(255)
@@ -167,15 +154,13 @@ export const AddUpdateStaff = (props) => {
         onSubmit: async (values, helpers) => {
             if (buttonval == "Save") {
                 try {
-                    console.log(JSON.stringify(values));
+                    const clonedObj = Object.assign({}, values);
+                    const targetKey = clonedObj['username'];   
+                    clonedObj['password'] = targetKey;
+                    values = clonedObj;
                     LoginService.register(values)
                         .then(response => {
-                            //////alert(JSON.stringify(response));
-                            //auth.skip();
-                            //router.push('/staffs');
-                            //setSubmitted(true);
                             handleAddStaff(false);
-                            console.log(response.data);
                         })
                         .catch(e => {
                             console.log(e);
@@ -198,9 +183,7 @@ export const AddUpdateStaff = (props) => {
                     values = clonedObj;
                     UserService.create(values)
                         .then(response => {
-                            //alert(JSON.stringify(response));
                             handleAddStaff(false);
-                            console.log(response.data);
                         })
                         .catch(e => {
                             console.log(e);
@@ -418,18 +401,22 @@ export const AddUpdateStaff = (props) => {
                                                                 value={formik.values.email}
                                                             />
 
+
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.password && formik.errors.password)}
+                                                                error={!!(formik.touched.dateOfJoining && formik.errors.dateOfJoining)}
                                                                 fullWidth
-                                                                helperText={formik.touched.password && formik.errors.password}
-                                                                label="Password"
-                                                                name="password"
+                                                                helperText={formik.touched.dateOfJoining && formik.errors.dateOfJoining}
+                                                                label="Date Of Joining"
+                                                                name="dateOfJoining"
+                                                                //label="Date Of Joining"
+                                                                type={'date'}
+                                                                value={formik.values.dateOfJoining}
                                                                 onBlur={formik.handleBlur}
                                                                 onChange={formik.handleChange}
-                                                                type="password"
-                                                                value={formik.values.password}
+                                                                InputLabelProps={{ shrink: true }}
                                                             />
+                                                          
 
 
                                                             <TextField
@@ -496,29 +483,11 @@ export const AddUpdateStaff = (props) => {
                                                             />
 
 
-                                                            <TextField
-                                                                 sx={{ marginTop: 2 }}
-                                                                 error={!!(formik.touched.dateOfJoining && formik.errors.dateOfJoining)}
-                                                                 fullWidth
-                                                                 helperText={formik.touched.dateOfJoining && formik.errors.dateOfJoining}
-                                                                 label="Date Of Joining"
-                                                                 name="dateOfJoining"
-                                                                //label="Date Of Joining"
-                                                                type={'date'}
-                                                                value={formik.values.dateOfJoining}
-                                                                onBlur={formik.handleBlur}
-                                                                onChange={formik.handleChange}
-                                                                InputLabelProps={{ shrink: true }}
-                                                            />
+
 
                                                         </Grid>
                                                     </Grid>
-                                                    {/* <DatePicker label="Date Of Joining"
-                  name="dateOfJoining"  
-                  // onChange={formik.handleChange}
-                  // value={formik.values.dateOfJoining}
-                  />
-                 */}
+                                                    
 
                                                 </Box>
                                             </CardContent>
@@ -557,5 +526,4 @@ export const AddUpdateStaff = (props) => {
 AddUpdateStaff.prototype = {
     staff: PropTypes.array,
     handleAddStaff: PropTypes.func,
-    stores: PropTypes.array,
 }

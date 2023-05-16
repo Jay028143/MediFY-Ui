@@ -31,6 +31,8 @@ export const OrdersDetailTable = (props) => {
     handleRemove,
     handleOrderSubmit,
     customerName,
+    isError,
+    errorMessage,
     page = 0,
     rowsPerPage = 0,
     selected = []
@@ -135,6 +137,15 @@ export const OrdersDetailTable = (props) => {
               </TableBody>
             </Table>
             <CardActions sx={{ justifyContent: 'center' }}>
+            {isError ? <Typography
+              color="error"
+              sx={{ mt: 3, justifyContent: 'center' }}
+              variant="body2"
+            >
+              
+              {errorMessage}
+            </Typography> : <></>}</CardActions>
+            <CardActions sx={{ justifyContent: 'center' }}>
               <Button
 
                 size="large"
@@ -165,6 +176,8 @@ OrdersDetailTable.propTypes = {
   onSelectAll: PropTypes.func,
   onSelectOne: PropTypes.func,
   page: PropTypes.number,
+  isError:PropTypes.bool,
+  errorMessage:PropTypes.string,
   rowsPerPage: PropTypes.number,
   selected: PropTypes.array,
   deleteOrder: PropTypes.func,

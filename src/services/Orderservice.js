@@ -12,6 +12,10 @@ const getByStoreId = id => {
   return http.get(`/order/getOrdersByStoreId/${id}`);
 };
 
+const getSalesReportByStoreId = id => {
+  return http.get(`/order/getSalesReportByStoreId/${id}`);
+};
+
 const create = data => {
   return http.post("/order", data);
 };
@@ -36,7 +40,8 @@ const OrderService = {
   update,
   remove,
   removeAll,
-  getByStoreId
+  getByStoreId,
+  getSalesReportByStoreId
 };
 
 export default OrderService;

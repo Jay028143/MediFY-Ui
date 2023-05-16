@@ -7,8 +7,8 @@ import { AccountProfileDetails } from 'src/sections/account/account-profile-deta
 import { AddUpdateStaff } from 'src/components/addUpdateStaff';
 import UserService from 'src/services/UserService';
 const Page = () => {
-  const [userdata, setUser] = useState({});
-  const [addstaff, setAddstaff] = useState(true);
+  const [userdata, setUser] = useState([]);
+  const [addstaff, setAddstaff] = useState(false);
   const handleAddStaff=(isStaff)=>{
   }
   useEffect(() => {
@@ -18,11 +18,18 @@ const Page = () => {
   const retrieveUser = () => {
    
      const user = JSON.parse(localStorage.getItem('user'));
-      UserService.get(user.id)
-      .then(response => {
-        alert(JSON.stringify(response.data))
-        setUser(response.data);
-      })
+     UserService.getByStoreId(user.storeId)
+     .then(response => {
+      
+       const staff=response.data;
+       staff.forEach((res, index) => {
+         if (res.userId == user.id) {
+          setUser(res);
+          setAddstaff(true);
+         }
+     })
+   
+     })
       .catch(e => {
         console.log(e);
       });
@@ -30,57 +37,63 @@ const Page = () => {
    
   };    
 
-  return (<>
-    <Head>
-      <title>
-        Account | MediFY
-      </title>
-    </Head>
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 8
-      }}
-    >
-      <Container maxWidth="xl">
-        <Stack spacing={3}>
-          <div>
-            <Typography variant="h4">
-              Account
-            </Typography>
-          </div>
-          <div>
-            <Grid
-              container
-              spacing={3}
-            >
-              <Grid
-                xs={12}
-                md={6}
-                lg={4}
-              >
-               
-              </Grid>
-              <Grid
-                xs={12}
-                md={6}
-                lg={8}
-              >
-                {/* <AccountProfileDetails /> */}
-                <AddUpdateStaff
-                 staff={userdata} 
-                 //handleAddStaff={handleAddStaff}
-                 />
+  return (
 
-              </Grid>
-            </Grid>
-          </div>
-        </Stack>
-      </Container>
-    </Box>
-  </>
-)};
+    <>{!addstaff?<>
+      
+    </>:<>
+    
+    <AddUpdateStaff 
+     staff={userdata}
+     /></>}</>
+
+//   <>
+//     <Head>
+//       <title>
+//         Account | MediFY
+//       </title>
+//     </Head>
+//     <Box
+//       component="main"
+//       sx={{
+//         flexGrow: 1,
+//         py: 8
+//       }}
+//     >
+//       <Container maxWidth="xl">
+//         <Stack spacing={3}>
+//         <Stack
+//               direction="row"
+//               justifyContent="space-between"
+//               spacing={4}
+//             >
+//            <Stack spacing={1}>
+//             <Typography variant="h4">
+//               Account
+//             </Typography>
+//             </Stack>
+         
+           
+             
+              
+             
+
+        
+//         </Stack>
+//         {addstaff?<>
+//                 <AccountProfile
+//                    staff={userdata} />
+//                 <AddUpdateStaff
+//                  staff={userdata} 
+//                  //handleAddStaff={handleAddStaff}
+//                  /></>:<></>}
+//         </Stack>
+//       </Container>
+//     </Box>
+//   </>
+// )
+  )
+};
 
 Page.getLayout = (page) => (
   <DashboardLayout>

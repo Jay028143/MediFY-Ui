@@ -89,6 +89,7 @@ const Page = () => {
   const handleAddOrder = (isOrder) => {
     setOrders([]);
     setAddorder(isOrder);
+    retrieveOrders();
     retrieveMedicine();
   }
 

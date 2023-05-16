@@ -90,7 +90,12 @@ const Page = () => {
       username: Yup
         .string()
         .max(255)
-        .required('User Name is required'),
+        .required('User Name is required')
+        .matches(
+                   
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
+          "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number")      
+,
 
       houseNo: Yup
         .string()
@@ -117,9 +122,9 @@ const Page = () => {
         .max(255)
         .required('Post Code is required'),
       dateOfJoining: Yup
-        .string()
-        .max(255)
-        .required('dateOfJoining is required'),
+      .date()
+      .max(new Date(),'You can not choose future date')
+      .required('Date Of Joiming Required'),
       password: Yup
         .string()
         .max(255)
@@ -385,16 +390,17 @@ const Page = () => {
                               <TextField
                                 sx={{ marginTop: 2 }}
 
-                                fullWidth
-                                //label="Date Of Joining"
-                                type={'date'}
-                                placeholder=''
-                                label="Date Of Joining"
-                                name="dateOfJoining"
-                                value={formik.values.dateOfJoining}
-                                onBlur={formik.handleBlur}
-                                onChange={formik.handleChange}
-                                InputLabelProps={{ shrink: true }}
+                                error={!!(formik.touched.dateOfJoining && formik.errors.dateOfJoining)}
+                                                                fullWidth
+                                                                helperText={formik.touched.dateOfJoining && formik.errors.dateOfJoining}
+                                                                label="Date Of Joining"
+                                                                name="dateOfJoining"
+                                                                //label="Date Of Joining"
+                                                                type={'date'}
+                                                                value={formik.values.dateOfJoining}
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                InputLabelProps={{ shrink: true }}
                               >
 
 

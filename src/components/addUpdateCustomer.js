@@ -113,10 +113,11 @@ export const AddUpdateCustomer = (props) => {
             .string()
             .max(255)
             .required('Mobile Number is required'),
-        dateOfBirth: Yup
-            .string()
-            .max(255)
-            .required('Date Of Birth is required'),
+       
+            dateOfBirth:Yup
+            .date()
+            .max(new Date(),'You can not choose future date')
+            .required('Date Of Birth Required'),
         }),
         onSubmit: async (values, helpers) => {
             try {

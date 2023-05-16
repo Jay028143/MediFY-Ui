@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { useCallback, useMemo, useState ,useEffect} from 'react';
 import { subDays, subHours } from 'date-fns';
 import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -10,11 +11,34 @@ import { OverviewTasksProgress } from 'src/sections/overview/overview-tasks-prog
 import { OverviewTotalCustomers } from 'src/sections/overview/overview-total-customers';
 import { OverviewTotalProfit } from 'src/sections/overview/overview-total-profit';
 import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
+import OrderService from 'src/services/Orderservice';
 
-const now = new Date();
 
-const Page = () => (
-  <>
+const Page = () => {
+
+  const [data, setData] = useState();
+  const [days,setDays]=useState();
+
+  useEffect(() => {
+    retrieveSaleData();
+  }, []);
+
+  const retrieveSaleData = () => {
+   
+    const defaultStoreId = localStorage.getItem('defaultStoreId');
+       OrderService.getSalesReportByStoreId(defaultStoreId)
+      .then(response => {
+         setData(response.data.data);
+         setDays(response.data.days);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    
+   
+  }; 
+
+  return (<>
     <Head>
       <title>
         MediFY
@@ -82,15 +106,12 @@ const Page = () => (
             lg={8}
           >
             <OverviewSales
+              days={days}
               chartSeries={[
                 {
-                  name: 'This year',
-                  data: [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20]
+                  name: 'This Day',
+                  data: data
                 },
-                {
-                  name: 'Last year',
-                  data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13]
-                }
               ]}
               sx={{ height: '100%' }}
             />
@@ -221,8 +242,8 @@ const Page = () => (
         </Grid>
       </Container>
     </Box>
-  </>
-);
+  </>)
+};
 
 Page.getLayout = (page) => (
   <DashboardLayout>

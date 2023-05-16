@@ -61,6 +61,8 @@ export const AddUpdateStaff = (props) => {
     const userId = staff.userId > 0 ? staff.userId : user.id;
     const createdAt = staff.userId > 0 ? staff.createdAt : currentdatetime;
     const defaultStoreId = localStorage.getItem('defaultStoreId');
+    const disabled= staff.userId > 0?true:false;
+    console.log("role.."+staff.roles[0].name)
     const formik = useFormik({
         initialValues: {
             firstName: staff.firstName || '',
@@ -83,7 +85,7 @@ export const AddUpdateStaff = (props) => {
             userId: userId || '0',
             createdAt: createdAt,
             updatedAt: currentdatetime,
-            role: '',
+            role: staff.roles[0].name || '',
             submit: null
         },
         response: {
@@ -95,7 +97,12 @@ export const AddUpdateStaff = (props) => {
             username: Yup
                 .string()
                 .max(255)
-                .required('User Name is required'),
+                .required('User Name is required')
+                .matches(
+                   
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/,
+                    "Must Contain 6 Characters, One Uppercase, One Lowercase, One Number")      
+                ,
 
 
             firstName: Yup
@@ -142,10 +149,10 @@ export const AddUpdateStaff = (props) => {
                 .string()
                 .max(255)
                 .required('Mobile Number is required'),
-            dateOfJoining: Yup
-                .string()
-                .max(255)
-                .required('Date Of Joining is required'),
+            dateOfJoining:  Yup
+            .date()
+            .max(new Date(),'You can not choose future date')
+            .required('Date Of Joiming Required'),
             storeId: Yup
                 .string()
                 .max(255)
@@ -293,6 +300,7 @@ export const AddUpdateStaff = (props) => {
                                                                 onBlur={formik.handleBlur}
                                                                 onChange={formik.handleChange}
                                                                 value={formik.values.username}
+                                                                disabled={disabled}
                                                             />
 
                                                             <TextField
@@ -399,6 +407,7 @@ export const AddUpdateStaff = (props) => {
                                                                 onChange={formik.handleChange}
                                                                 type="email"
                                                                 value={formik.values.email}
+                                                                disabled={disabled}
                                                             />
 
 
@@ -428,6 +437,8 @@ export const AddUpdateStaff = (props) => {
                                                                 name="role"
                                                                 // onBlur={formik.handleBlur}
                                                                 //onChange={formik.handleChange}
+                                                                value={formik.values.role}
+                                                                disabled={disabled}
                                                                 onClick={(e) => formik.setFieldValue('role', [e.target.value])}
                                                                 select
                                                                 SelectProps={{ native: true }}

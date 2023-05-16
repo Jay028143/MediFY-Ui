@@ -27,6 +27,7 @@ export const AddOrder = (props) => {
     const [availableStorePopup, setAvailableStorePopup] = useState(false);
     const [minAge, setMinAge] = useState(0);
     const [message, setMessage] = useState(0);
+    const [titlemessage, setTitleMessage] = useState(0);
     const [isRegisterd, setisRegisterd] = useState(false);
     const [searchBydateOfBirth, setDateOfBirth] = useState('');
     const [customers, setCustomers] = useState([]);
@@ -37,6 +38,14 @@ export const AddOrder = (props) => {
     const [medicinecart, setMedicineCart] = useState([]);
     const [orderDetail,setOrderDetail]=useState([]);
     const [storeDetail,setStoreDetail]=useState([]);
+    const [disabled,setDisabled]=useState(true);
+    const [isError, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(0);
+    const {
+        order,
+        handleAddOrder,
+        medicinedata
+    } = props;
     const handleClickOpen = (medicinedata) => {
         const medicine = JSON.parse(medicinedata);
         if(medicine.availableStock==1000){
@@ -71,6 +80,8 @@ export const AddOrder = (props) => {
     };
 
     const handleOrderSubmit = () => {
+
+
         const currentdatetime = format(now, "yyyy-MM-dd HH:mm:ss");
         const defaultStoreId = localStorage.getItem('defaultStoreId');
         const user = JSON.parse(localStorage.getItem('user'));
@@ -90,9 +101,14 @@ export const AddOrder = (props) => {
         });
 
         const total = medicinecart.reduce((total, order)=> total+(order.orderQuantity * order.medicinePrice), 0);
+        
+        if(customerName=='')
+        {
+            setError(true);
+            setErrorMessage("Error : Cusomer Name is Required")
+        }
 
-
-
+        else{
         const submit= {
             "customerId":customerId,
             "customerName":customerName,
@@ -108,8 +124,7 @@ export const AddOrder = (props) => {
         try {
             OrderService.create(submit)
                 .then(response => {
-                    auth.skip();
-                    router.push('/orders');
+                    handleAddOrder(false);
                 })
                 .catch(e => {
                     console.log(e);
@@ -119,7 +134,7 @@ export const AddOrder = (props) => {
             helpers.setStatus({ success: false });
             helpers.setErrors({ submit: err.message });
             helpers.setSubmitting(false);
-        }
+        }}
 
 
     }
@@ -144,7 +159,20 @@ export const AddOrder = (props) => {
 
     };
     const handleAddQuantity = (e) => {
+        setDisabled(true);
         medicinedetail.orderQuantity = e.target.value;
+         if(medicinedetail.availableStock<medicinedetail.orderQuantity)
+        {
+            setMessage("Medicine Is not avialable.");
+            setTitleMessage("Check Medicine Availability");
+            
+        }
+        
+        else if(medicinedetail.orderQuantity!=0 && medicinedetail.orderQuantity!='')
+        {
+            setDisabled(false);
+        }
+        
     };
 
 
@@ -179,13 +207,14 @@ export const AddOrder = (props) => {
     };
 
     const handleCustomerName = (id, name) => {
+        setError(false);
         setCustomerName(name);
         setCustomerId(id);
     };
 
     const handleAdd = () => {
         medicinecart.push(medicinedetail);
-        
+        setDisabled(true);
         setMedicineDetail();
         setIlligible(false);
     };
@@ -201,6 +230,7 @@ export const AddOrder = (props) => {
             
             const msg="Customer do not meet the age requirement of this medication. \n Minimum age for this medication is" +minAge +"years";
             setMessage(msg);
+            setTitleMessage("Check Age Illigibility");
             setIlligible(false);
             setagePopup(true);
 
@@ -208,17 +238,13 @@ export const AddOrder = (props) => {
         else {
             const msg="Customer meet the age requirement of this medication. \n Minimum age for this medication is" +minAge +"years";
             setMessage(msg);
-           
+            setTitleMessage("Check Age Illigibility");
             setIlligible(true);
             setagePopup(true);
         }
 
     }
-    const {
-        order,
-        handleAddOrder,
-        medicinedata
-    } = props;
+   
     const buttonval = order.orderId > 0 ? 'Update' : 'Save';
     const now = new Date();
     const currentdatetime = format(now, "yyyy-MM-dd HH:mm:ss");
@@ -436,6 +462,7 @@ export const AddOrder = (props) => {
                                                             type="submit"
                                                             variant="contained"
                                                             onClick={handleAdd}
+                                                            disabled={disabled}
                                                         >
                                                             Add
                                                         </Button> : <></>}
@@ -474,7 +501,7 @@ export const AddOrder = (props) => {
                                                             aria-describedby="alert-dialog-description"
                                                         >
                                                             <DialogTitle id="ageilligible">
-                                                                {"Check Age Illigibility"}
+                                                                {titlemessage}
                                                             </DialogTitle>
                                                             <DialogContent>
                                                                 <DialogContentText id="alert-dialog-description">
@@ -503,6 +530,13 @@ export const AddOrder = (props) => {
                                                                    
                                                                     Medicine Available at below Store<br/>
                                                                     <Divider/>
+                                                                   
+                                                                    {storeDetail.map((option) => (
+                                                                   
+                                                                        option.storeName
+                                                                  
+                                                                ))}
+
                                                                    
 
                                                                 </DialogContentText>
@@ -552,6 +586,8 @@ export const AddOrder = (props) => {
                                                 OrderCart={medicinecart}
                                                 handleRemove={handleRemove}
                                                 handleOrderSubmit={handleOrderSubmit}
+                                                isError={isError}
+                                                errorMessage={errorMessage}
                                                 customerName={[customerName]}
                                             /> : <></>}
         </>

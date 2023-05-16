@@ -50,16 +50,12 @@ export const OrdersTable = (props) => {
                 <TableCell>
                  Total Price
                 </TableCell>
-                <TableCell>
-                  Show Full Detail
-                </TableCell>
+                
                 {userRole=="ADMIN" || userRole=="MANAGER" ?<>
                 <TableCell>
                   Edit
                 </TableCell>
-                <TableCell>
-                  Delete
-                </TableCell></>:<></>}
+                </>:<></>}
 
               </TableRow>
             </TableHead>
@@ -97,18 +93,7 @@ export const OrdersTable = (props) => {
                     <TableCell>
                       {order.totalPrice}
                     </TableCell>
-                    <TableCell>
-                      <Button
-                        fullWidth
-                        size="small"
-                        sx={{ mt: 3 }}
-                        type="submit"
-                        variant="contained"
-                        onClick={() =>EditOrder(order)}
-                      >
-                        Show Detail
-                      </Button>
-                    </TableCell>
+                    
                     {userRole=="ADMIN" || userRole=="MANAGER" ? <> <TableCell>
                       <Button
                         fullWidth
@@ -121,18 +106,7 @@ export const OrdersTable = (props) => {
                         Edit
                       </Button>
                     </TableCell>
-                    <TableCell>
-                      <Button
-                        fullWidth
-                        size="small"
-                        sx={{ mt: 3 }}
-                        type="submit"
-                        variant="contained"
-                        onClick={() => deleteOrder(customer.customerId)}
-                      >
-                        Delete
-                      </Button>
-                    </TableCell></>:<></>}
+                    </>:<></>}
                   </TableRow>
                 );
               })}

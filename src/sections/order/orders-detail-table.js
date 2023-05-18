@@ -41,7 +41,7 @@ export const OrdersDetailTable = (props) => {
   const selectedSome = (selected.length > 0) && (selected.length < OrderCart.length);
   const selectedAll = (OrderCart.length > 0) && (selected.length === OrderCart.length);
   const now = new Date();
-  const currentdatetime = format(now, "dd-MM-yyyy HH:mm:ss");
+  const orderdate = format(now, "dd-MM-yyyy");
   const customer="Customer Name : ".concat(customerName[0]) ;
   return (
     <>
@@ -55,7 +55,7 @@ export const OrdersDetailTable = (props) => {
   
         <CardHeader
                title={customer}
-               subheader={"Date :".concat(currentdatetime)}
+               subheader={"Date :".concat(orderdate)}
        />
         
         <Scrollbar>
@@ -63,14 +63,26 @@ export const OrdersDetailTable = (props) => {
             <Table>
               <TableHead>
                 <TableRow>
+                <TableCell>
+                    Sr. No
+                  </TableCell>
                   <TableCell>
                     MedicineName
+                  </TableCell>
+                  <TableCell>
+                    Description
                   </TableCell>
                   <TableCell>
                     Unit Price
                   </TableCell>
                   <TableCell>
                     Quantity
+                  </TableCell>
+                  <TableCell>
+                    Before/After
+                  </TableCell>
+                  <TableCell>
+                  Time Taking
                   </TableCell>
                   <TableCell>
                     Total
@@ -80,7 +92,7 @@ export const OrdersDetailTable = (props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {OrderCart.map((ordersDetail) => {
+                {OrderCart.map((ordersDetail,index) => {
                   // const isSelected = selected.includes(ordersDetail.orderId);
                   //const createdAt = format(ordersDetail.createdAt, 'dd/MM/yyyy');
 
@@ -90,6 +102,9 @@ export const OrdersDetailTable = (props) => {
                       key={ordersDetail.medicineId}
                     //selected={isSelected}
                     >
+                      <TableCell>
+                        {index+1}
+                      </TableCell>
 
                       <TableCell>
                         <Stack
@@ -107,13 +122,21 @@ export const OrdersDetailTable = (props) => {
                       </TableCell>
 
                       <TableCell>
+                        {ordersDetail.description}
+                      </TableCell>
+                      <TableCell>
                         {ordersDetail.medicinePrice}
                       </TableCell>
 
                       <TableCell>
                         {ordersDetail.orderQuantity}
                       </TableCell>
-
+                      <TableCell>
+                        {ordersDetail.timeofmedicine}
+                      </TableCell>
+                      <TableCell>
+                        {ordersDetail.medicineAdhre}
+                      </TableCell>
                       <TableCell>
                         {(ordersDetail.orderQuantity * ordersDetail.medicinePrice)}
                       </TableCell>

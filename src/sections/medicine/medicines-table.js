@@ -128,7 +128,7 @@ export const MedicinesTable = (props) => {
                         variant="contained"
                         onClick={() =>EditMedicine(medicine)}
                       >
-                        Edit
+                        Add Stock
                       </Button>
                     </TableCell>
                     <TableCell>

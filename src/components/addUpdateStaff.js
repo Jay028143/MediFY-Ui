@@ -167,7 +167,15 @@ export const AddUpdateStaff = (props) => {
                     values = clonedObj;
                     LoginService.register(values)
                         .then(response => {
-                            handleAddStaff(false);
+                            if(response.status==200){
+                                handleAddStaff(false);
+                              }
+                              else if(response.status==201){
+                                helpers.setStatus({ success: false });
+                                helpers.setErrors({ submit: response.data.message });
+                              }
+
+                            
                         })
                         .catch(e => {
                             console.log(e);
@@ -503,14 +511,14 @@ export const AddUpdateStaff = (props) => {
                                                 </Box>
                                             </CardContent>
                                             <Divider />
-                                            {formik.errors.submit && (
+                                            {formik.errors.submit && (<><CardActions sx={{ justifyContent: 'center' }}>
                                                 <Typography
                                                     color="error"
                                                     sx={{ mt: 3 }}
                                                     variant="body2"
                                                 >
                                                     {formik.errors.submit}
-                                                </Typography>
+                                                </Typography></CardActions></>
                                             )}
                                             <CardActions sx={{ justifyContent: 'center' }}>
                                                 <Button

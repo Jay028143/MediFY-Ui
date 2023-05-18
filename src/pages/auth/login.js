@@ -13,6 +13,7 @@ import {
   Stack,
   Tab,
   Tabs,
+  CardActions,
   TextField,
   Typography
 } from '@mui/material';
@@ -162,14 +163,14 @@ const Page = () => {
                     value={formik.values.password}
                   />
                 </Stack>
-                {formik.errors.submit && (
+                {formik.errors.submit && (<><CardActions sx={{ justifyContent: 'center' }}>
                   <Typography
                     color="error"
                     sx={{ mt: 3 }}
                     variant="body2"
                   >
                     {formik.errors.submit}
-                  </Typography>
+                  </Typography></CardActions></>
                 )}
                 <Button
                   fullWidth

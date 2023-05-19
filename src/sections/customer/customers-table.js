@@ -30,6 +30,7 @@ export const CustomersTable = (props) => {
   } = props;
 
   const userRole=localStorage.getItem('userRole');
+  const defaultStoreId=localStorage.getItem('defaultStoreId');
   return (
     <Card>
       <Scrollbar>
@@ -38,9 +39,11 @@ export const CustomersTable = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  Customer Name
+                Customer Name
                 </TableCell>
-                
+                <TableCell>
+                 Disease
+                </TableCell>
                 <TableCell>
                   Store
                 </TableCell>
@@ -59,9 +62,7 @@ export const CustomersTable = (props) => {
                 <TableCell>
                   Post Code
                 </TableCell>
-                <TableCell>
-                 Mobile Number
-                </TableCell>
+                
                 
                 {userRole=="ADMIN" || userRole=="MANAGER" ?<>
                 <TableCell>
@@ -98,6 +99,9 @@ export const CustomersTable = (props) => {
                       </Stack>
                     </TableCell>
                     <TableCell>
+                      {customer.disease}
+                    </TableCell>
+                    <TableCell>
                       {customer.storeName}
                     </TableCell>
                     <TableCell>
@@ -115,9 +119,7 @@ export const CustomersTable = (props) => {
                     <TableCell>
                        {customer.postCode}
                     </TableCell>
-                    <TableCell>
-                      {customer.mobileNumber}
-                    </TableCell>
+                    
                     {userRole=="ADMIN" || userRole=="MANAGER" ? <> <TableCell>
                       <Button
                         fullWidth
@@ -126,6 +128,7 @@ export const CustomersTable = (props) => {
                         type="submit"
                         variant="contained"
                         onClick={() =>EditCustomer(customer)}
+                        disabled={defaultStoreId==customer.storeId?false:true}
                       >
                         Edit
                       </Button>
@@ -137,6 +140,7 @@ export const CustomersTable = (props) => {
                         sx={{ mt: 3 }}
                         type="submit"
                         variant="contained"
+                        disabled={defaultStoreId==customer.storeId?false:true}
                         onClick={() => deleteCustomer(customer.customerId)}
                       >
                         Delete

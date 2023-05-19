@@ -62,7 +62,7 @@ export const AddUpdateStaff = (props) => {
     const createdAt = staff.userId > 0 ? staff.createdAt : currentdatetime;
     const defaultStoreId = localStorage.getItem('defaultStoreId');
     const disabled= staff.userId > 0?true:false;
-    console.log("role.."+staff.roles[0].name)
+    
     const formik = useFormik({
         initialValues: {
             firstName: staff.firstName || '',
@@ -85,7 +85,7 @@ export const AddUpdateStaff = (props) => {
             userId: userId || '0',
             createdAt: createdAt,
             updatedAt: currentdatetime,
-            role: staff.roles[0].name || '',
+            role:  '',
             submit: null
         },
         response: {
@@ -446,7 +446,7 @@ export const AddUpdateStaff = (props) => {
                                                                 // onBlur={formik.handleBlur}
                                                                 //onChange={formik.handleChange}
                                                                 value={formik.values.role}
-                                                                disabled={disabled}
+                                                                
                                                                 onClick={(e) => formik.setFieldValue('role', [e.target.value])}
                                                                 select
                                                                 SelectProps={{ native: true }}

@@ -40,12 +40,17 @@ export const AddOrder = (props) => {
     const [storeDetail, setStoreDetail] = useState([]);
     const [disabled, setDisabled] = useState(true);
     const [isError, setError] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(0);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isaddError, setAddError] = useState(false);
+    const [adderrorMessage, setAddErrorMessage] = useState('');
+    const [medicationTime, SetMedicationTime] = useState('');
+    const [dosage, SetDosage] = useState('');
+
 
     const medicineadhere = [
         {
-            value:'-1',
-            label:'--select--'
+            value: '-1',
+            label: '--select--'
         },
         {
             value: '0-1-1',
@@ -84,8 +89,8 @@ export const AddOrder = (props) => {
 
     const beforeAfter = [
         {
-            value:'-1',
-            label:'--select--'
+            value: '-1',
+            label: '--select--'
         },
         {
             value: 'Before Eat',
@@ -99,12 +104,19 @@ export const AddOrder = (props) => {
     ];
 
     const setMedineadhre = (value) => {
+        SetMedicationTime(value);
+        setAddError(false);
+        setAddErrorMessage('');
         medicinedetail.medicineAdhre = value;
 
     }
 
     const setBeforeAfter = (value) => {
+        SetDosage(value);
         medicinedetail.timeofmedicine = value;
+        setAddError(false);
+        setAddErrorMessage('');
+
     }
 
     const {
@@ -114,13 +126,17 @@ export const AddOrder = (props) => {
     } = props;
     const handleClickOpen = (medicinedata) => {
         const medicine = JSON.parse(medicinedata);
-        if (medicine.availableStock == 1000) {
+        if (medicine.availableStock < 10) {
 
             MedicineService.getMedicineAvailabilityAtStore(medicine.storeId, medicine.medicineCode)
                 .then(response => {
                     if (response.data.length > 0) {
                         setStoreDetail(response.data);
                         setTitleMessage("Check Medicine Availability");
+                        if (medicine.idCheck == 'Y') {
+                            setMinAge(medicine.minAge);
+                            setMedicineDetail(medicine);
+                        }
                         setAvailableStorePopup(true);
                         setIlligible(false);
                     }
@@ -225,14 +241,19 @@ export const AddOrder = (props) => {
 
     const handleAvailableStoreClose = () => {
         setAvailableStorePopup(false);
+        if(medicinedetail.idCheck=="Y")
+        {
+            setOpen(true);
+        }
 
     };
     const handleAddQuantity = (e) => {
         setDisabled(true);
         medicinedetail.orderQuantity = e.target.value;
         if (medicinedetail.availableStock < medicinedetail.orderQuantity) {
-            setMessage("Medicine Is not avialable.");
+            setMessage("Medicine Availble Stock is only " + medicinedetail.availableStock + ".");
             setTitleMessage("Check Medicine Availability");
+            setagePopup(true);
 
         }
 
@@ -273,17 +294,43 @@ export const AddOrder = (props) => {
 
     };
 
-    const handleCustomerName = (id, name) => {
-        setError(false);
+    const handleCustomerName = (customerid, name) => {
+        setAddError(false);
         setCustomerName(name);
-        setCustomerId(id);
+        setCustomerId(customerid);
+    };
+    
+    const handleCustomerNameDropdown = ( customerdata) => {
+        const customer = JSON.parse(customerdata);
+        //alert(JSON.stringify(customer));
+        setAddError(false);
+        const cname=customer.firstName +" "+customer.lastName;
+        setCustomerName(cname);
+        setCustomerId(customer.customerId);
     };
 
     const handleAdd = () => {
-        medicinecart.push(medicinedetail);
-        setDisabled(true);
-        setMedicineDetail();
-        setIlligible(false);
+        if (dosage == '' || dosage == -1) {
+            setAddError(true);
+            setAddErrorMessage("Please Select Dosage")
+        }
+        else if (medicationTime == '' || medicationTime == -1) {
+            setAddError(true);
+            setAddErrorMessage("Please Select MedicationTime")
+        }
+        else  if (customerName == '') {
+            setAddError(true);
+            setAddErrorMessage("Customer Name Required")
+        }
+        else {
+            medicinecart.push(medicinedetail);
+            setDisabled(true);
+            setMedicineDetail();
+            setIlligible(false);
+            SetDosage('');
+            SetMedicationTime('');
+        }
+
     };
 
 
@@ -295,7 +342,7 @@ export const AddOrder = (props) => {
         const age = Math.abs(year - 1970);
         if (age < minAge) {
 
-            const msg = "Customer do not meet the age requirement of this medication. \n Minimum age for this medication is" + minAge + "years";
+            const msg = "Customer do not meet the age requirement of this medication. \n Minimum age for this medication is " + minAge + " years";
             setMessage(msg);
             setTitleMessage("Check Age Illigibility");
             setIlligible(false);
@@ -303,7 +350,7 @@ export const AddOrder = (props) => {
 
         }
         else {
-            const msg = "Customer meet the age requirement of this medication. \n Minimum age for this medication is" + minAge + "years";
+            const msg = "Customer meet the age requirement of this medication. \n Minimum age for this medication is " + minAge + " years";
             setMessage(msg);
             setTitleMessage("Check Age Illigibility");
             setIlligible(true);
@@ -411,8 +458,9 @@ export const AddOrder = (props) => {
                                                                 sx={{ marginTop: 2 }}
                                                                 fullWidth
                                                                 label="Customer"
-                                                                name="customer"
-                                                                onChange={(e) => { handleCustomerName(e.target.key, e.target.value) }}
+                                                                //name="customer"
+                                                                id="customerName"
+                                                                onChange={(e) => { handleCustomerNameDropdown( e.target.value) }}
                                                                 required
                                                                 select
                                                                 SelectProps={{ native: true }}
@@ -427,9 +475,8 @@ export const AddOrder = (props) => {
                                                                 {customers.map((customer) => (
                                                                     <option
                                                                         key={customer.customerId}
-                                                                        value={customer.customerName}
-
-
+                                                                        
+                                                                        value={JSON.stringify(customer)}
                                                                     >
                                                                         {customer.firstName} {customer.lastName}
                                                                     </option>
@@ -529,11 +576,11 @@ export const AddOrder = (props) => {
 
                                                                 fullWidth
 
-                                                                label="Time Duration"
+                                                                label="Medication Time"
                                                                 name="timeduration"
 
 
-                                                                onClick={(e) => setBeforeAfter(e.target.value)}
+                                                                onChange={(e) => setBeforeAfter(e.target.value)}
                                                                 select
                                                                 SelectProps={{ native: true }}
 
@@ -548,174 +595,182 @@ export const AddOrder = (props) => {
                                                                 ))}
 
                                                             </TextField>
-
-                                                            <Button
-
-                                                                size="large"
-                                                                sx={{ mt: 2 }}
-                                                                type="submit"
-                                                                variant="contained"
-                                                                onClick={handleAdd}
-                                                                disabled={disabled}
+                                                            {isaddError?<Typography
+                                                                color="error"
+                                                                sx={{ mt: 3 }}
+                                                                variant="body2"
                                                             >
-                                                                Add
-                                                            </Button> </> : <></>}
+                                                                {adderrorMessage}
+                                                            </Typography>:<></>}
+                                                    <Button
 
-
-
-                                                        <Dialog open={open} onClose={handleClose}>
-                                                            <DialogTitle>Verification</DialogTitle>
-                                                            <DialogContent>
-                                                                <DialogContentText>
-                                                                    Id Check Required for this medition
-
-                                                                </DialogContentText>
-                                                                <TextField
-                                                                    autoFocus
-                                                                    margin="dense"
-                                                                    id="dateOfBirth"
-                                                                    label="Date Of Birth"
-                                                                    onChange={(e) => setDate(e.target.value)}
-                                                                    fullWidth
-
-                                                                    type={'date'}
-                                                                />
-                                                            </DialogContent>
-                                                            <DialogActions>
-                                                                <Button onClick={checkillegible}>OK</Button>
-                                                                <Button onClick={handleClose}>Cancel</Button>
-
-                                                            </DialogActions>
-                                                        </Dialog>
-
-                                                        <Dialog
-                                                            open={agePopup}
-                                                            onClose={handleAgeClose}
-                                                            aria-labelledby="alert-dialog-title"
-                                                            aria-describedby="alert-dialog-description"
-                                                        >
-                                                            <DialogTitle id="ageilligible">
-                                                                {titlemessage}
-                                                            </DialogTitle>
-                                                            <DialogContent>
-                                                                <DialogContentText id="alert-dialog-description">
-                                                                    {message}
-                                                                </DialogContentText>
-                                                            </DialogContent>
-                                                            <DialogActions>
-
-                                                                <Button onClick={handleAgeClose} autoFocus>
-                                                                    OK
-                                                                </Button>
-                                                            </DialogActions>
-                                                        </Dialog>
-
-                                                        <Dialog
-                                                            open={availableStorePopup}
-                                                            onClose={handleAvailableStoreClose}
-                                                            aria-labelledby="alert-dialog-title"
-                                                            aria-describedby="alert-dialog-description"
-                                                        >
-                                                            <DialogTitle id="ageilligible">
-                                                                {"Medicine Availablity"}
-                                                            </DialogTitle>
-                                                            <DialogContent>
-                                                                <DialogContentText id="alert-dialog-description">
-                                                                    
-                                                                    <h2>OOPS! At the moment this medicine is Out of Stock &#128549;</h2>
-                                                                    Kindly Suggest Customer to visit below Store for purschase<br />
-                                                            
-                                                                    <Divider/>
-                                                                    <br/>
-                                                                    {storeDetail.map((option,index) => {
-                                                                        
-                                                                        return (<>
-                                                                    
-                                                                       {index+1}-{option.storeName} - {option.houseNo} , {option.streetName} ,{option.postCode}
-                                                                    
-                                                                    <br/></>
-                                                                    )
-                                                                  
-                                                                         } )}
-
-
-
-                                                                </DialogContentText>
-                                                            </DialogContent>
-                                                            <DialogActions>
-
-                                                                <Button onClick={handleAvailableStoreClose} autoFocus>
-                                                                    OK
-                                                                </Button>
-                                                            </DialogActions>
-                                                        </Dialog>
-                                                    </Grid>
-                                                    <Grid
-                                                        xs={12}
-                                                        md={6}
+                                                        size="large"
+                                                        sx={{ mt: 2 }}
+                                                        type="submit"
+                                                        variant="contained"
+                                                        onClick={handleAdd}
+                                                        disabled={disabled}
                                                     >
+                                                        Add
+                                                    </Button> </> : <></>}
 
-                                                        {isIlligible ? <>< TextField
-                                                            sx={{ marginTop: 2 }}
-                                                            // error={!!(formik.touched.quantity && formik.errors.quantity)}
+
+
+                                                <Dialog open={open} onClose={handleClose}>
+                                                    <DialogTitle>Verification</DialogTitle>
+                                                    <DialogContent>
+                                                        <DialogContentText>
+                                                            Id Check Required for this medition
+
+                                                        </DialogContentText>
+                                                        <TextField
+                                                            autoFocus
+                                                            margin="dense"
+                                                            id="dateOfBirth"
+                                                            label="Date Of Birth"
+                                                            onChange={(e) => setDate(e.target.value)}
                                                             fullWidth
-                                                            type="number"
-                                                            //  helperText={formik.touched.quantity && formik.errors.quantity}
-                                                            label="Quantity"
-                                                            name="quantity"
-                                                            //onBlur={formik.handleBlur}
-                                                            onChange={handleAddQuantity}
-                                                        // value={formik.values.quantity}
+
+                                                            type={'date'}
                                                         />
-                                                            <TextField
-                                                                sx={{ marginTop: 2 }}
+                                                    </DialogContent>
+                                                    <DialogActions>
+                                                        <Button onClick={checkillegible}>OK</Button>
+                                                        <Button onClick={handleClose}>Cancel</Button>
 
-                                                                fullWidth
+                                                    </DialogActions>
+                                                </Dialog>
 
-                                                                label="medicaladhre"
-                                                                name="medicaladhre"
+                                                <Dialog
+                                                    open={agePopup}
+                                                    onClose={handleAgeClose}
+                                                    aria-labelledby="alert-dialog-title"
+                                                    aria-describedby="alert-dialog-description"
+                                                >
+                                                    <DialogTitle id="ageilligible">
+                                                        {titlemessage}
+                                                    </DialogTitle>
+                                                    <DialogContent>
+                                                        <DialogContentText id="alert-dialog-description">
+                                                            {message}
+                                                        </DialogContentText>
+                                                    </DialogContent>
+                                                    <DialogActions>
+
+                                                        <Button onClick={handleAgeClose} autoFocus>
+                                                            OK
+                                                        </Button>
+                                                    </DialogActions>
+                                                </Dialog>
+
+                                                <Dialog
+                                                    open={availableStorePopup}
+                                                    onClose={handleAvailableStoreClose}
+                                                    aria-labelledby="alert-dialog-title"
+                                                    aria-describedby="alert-dialog-description"
+                                                >
+                                                    <DialogTitle id="ageilligible">
+                                                        {"Medicine Availablity"}
+                                                    </DialogTitle>
+                                                    <DialogContent>
+                                                        <DialogContentText id="alert-dialog-description">
+
+                                                            <h2>OOPS! At the moment this medicine is less then 10 &#128549;</h2>
+                                                            Kindly Suggest Customer to visit below Store for purschase if they need medicine more then 10.<br />
+
+                                                            <Divider />
+                                                            <br />
+                                                            {storeDetail.map((option, index) => {
+
+                                                                return (<>
+
+                                                                    {index + 1}-{option.storeName} - {option.houseNo} , {option.streetName} ,{option.postCode}
+
+                                                                    <br /></>
+                                                                )
+
+                                                            })}
 
 
-                                                                onClick={(e) => setMedineadhre(e.target.value)}
-                                                                select
-                                                                SelectProps={{ native: true }}
 
+                                                        </DialogContentText>
+                                                    </DialogContent>
+                                                    <DialogActions>
+
+                                                        <Button onClick={handleAvailableStoreClose} autoFocus>
+                                                            OK
+                                                        </Button>
+                                                    </DialogActions>
+                                                </Dialog>
+                                            </Grid>
+                                            <Grid
+                                                xs={12}
+                                                md={6}
+                                            >
+
+                                                {isIlligible ? <>< TextField
+                                                    sx={{ marginTop: 2 }}
+                                                    // error={!!(formik.touched.quantity && formik.errors.quantity)}
+                                                    fullWidth
+                                                    type="number"
+                                                    //  helperText={formik.touched.quantity && formik.errors.quantity}
+                                                    label="Quantity"
+                                                    name="quantity"
+                                                    //onBlur={formik.handleBlur}
+                                                    onChange={handleAddQuantity}
+                                                // value={formik.values.quantity}
+                                                />
+                                                    <TextField
+                                                        sx={{ marginTop: 2 }}
+
+                                                        fullWidth
+
+                                                        label="Dosage"
+                                                        name="medicaladhre"
+
+
+                                                        onChange={(e) => setMedineadhre(e.target.value)}
+                                                        select
+                                                        SelectProps={{ native: true }}
+
+                                                    >
+                                                        {medicineadhere.map((option) => (
+                                                            <option
+                                                                key={option.value}
+                                                                value={option.value}
                                                             >
-                                                                {medicineadhere.map((option) => (
-                                                                    <option
-                                                                        key={option.value}
-                                                                        value={option.value}
-                                                                    >
-                                                                        {option.label}
-                                                                    </option>
-                                                                ))}
+                                                                {option.label}
+                                                            </option>
+                                                        ))}
 
-                                                            </TextField>
-                                                        </>
-                                                            : <></>}
+                                                    </TextField>
+                                                </>
+                                                    : <></>}
 
-                                                    </Grid>
-                                                </Grid></Box></CardContent>
+                                            </Grid>
+                                        </Grid></Box></CardContent>
 
 
-                                    </Card>
+                            </Card>
 
 
-                                </Grid>
-                            </Grid>
-                        </div>
-                    </Stack>
-                </Container>
-            </Box>
-            {medicinecart.length > 0 ?
-                <OrdersDetailTable
-                    OrderCart={medicinecart}
-                    handleRemove={handleRemove}
-                    handleOrderSubmit={handleOrderSubmit}
-                    isError={isError}
-                    errorMessage={errorMessage}
-                    customerName={[customerName]}
-                /> : <></>}
+                        </Grid>
+                    </Grid>
+                </div>
+            </Stack>
+        </Container >
+            </Box >
+{
+    medicinecart.length > 0 ?
+        <OrdersDetailTable
+            OrderCart={medicinecart}
+            handleRemove={handleRemove}
+            handleOrderSubmit={handleOrderSubmit}
+            isError={isError}
+            errorMessage={errorMessage}
+            customerName={[customerName]}
+        /> : <></>
+}
         </>
     );
 };

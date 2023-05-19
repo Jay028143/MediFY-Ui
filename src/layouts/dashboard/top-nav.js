@@ -41,7 +41,14 @@ export const TopNav = (props) => {
     localStorage.setItem('defaultStoreName',store.storeName);
          
     auth.skip();
-    router.push('/');
+    const userRole = localStorage.getItem('userRole');
+    if(userRole == "ADMIN"){
+      
+    router.push('/stores');
+    }
+    else{
+      router.push('/');
+    }
 
   }
   const retrieveStores = () => {

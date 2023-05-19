@@ -101,7 +101,7 @@ export const MedicinesTable = (props) => {
                       {medicine.medicineCode}
                     </TableCell>
                     <TableCell>
-                      {medicine.medicinePrice}
+                     £{medicine.medicinePrice}
                     </TableCell>
                     <TableCell>
                       {medicine.description}

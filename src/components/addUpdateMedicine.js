@@ -39,13 +39,13 @@ export const AddUpdateMedicine = (props) => {
     const defaultStoreId = localStorage.getItem('defaultStoreId');
     const storeId = medicine.medicineId > 0 ? medicine.storeId : defaultStoreId;
     const createdAt = medicine.medicineId > 0 ? medicine.createdAt : currentdatetime;
-
+    const disabled= medicine.medicineId > 0?true:false;
     const formik = useFormik({
         initialValues: {
             medicineId: medicine.medicineId || '',
             medicineCode: medicine.medicineCode || '',
             medicineName: medicine.medicineName || '',
-            medicinePrice: medicine.medicinePrice || '',
+            medicinePrice: medicine.medicinePrice || '0',
             minAge:medicine.minAge || 0,
             description: medicine.description || '',
             idCheck: medicine.idCheck || 'N',
@@ -56,7 +56,7 @@ export const AddUpdateMedicine = (props) => {
             createdAt: createdAt,
             updatedAt: currentdatetime,
             stock: [{
-                quantity: '',
+                quantity: '0',
                 expiryDate: '',
             }],
             submit: null
@@ -74,10 +74,10 @@ export const AddUpdateMedicine = (props) => {
                 .string()
                 .max(255)
                 .required('Medicine Code is required'),
-            medicinePrice: Yup
-                .string()
-                .max(255)
-                .required('Medicine Price is required'),
+            medicinePrice: Yup.number()
+                .required('Medicine Price is required')
+                .moreThan(0, 'Medicine Price not be zero or less than zero')
+               ,
             description: Yup
                 .string()
                 .max(255)
@@ -229,6 +229,7 @@ export const AddUpdateMedicine = (props) => {
                                                                 onBlur={formik.handleBlur}
                                                                 onChange={formik.handleChange}
                                                                 value={formik.values.medicineCode}
+                                                                disabled={disabled}
                                                             />
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
@@ -275,6 +276,7 @@ export const AddUpdateMedicine = (props) => {
                                                                 onBlur={formik.handleBlur}
                                                                 onChange={formik.handleChange}
                                                                 type="number"
+                                                                disabled={formik.values.idCheck=='Y'?false:true}
                                                                 value={formik.values.minAge}
                                                             />
                                                         </Grid>

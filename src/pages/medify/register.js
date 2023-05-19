@@ -223,7 +223,7 @@ const Page = () => {
               &nbsp;
               <Link
                 component={NextLink}
-                href="/auth/login"
+                href="/medify/login"
                 underline="hover"
                 variant="subtitle2"
               >
@@ -346,7 +346,7 @@ const Page = () => {
                           &nbsp;
                           <Link
                             component={NextLink}
-                            href="/auth/login"
+                            href="/medify/login"
                             underline="hover"
                             variant="subtitle2"
                           >

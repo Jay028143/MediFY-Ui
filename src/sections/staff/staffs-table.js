@@ -116,7 +116,7 @@ export const StaffsTable = (props) => {
                     {defaultStoreName}
                     </TableCell>
                     <TableCell>
-                    {/* {staff.roles.name} */}
+                    {staff.roles[0].name}
                     </TableCell>
                     <TableCell>
                     {staff.houseNo} , {staff.streetName} ,{staff.city}

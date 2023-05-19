@@ -125,7 +125,7 @@ export const OrdersDetailTable = (props) => {
                         {ordersDetail.description}
                       </TableCell>
                       <TableCell>
-                        {ordersDetail.medicinePrice}
+                      £{ordersDetail.medicinePrice}
                       </TableCell>
 
                       <TableCell>
@@ -138,7 +138,7 @@ export const OrdersDetailTable = (props) => {
                         {ordersDetail.medicineAdhre}
                       </TableCell>
                       <TableCell>
-                        {(ordersDetail.orderQuantity * ordersDetail.medicinePrice)}
+                      £{(ordersDetail.orderQuantity * ordersDetail.medicinePrice)}
                       </TableCell>
 
                       <TableCell>

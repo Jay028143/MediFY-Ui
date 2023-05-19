@@ -15,7 +15,7 @@ export const AccountPopover = (props) => {
     () => {
       onClose?.();
       auth.signOut();
-      router.push('/auth/login');
+      router.push('/medify/login');
     },
     [onClose, auth, router]
   );

@@ -39,7 +39,7 @@ export const OrdersTable = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  OrderNo
+                  Sr.No
                 </TableCell>
                 <TableCell>
                   CustomerName
@@ -60,7 +60,7 @@ export const OrdersTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-            {items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order)  => {
+            {items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((order,index)  => {
             
                 return (
                   <TableRow
@@ -69,7 +69,7 @@ export const OrdersTable = (props) => {
                     
                   >
                     <TableCell>
-                      {order.orderId}
+                      {index}
                     </TableCell>
                     <TableCell>
                       <Stack
@@ -91,7 +91,7 @@ export const OrdersTable = (props) => {
                     </TableCell>
                     
                     <TableCell>
-                      {order.totalPrice}
+                     £{order.totalPrice}
                     </TableCell>
                     
                     {userRole=="ADMIN" || userRole=="MANAGER" ? <> <TableCell>

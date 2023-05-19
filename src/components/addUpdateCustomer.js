@@ -16,18 +16,18 @@ export const AddUpdateCustomer = (props) => {
 
     const genders = [
         {
-          value: '-1',
-          label: '--Select Gender--'
+            value: '-1',
+            label: '--Select Gender--'
         },
         {
-          value: 'Male',
-          label: 'Male'
+            value: 'Male',
+            label: 'Male'
         },
         {
-          value: 'Female',
-          label: 'Female'
+            value: 'Female',
+            label: 'Female'
         }
-      ];
+    ];
 
 
 
@@ -50,9 +50,10 @@ export const AddUpdateCustomer = (props) => {
             customerId: customer.customerId || '',
             firstName: customer.firstName || '',
             middleName: customer.middleName || '',
+            disease:customer.disease || '',
             lastName: customer.lastName || '',
             gender: customer.gender || '',
-            storeName:defaultStoreName,
+            storeName: defaultStoreName,
             houseNo: customer.houseNo || '',
             streetName: customer.streetName || '',
             state: customer.state || '',
@@ -74,50 +75,54 @@ export const AddUpdateCustomer = (props) => {
         validationSchema: Yup.object({
 
             firstName: Yup
-            .string()
-            .max(255)
-            .required('First Name is required'),
-        middleName: Yup
-            .string()
-            .max(255)
-            .required('Middle Name is required'),
-        lastName: Yup
-            .string()
-            .max(255)
-            .required('last Name is required'),
-        houseNo: Yup
-            .string()
-            .max(255)
-            .required('House No is required'),
-        streetName: Yup
-            .string()
-            .max(255)
-            .required('Street Name is required'),
-        state: Yup
-            .string()
-            .max(255)
-            .required('State is required'),
-        country: Yup
-            .string()
-            .max(255)
-            .required('Country is required'),
-        city: Yup
-            .string()
-            .max(255)
-            .required('City is required'),
-        postCode: Yup
-            .string()
-            .max(255)
-            .required('Post Code is required'),
-        mobileNumber: Yup
-            .string()
-            .max(255)
-            .required('Mobile Number is required'),
-       
-            dateOfBirth:Yup
-            .date()
-            .max(new Date(),'You can not choose future date')
-            .required('Date Of Birth Required'),
+                .string()
+                .max(255)
+                .required('First Name is required'),
+            middleName: Yup
+                .string()
+                .max(255)
+                .required('Middle Name is required'),
+                disease:Yup
+                .string()
+                .max(255)
+                .required('Disease required'),
+            lastName: Yup
+                .string()
+                .max(255)
+                .required('last Name is required'),
+            houseNo: Yup
+                .string()
+                .max(255)
+                .required('House No is required'),
+            streetName: Yup
+                .string()
+                .max(255)
+                .required('Street Name is required'),
+            state: Yup
+                .string()
+                .max(255)
+                .required('State is required'),
+            country: Yup
+                .string()
+                .max(255)
+                .required('Country is required'),
+            city: Yup
+                .string()
+                .max(255)
+                .required('City is required'),
+            postCode: Yup
+                .string()
+                .max(255)
+                .required('Post Code is required'),
+            mobileNumber: Yup
+                .string()
+                .max(255)
+                .required('Mobile Number is required'),
+
+            dateOfBirth: Yup
+                .date()
+                .max(new Date(), 'You can not choose future date')
+                .required('Date Of Birth Required'),
         }),
         onSubmit: async (values, helpers) => {
             try {
@@ -188,7 +193,7 @@ export const AddUpdateCustomer = (props) => {
                                                             xs={12}
                                                             md={6}
                                                         >
-                                                             <TextField
+                                                            <TextField
                                                                 error={!!(formik.touched.firstName && formik.errors.firstName)}
                                                                 fullWidth
                                                                 helperText={formik.touched.firstName && formik.errors.firstName}
@@ -211,7 +216,7 @@ export const AddUpdateCustomer = (props) => {
                                                                 value={formik.values.lastName}
                                                             />
 
-                                                         
+
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
@@ -276,12 +281,25 @@ export const AddUpdateCustomer = (props) => {
                                                                 value={formik.values.country}
                                                             />
 
+                                                            <TextField
+                                                                sx={{ marginTop: 2 }}
+                                                                error={!!(formik.touched.mobileNumber && formik.errors.mobileNumber)}
+                                                                fullWidth
+                                                                helperText={formik.touched.mobileNumber && formik.errors.mobileNumber}
+                                                                label="Mobile Number"
+                                                                name="mobileNumber"
+                                                                onBlur={formik.handleBlur}
+                                                                onChange={formik.handleChange}
+                                                                value={formik.values.mobileNumber}
+                                                                type="number"
+                                                            />
+
                                                         </Grid>
                                                         <Grid
                                                             xs={12}
                                                             md={6}
                                                         >
-                                                             <TextField
+                                                            <TextField
                                                                 error={!!(formik.touched.middleName && formik.errors.middleName)}
                                                                 fullWidth
                                                                 helperText={formik.touched.middleName && formik.errors.middleName}
@@ -294,15 +312,15 @@ export const AddUpdateCustomer = (props) => {
 
                                                             <TextField
                                                                 sx={{ marginTop: 2 }}
-                                                                error={!!(formik.touched.mobileNumber && formik.errors.mobileNumber)}
+                                                                error={!!(formik.touched.disease && formik.errors.disease)}
                                                                 fullWidth
-                                                                helperText={formik.touched.mobileNumber && formik.errors.mobileNumber}
-                                                                label="Mobile Number"
-                                                                name="mobileNumber"
+                                                                helperText={formik.touched.disease && formik.errors.disease}
+                                                                label="Disease"
+                                                                name="disease"
                                                                 onBlur={formik.handleBlur}
                                                                 onChange={formik.handleChange}
-                                                                value={formik.values.mobileNumber}
-                                                                type="number"
+                                                                value={formik.values.disease}
+                                                                
                                                             />
 
 
@@ -358,7 +376,7 @@ export const AddUpdateCustomer = (props) => {
                                                             />
                                                         </Grid>
                                                     </Grid>
-                                            
+
 
                                                 </Box>
                                             </CardContent>

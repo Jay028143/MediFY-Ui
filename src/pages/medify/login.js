@@ -52,7 +52,7 @@ const Page = () => {
             auth.skip();
             localStorage.setItem('user',JSON.stringify(response.data));
             localStorage.setItem('userRole',response.data.roles);
-            
+            localStorage.setItem('defaultStoreId', response.data.storeId);
             router.push('/');
 
           }
@@ -126,7 +126,7 @@ const Page = () => {
                 &nbsp;
                 <Link
                   component={NextLink}
-                  href="/auth/register"
+                  href="/medify/register"
                   underline="hover"
                   variant="subtitle2"
                 >

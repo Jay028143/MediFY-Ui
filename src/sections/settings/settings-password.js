@@ -42,7 +42,7 @@ export const SettingsPassword = () => {
     (false);
     setpasswordPopup(false)
     auth.signOut();
-    router.push('/auth/login');
+    router.push('/medify/login');
 
 
   };
